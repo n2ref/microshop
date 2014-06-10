@@ -2,7 +2,7 @@
 /**
  * Microshop - application for fast and easy placement of their products on the internet.
  *
- * Copyright (C) 2014  Shabunin Igor
+ * Copyright (C) 2014  Shabunin Igor, Stepovich Pavel
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * @author: Shabunin Igor
+ * @author: Stepovich Pavel
+ * @email: info@microshop.by
+ * @see: microshop.by
+ * @version: 1.0.0
  */
 
 /**
@@ -29,11 +35,11 @@ define('USE_SITE_NAME_IN_TITLE', true);
 
 /**
  * Адрес электронной почты на который будет приходить заказы.
- * А так же адрес отправителя который будет указан в письмах
+ * А так же отбратный адрес который будет указан в письмах
  * TODO отправляемых заказчику на указанный им адрес.
  * Метод отправки писем - по умолчанию равен MAIL
  */
-define('ORDER_EMAIL_TO',     'exemple@domain.com');
+define('ORDER_EMAIL_TO',     'yourmail@domain.com');
 define('ORDER_EMAIL_FROM',   'info@microshop.com');
 define('ORDER_EMAIL_METHOD', 'MAIL');
 
@@ -77,8 +83,8 @@ define('WATERMARK_IMAGE',        '');
 /**
  *  Настройки для каких изображений будет применен водяной знак
  */
-define('USE_WATERMARK_LIST_IMAGE', false);
 define('USE_WATERMARK_BIG_IMAGE',  true);
+define('USE_WATERMARK_LIST_IMAGE', false);
 define('USE_WATERMARK_CART_IMAGE', false);
 
 
@@ -87,8 +93,8 @@ define('USE_WATERMARK_CART_IMAGE', false);
  */
 define('MAX_WIDTH_BIG_IMAGE',   640);
 define('MAX_HEIGHT_BIG_IMAGE',  480);
-define('MAX_WIDTH_LIST_IMAGE',  210);
-define('MAX_HEIGHT_LIST_IMAGE', 170);
+define('MAX_WIDTH_LIST_IMAGE',  205);
+define('MAX_HEIGHT_LIST_IMAGE', 180);
 define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
 
@@ -130,436 +136,230 @@ Micro_Init::$menu = array(
 Micro_Init::$template = array(
     'tpl' => <<<HTML
 <!DOCTYPE html>
-<html lang="[LANG]">
+<html>
 <head>
     <title>[TITLE]</title>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="content-type"       content="text/META; charset=utf-8"/>
-    <meta name="author"             content="easter@tut.by"/>
-    <meta name="author"             content="shabuninil24@gmail.com"/>
     <meta name="robots"             content="all"/>
     <meta name="revisit-afte"       content="7 days"/>
     <meta name="distributionrobots" content="global"/>
     <meta name="description"        content="[META_DESC]"/>
     <meta name="keywords"           content="[META_KEYS]"/>
+    <meta name="viewport"           content="width=device-width, initial-scale=1"/>
 
     <style type="text/css">
+        html,body,div,span,applet,object,iframe,
+        h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,
+        address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,
+        samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,
+        dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,
+        tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
+        embed,figure,figcaption,footer,header,hgroup,menu,nav,
+        output,ruby,section,summary,time,mark,audio,video {
+            border:0;
+            font:inherit;
+            font-size:100%;
+            margin:0;
+            padding:0;
+            vertical-align:baseline;
+        }
         body {
-            margin: 0;
-            padding: 0;
-            background: #e2e6e9;
-            font: normal 12px Verdana, Arial, Sans-Serif;
-            text-align: left;
+            -webkit-tap-highlight-color:#ea4c88;
+            color:#888;
+            font-family:Helvetica, Arial, sans-serif;
+            font-size:13px;
+            line-height:1;
         }
-            /* Links */
-        a:link {
-            color: #273A4D;
-            text-decoration: none;
+        ol,ul {
+            list-style:none;
         }
-        a:visited {
-            color: #273A4D;
-            text-decoration: none;
+        blockquote, q {
+            quotes:none;
         }
-        h3 a:link {
-            color: #3f4f5c;
-            text-decoration: none;
+        blockquote:before,
+        blockquote:after,
+        q:before,
+        q:after {
+            content:none;
         }
-        h3 a:visited {
-            color: #3f4f5c;
-            text-decoration: none;
+        table {
+            border-collapse:collapse;
+            border-spacing:0;
         }
-        h3 a:hover,
-        a:active { color: #FFFFFF }
-            /* Html Elements */
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: normal;
-            margin: 10px 0;
-            padding: 0;
+        .pull-right { float:right; }
+        .pull-left { float:left; }
+        .clearfix { clear:both; }
+        .clearfix:after,
+        .pull-right:after {
+            clear:both;
+            content:".";
+            display:block;
+            height:0;
+            line-height:0;
+            visibility:hidden;
         }
-        h1 {
-            font-size: 36px;
-            color: #293138;
+        .wrapper {
+            margin:0 auto;
+            position:relative;
+            width:940px;
+            -webkit-text-size-adjust: 100%;
         }
-        h2 {
-            font-size: 28px;
-            color: #353F47;
-        }
-        .post-title h2 {
-            color: #3f4f5c;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        h3 {
-            font-size: 24px;
-            color: #3f4f5c;
-        }
-        h4 {
-            font-size: 20px;
-            color: #3f4f5c;
-        }
-        h5 {
-            font-size: 16px;
-            color: #3f4f5c;
-        }
-        h6 {
-            font-size: 13px;
-            text-transform: uppercase;
-            margin: 5px 0;
-            font-weight: bold;
-        }
-        ul {
-            line-height: 1.8em;
-            list-style-type: circle;
-            color: #333333;
-        }
-            /* Structure */
-        #container {
-            width: 800px;
-            margin: 0 auto;
-        }
-        #header { padding: 0px 0 }
-        #navigation {
-            float: left;
-            width: 800px;
-            background-color: #282d2d;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-        #wrapper {
-            margin: 0;
-            padding: 0;
-            clear: both;
-            float: left;
-            width: 800px;
-            background: #ffffff;
-            border-left: solid #dde0e1 2px;
-            border-right: solid #dde0e1 2px;
-            border-bottom: solid #dde0e1 2px;
-        }
-        #content-wrapper {
-            width: 800px;
-            float: left;
-        }
-        #content {
-            width: 93.3%;
-            padding: 27px;
-            padding_top: 18px;
-            background-color: #ededed;
-            line-height: 1.6em;
+        body p {
+            margin-bottom:21px;
+            text-indent: 20px;
             text-align: justify;
         }
-        #footer {
-            clear: both;
-            float: left;
-            width: 800px;
-            margin: 0px 0;
-            color: #555555;
-            text-align: center;
-            padding: 10px 3px 10px 0;
-            background: #cfcfcf;
+        body a {
+            -moz-transition:color .3s ease;
+            -o-transition:color .3s ease;
+            -webkit-transition:color .3s ease;
+            color:#444;
+            text-decoration:none;
+            transition:color .3s ease;
         }
-            /* Navigation */
-        #navigation ul {
-            margin: 0 5px;
-            float: left;
+        b,strong {
+            font-weight: bold;
+            color: #757575;
+        }
+        h1,h2,h3,h4,h5,h6 {
+            color:#444;
+            font-family:Arial, sans-serif;
+            font-weight:400;
+        }
+        h1 { font-size:48px; }
+        h2 { font-size:36px; }
+        h3 { font-size:24px; }
+        h4 { font-size:21px; }
+        h5 { font-size:18px; }
+        h6 { font-size:14px; }
+        body,.home-block-heading span,.page-heading span {
+            background:#ebebe8;
+        }
+        body a:hover,#top-widget-holder a:hover,#nav>li>a:hover,.project-heading .launch:hover {
+            color:#ea4c88;
+        }
+        header { background:#444 bottom left repeat-x; }
+        #logo {
+            color:#E2E0D7;
+            display:inline-block;
+            font-size:27px;
+            font-weight:700;
+            padding-bottom:30px;
+            padding-top:40px;
+        }
+        #logo:hover { opacity:0.8; }
+        #main {
+            background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAICAYAAAAx8TU7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADFJREFUeNpifPXqlTEDEggICGBgAhHIYMOGDQxMIAJdggkmiyzBhKwNJsFImUUAAQYA5dgZ0UtKh+cAAAAASUVORK5CYII=) repeat-x;
+            margin-bottom:60px;
+            padding-top:40px;
+        }
+        #main,footer,aside {
+            line-height:1.5em;
+        }
+        #top-widget-holder,footer,aside {
+            font-size:12px;
+            line-height:1.5em;
+        }
+        .page-heading {
+            margin-bottom:15px;
+            text-align:left;
+        }
+        .page-heading span {
+            margin-left:20px;
+            padding:0 20px;
+        }
+        nav {
+            height:30px;
+            margin-top:0;
+        }
+        nav a {
+            color:#E2E0D7;
+            text-decoration:none;
+        }
+        #nav li {
+            display:inline-block;
+            margin-right:20px;
+        }
+        #nav>li>a {
+            font-size:18px;
+            font-weight:300;
+            overflow:hidden;
+            padding:0 0 7px;
+            text-shadow:2px 2px 0 rgba(0,0,0,.6);
+        }
+        #nav>li.current>a {
+            border-bottom:solid #ebebe8 5px;
+        }
+        #comboNav {
+            display: none;
             width: 100%;
-            padding: 0px 0;
-            list-style-type: none;
         }
-        #navigation li {
+        footer { min-height: 100px; }
+        footer .wrapper {
+            background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFRJREFUeNpifPXqlTEDEAQEBDBs2LCBARkgizHBBEECIAlkgCzGCDMRmynIYoxWVlbG+KyEASZCVsIVEuM+GnkGSKMoxAUY////zzDYFRLrGYAAAwBmmUERGMSYkwAAAABJRU5ErkJggg==) repeat-x top center;
+            padding-top:45px;
+        }
+        article,aside,details,figcaption,figure,footer,header,hgroup,
+        menu,nav,section,article,aside,canvas,figure,figure img,
+        figcaption,hgroup,footer,header,nav,section,audio,video {
+            display:block;
+        }
+        ::selection,
+        ::-moz-selection {
+            background:#ea4c88;
+            color:#fff;
+        }
+        img::selection,img::-moz-selection {
+            background:transparent;
+        }
+        #sidebar {
+            background: none repeat scroll 0 0 #E2E0D7;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
             float: left;
-            margin: 0 0 0 5px;
-            padding: 0;
+            padding: 20px 10px;
+            margin-bottom: 25px;
+            position: relative;
+            width: 200px;
         }
-        #navigation a:link,
-        #navigation a:visited {
-            float: left;
-            display: block;
-            color: #c6c6c6;
-            padding: 5px 10px;
-        }
-        #navigation ul li.current  a:link,
-        #navigation ul li.current  a:visited,
-        #navigation ul li.current  a:hover,
-        #navigation ul li.current  a:active {
-            color: #ffffff;
-            background-color: #414646;
-            border-left: solid #6b7070 1px;
-            border-right: solid #6b7070 1px;
-        }
-        #navigation ul li.search {
+        #sidebar h4 { margin-bottom: 20px; }
+        #select_lang {
             float: right;
+            margin-left: 10px;
             margin-right: 10px;
         }
-            /* Header */
-        #header h1 {
-            color: #191a1a;
-            font-weight: bold;
-            margin-bottom: 10px;
+        input[type=text], input[type=number], input[type=password],
+        input[type=tel], input[type=search], input[type=email], textarea {
+            background: none repeat scroll 0 0 #EAEAEA;
+            border: 1px solid #CCCCCC;
+            color: #484848;
+            font-family: Helvetica,Arial;
+            font-size: 13px;
+            line-height: 1.5em;
+            overflow: auto;
+            padding: 5px 10px;
+            width: 200px;
         }
-        #header h1 a:link,
-        #header h1 a:visited { color: #333333 }
-        #header h1 a:hover,
-        #header h1 a:active {
-            color: #000000;
-            background-color: transparent;
-        }
-        #header h1 span { color: #5b5c5c }
-            /* Content */
-        .date {
-            margin-left: 3px !important;
-            padding: 0;
-            color: #ccc !important;
-            font-family: Verdana, Arial, Sans-Serif !important;
-            letter-spacing: -1px;
-            font-weight: normal;
-            font-size: 24px;
-            text-transform: lowercase;
-            display: inline;
-        }
-        h3.post-title { display: inline }
-        h3.post-title a {
-            text-transform: lowercase;
-            color: #3f4f5c !important;
-            font-family: Verdana, Arial, Sans-Serif !important;
-            letter-spacing: -1px;
-            font-weight: bold;
-            font-size: 24px;
-            border-bottom: none !important;
-        }
-        h3.post-title a:hover {
-            text-decoration: none!important;
-            color: #222 !important;
-            background: transparent;
-        }
-        /* Conteiner Img */
-        .photo_img{
-            cursor:pointer;
-        }
-        .photo .div-img {
-            width: 100%;
-            text-align: center;
-            height: 171px;
-        }
-        .div-name {
-            color: #222222;
-            font-weight: bold;
-            height: 35px;
-            overflow: hidden;
-            padding: 5px;
-            z-index: 999;
-        }
-        .div-img a:focus {
-            text-decoration: none;
-        }
-        .div-img a:active {
-            text-decoration: none;
-        }
-        .div-img a:hover {
-            text-decoration: none;
-        }
-        .div-data {
-            margin-top: 5px;
-        }
-        .div-img img {
-            border: 1px solid #DDDDDD;
-            max-height: 170px;
-            max-width: 210px;
-        }
-        .conteiner_img .div-data{
-            margin-top: 5px;
-            padding-bottom: 10px;
-            text-align: center;
-            width: 100%;
-        }
-        .currency{
-            float: left;
-            padding-left: 5px;
-        }
-        .choose{
-            text-align: center;
-        }
-        .bottom{
-            margin-top: 5px;
-        }
-        .photo {
-            float: left;
-            margin: 3px;
-            text-align: center;
-            width: 215px;
-            text-align: center;
-            padding: 10px;
-            height: 245px;
-            margin: 5px;
-            border: 1px solid #C2C2C2;
-            background: #DEDEDE;
-            background: linear-gradient(to top, #DEDEDE, #ffffff, #ffffff, #ffffff);
-        }
-         /* Order */
-        .order_wrapper {
-            width: 150px;
-            height: 183px;
-            float: left;
-        }
-        .order_img {
-            width: 100%;
-            height: 170px;
-            text-align: center;
-        }
-        .order_img img {
-            padding: 10px;
-            max-height: 200px;
-            max-width: 200px;
-        }
-        .input-text {
-            color: #222;
-            margin-top: 6px;
-            padding: 0px;
-            background-color: #fff;
-            border: 1px solid #C7C4C0;
-            border-radius: 3px;
-            text-align: center;
-        }
-        .left{
-            text-align: left;
-        }
-        .input-batton {
-            color: #3D83A0;
-            margin-top: 6px;
-            margin-bottom: 6px;
-            cursor: pointer;
-        }
-        .button:hover{
-            border: 1px solid #888;
-        }
-        .button:active{
-            border: 1px solid #222;
-        }
-        .order_data {
-            font-size: 12px;
-            padding-left: 15px;
-            padding-bottom: 3px;
-            text-align: left;
-        }
-        .order_param {
-            font-size: 12px;
-            vertical-align: top;
-        }
-        .order_num {
-            text-align: left;
-            padding: 0px;
-            padding-bottom: 6px;
-        }
-        .order_currency{
-            width: 60%;
-            border-right: 1px solid #222;
-            float: left;
-        }
-        .order_choose{
-            text-align: center;
-        }
-        .order_choose input{
-            margin:  0;
-        }
-        .order_num input { padding: 0px }
-        .order_name {
-            padding-left: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: left;
-        }
-        #order { text-align: center }
-        .order_modeles {
-            padding: 6px;
-            padding-left: 0px;
-            height: 100%;
-        }
-        .model {
-            padding: 6px 0;
-            font-size: 12px;
-            color: #333;
-        }
-        .model form { margin-bottom: 0px }
-        .model form input { text-align: center }
-        .order_comment {
-            font-size: 12px;
-            padding-left: 6px;
-        }
-        .cyrrency_one_sum{
-            margin-left: 5px;
-        }
-        .all_sum{
-            text-align: center;
-            color: #10233b;
-            font-size: 14px;
-        }
-        /* Menu */
-        #menuIndicator{
-            position: relative;
-            top: -4px;
-            color: #8c8f8f;
-        }
-        #menuRow{
-            width:12px;
-            height:12px;
-            border:1px solid silver;
-            font-size:12px;
-            background: #ffffff;
-            cursor: pointer;
-            margin-top: 2px;
-        }
-        .node{
-            cursor:pointer;
-            width:15px;
-            background-repeat: no-repeat;
-        }
-        .element{
-            cursor:pointer;
-            width:15px;
-            background-repeat: no-repeat;
-        }
-        .album_link{
-            color:black;
-            padding:2px;
-        }
-        /** Footer **/
-        #select_lang {
-          float: right;
-          margin-left: 10px;
-          margin-right: 10px;
+        label {
+            color: #484848;
+            padding-left: 7px;
         }
         .btn {
-            background-color: #F5F5F5;
-            /*background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);*/
-            /*background-color: #EEEEEE;*/
-            border: 1px solid #888888;
-            border-radius: 3px;
+            background: none repeat scroll 0 0 #EAEAEA;
+            border: 1px solid #A9A9A9;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+            color: #444444;
             cursor: pointer;
-            padding: 2px 5px 2px 5px;
-            border-image: none;
-            border-radius: 4px;
-            border-style: solid;
-            border-width: 1px;
-            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-            color: #333333;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 14px;
-            line-height: 20px;
-            margin-bottom: 0;
-            text-align: center;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-            vertical-align: middle;
+            font-size: 11px;
+            padding: 3px 10px;
+            transition: all 0.3s ease 0s;
+            width: auto;
         }
         .btn:hover {
-            /*background-color: #E6E6E6;*/
-            border-color: #404040;
-            text-decoration: none;
-        }
-        .btn:active {
-            border-color: #C2C2C2;
+            background: none repeat scroll 0 0 #EA4C88;
+            color: #FFFFFF;
         }
         .btn-success {
             background-color: #5BB75B;
@@ -569,13 +369,68 @@ Micro_Init::$template = array(
             color: #FFFFFF;
             text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
         }
+        .btn-link {
+            border: 0 none;
+            box-shadow: none;
+            display: inline;
+            padding: 0;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+            background: transparent;
+            color: #444;
+        }
+        .btn-link.btn-preloader {
+            padding-left: 25px;
+            padding-top: 3px;
+        }
+        .btn-preloader { padding-left: 12px; }
+        .btn-preloader, .btn-preloader.btn-link:hover  {
+            background-image: url("data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==");
+            background-repeat: no-repeat;
+            background-position: 3px 50%;
+        }
+        @media only screen and (min-width: 768px) and (max-width: 991px) {
+            #nav { display: block; }
+            #comboNav { display: none; }
+            .wrapper { width: 712px;}
+        }
+        @media only screen and (max-width: 767px) {
+            #nav { display: none; }
+            #comboNav { display: block; }
+            .wrapper { width: 252px; }
+            #nav>li{
+                display: block;
+                width: 252px;
+                margin-right: 15px;
+            }
+            #nav>li a{
+                border-bottom: solid #333 1px;
+                padding: 10px 0px;
+                text-align: center;
+            }
+            #nav>li.current>a,
+            #nav>li.current>a{
+                border-bottom: solid #333 1px;
+                background: rgba(0,0,0,.2);
+            }
+            #nav>li ul{
+                float:left;
+                position:relative;
+                width: 100%;
+            }
+        }
+        @media only screen and (min-width: 480px) and (max-width: 767px) {
+            .wrapper { width: 436px; }
+            #nav>li{ width: 436px; }
+        }
     </style>
     [STYLE]
 
     <script type="text/javascript">
-        /**
-         * Смена языка
-         */
+        function selectNav (select) {
+            document.location.href = select.value;
+        }
         function selectLang (lang) {
             if (document.location.search.indexOf('lang=') >= 0) {
                 document.location.href = document.location.href.replace(/([?|&])lang=([a-z]*)/, '$1lang=' + lang);
@@ -590,28 +445,27 @@ Micro_Init::$template = array(
         function getXmlHttp () {
             if (typeof XMLHttpRequest === 'undefined') {
                 XMLHttpRequest = function() {
-                try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); }
+                    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); }
                     catch(e) {}
-                try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); }
+                    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); }
                     catch(e) {}
-                try { return new ActiveXObject("Msxml2.XMLHTTP"); }
+                    try { return new ActiveXObject("Msxml2.XMLHTTP"); }
                     catch(e) {}
-                try { return new ActiveXObject("Microsoft.XMLHTTP"); }
+                    try { return new ActiveXObject("Microsoft.XMLHTTP"); }
                     catch(e) {}
                     throw new Error("This browser does not support XMLHttpRequest.");
                 };
             }
             return new XMLHttpRequest();
         }
-
         /**
          * POST запрос на сервер
          */
         function doPost (url, params, collback, async) {
 
             async = async == 'undefined' || async == null
-                ? true
-                : async;
+                    ? true
+                    : async;
 
             var data = new FormData();
             for (var prop in params) if (params.hasOwnProperty(prop)) {
@@ -631,40 +485,45 @@ Micro_Init::$template = array(
             req.open('POST', url, async);
             req.send(data);
         }
-
-
     </script>
     [JAVASCRIPT]
 
 </head>
-<body>
+<body lang="[LANG]">
 
-    <div id="container">
-        <div id="header">
-            <h1>
-                Micro <span>Shop</span>
-            </h1>
+    <header class="clearfix">
+
+        <div class="wrapper clearfix">
+
+            <a href="index.php" id="logo">[SITE_NAME]</a>
+
+            <nav>
+                <ul id="nav">
+                    <!-- BEGIN menu -->
+                    <li class="[CURRENT]">
+                        <a href="[MENU_URL]">##'[MENU_NAME]'##</a>
+                    </li>
+                    <!-- END menu -->
+                </ul>
+
+                <select id="comboNav" onchange="selectNav(this)">
+                    <option value="" selected="selected">Navigation</option>
+                    <!-- BEGIN combonav -->
+                    <option value="[MENU_URL]">##'[MENU_NAME]'##</option>
+                    <!-- END combonav -->
+                </select>
+            </nav>
         </div>
+    </header>
 
-        <div id="wrapper">
-            <div id='navigation'>
-                <ul>
-                     <!-- BEGIN menu -->
-                     <li class="[CURRENT]">
-                         <a href="[MENU_URL]">##'[MENU_NAME]'##</a>
-                     </li>
-                     <!-- END menu -->
-                 </ul>
-            </div>
-
-            <div id='content-wrapper'>
-                <div id='content'>
-                    [CONTENT]
-                </div>
-            </div>
+    <div id="main">
+        <div class="wrapper">
+            [CONTENT]
         </div>
+    </div>
 
-        <div id="footer">
+    <footer>
+        <div class="wrapper">
             <!-- BEGIN select_lang -->
             <div id="select_lang">
                 <select onchange="selectLang(this.value)" name="lang">
@@ -675,7 +534,7 @@ Micro_Init::$template = array(
             </div>
             <!-- END select_lang -->
         </div>
-    </div>
+    </footer>
 
 </body>
 </html>
@@ -709,24 +568,41 @@ Micro_Init::$pages['gallery'] = array(
     </ul>
     <!-- END taxonomy -->
 
-    <!-- BEGIN albums -->
-    <ul id="albums">
-        <!-- BEGIN album -->
-        <li>
-            <a href="[GALLERY_URL]">[GALLERY_NAME]</a>
-        </li>
-        <!-- END album -->
-    </ul>
-    <!-- END albums -->
+    <aside id="sidebar">
+        <h4>##'Категории'##</h4>
+        <!-- BEGIN albums -->
+        <ul id="albums">
+            <!-- BEGIN album -->
+            <li>
+                <a href="[GALLERY_URL]">[GALLERY_NAME]</a>
+            </li>
+            <!-- END album -->
+        </ul>
+        <select id="combo-albums" name="albums" onchange="selectAlbum(this)">
+            <option value="">--</option>
+            <!-- BEGIN comboalbum -->
+            <option value="[GALLERY_URL]">[GALLERY_NAME]</option>
+            <!-- END comboalbum -->
+        </select>
+        <!-- END albums -->
+
+        <!-- BEGIN no_albums -->
+        <p>
+            ##'Категории отсутствуют'##
+        </p>
+        <!-- END no_albums -->
+    </aside>
 
     <!-- BEGIN photos -->
     <div id="photo_wrapper">
         <!-- BEGIN photo -->
         <div class="photo">
-            <div class="div-img">
-                <a href="[PHOTO_BIG_URL]" target="_blank">
-                    <img class="photo_img" src="[PHOTO_SMALL_URL]" alt="[PHOTO_NAME]" title="[PHOTO_NAME]"/>
-                </a>
+            <div class="image-container">
+                <div class="div-img">
+                    <a href="[PHOTO_BIG_URL]" target="_blank">
+                        <img class="photo_img" src="[PHOTO_SMALL_URL]" alt="[PHOTO_NAME]" title="[PHOTO_NAME]"/>
+                    </a>
+                </div>
             </div>
             <div class="div-name">
                 [PHOTO_NAME]
@@ -743,7 +619,7 @@ Micro_Init::$pages['gallery'] = array(
             <!-- END pay -->
         </div>
         <!-- END photo -->
-        <div style="clear:both"></div>
+        <div class="clearfix"></div>
 
         <!-- BEGIN pagenation -->
         <div id="pagination">
@@ -755,6 +631,7 @@ Micro_Init::$pages['gallery'] = array(
         </div>
         <!-- END pagenation -->
     </div>
+    <div class="clearfix"></div>
     <!-- END photos -->
 HTML
 ,
@@ -772,6 +649,75 @@ HTML
 ,
     'style' => <<<HTML
     <style>
+        #photo_wrapper {
+            float: right;
+            width: 700px;
+        }
+        .photo {
+            overflow: hidden;
+            float: left;
+            text-align: center;
+            width: 205px;
+            height: 260px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            border: 1px solid #C2C2C2;
+            background: #DEDEDE;
+            background: linear-gradient(to top, #DEDEDE, #ffffff, #ffffff, #ffffff);
+        }
+        .photo_img{
+            cursor:pointer;
+            transition: all 0.3s ease 0s;
+        }
+        .photo_img:hover{
+            opacity: 0.2
+        }
+        .photo .image-container {
+            width: 100%;
+            text-align: center;
+            height: 180px;
+        }
+        .photo .div-img {
+            display: inline-block;
+            line-height: 0;
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOxJREFUeNqMkkEKwkAMRVsdCgVBlx7ArVDQTaE38AAeQHBVUARPIYqCK2/gPYRuFApuPYBbQSgUSv0pfyAWhQYeCc3PTJOMW5alo2wIViADbVAAH+zA3YpcFnkgBjk40VuT3IzFh+ogKQJbEDL+R0id00JlBJ4gUadPQElvLaEukqIpr21iR9EbNpzTB0wOlB8xTu2AjGq6A661k/cq7oGX6A2nI/YGY8YRC5bgovLVNA134fHGGxN9+of6ZsdfyCDOYNFwEHGl5w72Dfckuq8XsWajv17EHHTBRnJu7e0F/IVM9elzP6kVfQQYAJQPidJVNk1IAAAAAElFTkSuQmCC") no-repeat scroll center center #EA4C88;
+        }
+        .div-img a:focus {
+            text-decoration: none;
+        }
+        .div-img a:active {
+            text-decoration: none;
+        }
+        .div-img a:hover {
+            text-decoration: none;
+        }
+        .div-data {
+            margin-top: 5px;
+        }
+        .div-name {
+            color: #222222;
+            font-weight: bold;
+            height: 35px;
+            overflow: hidden;
+            padding: 5px;
+            z-index: 999;
+        }
+        .conteiner_img .div-data {
+            margin-top: 5px;
+            padding-bottom: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        .currency {
+            float: left;
+            padding-left: 20px;
+        }
+        .choose {
+            text-align: center;
+        }
+        .bottom {
+            margin-top: 5px;
+        }
         .btn-preloader {
             background-image: url(data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==);
             background-repeat: no-repeat;
@@ -809,19 +755,43 @@ HTML
         #albums li {
             background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcklEQVQ4je3TMQqDYAyG4ceh4I08lBeqmw5CXTr3As5eQPAqDv6DaMGGv6OBd0jgewmEQIFyx0OwejR4Jj6oIoL20JdpdkWH+psgUm+YMOAVZEhZS8YGC8wZgvkvgjFDMJJ3hfYWbNnjM/1Kk7Knd45QrNe2LfSKk3ZjAAAAAElFTkSuQmCC");
             background-repeat: no-repeat;
-            background-position: 8px 50%;
-            display: inline-block;
+            background-position: 1px 50%;
             text-shadow: 0 1px 0 #FFFFFF;
-            background-color: #ffffff;
-            border-radius: 4px;
-            padding: 8px 10px 8px 30px;
-            margin-right: 10px;
+            padding: 8px 10px 8px 24px;
+        }
+        #combo-albums {
+            display: none;
+            width: 100%;
+        }
+        @media only screen and (min-width: 768px) and (max-width: 991px) {
+            #photo_wrapper { width: 480px; }
+            .photo {
+                margin-left: 25px;
+                margin-bottom: 25px;
+            }
+        }
+        @media only screen and (min-width: 480px) and (max-width: 767px) {
+            #photo_wrapper { width: 435px; }
+            .photo { margin-left: 10px; }
+            #sidebar { width: 415px; }
+            #albums { display: none; }
+            #combo-albums { display: inline; }
+        }
+        @media only screen and (max-width: 480px) {
+            #photo_wrapper { width: 250px; }
+            .photo { margin-left: 25px; }
+            #sidebar { width: 250px; }
+            #albums { display: none; }
+            #combo-albums { display: inline; }
         }
     </style>
 HTML
 ,
     'javascript' => <<<HTML
     <script type="text/javascript">
+        function selectAlbum (select) {
+            document.location.href = select.value;
+        }
         var gallery = {
             order : function (obj) {
                 var photo_path = obj.getAttribute("data-photo-path");
@@ -879,7 +849,9 @@ HTML
         'Предыдущая' => array('ru' => 'Предыдущая', 'en' => 'Previous'),
         'Следующая'  => array('ru' => 'Следующая', 'en' => 'Next'),
         'В конец'    => array('ru' => 'В конец', 'en' => 'To end'),
-        'Ошибка'     => array('ru' => 'Ошибка', 'en' => 'Error')
+        'Ошибка'     => array('ru' => 'Ошибка', 'en' => 'Error'),
+        'Категории'  => array('ru' => 'Категории', 'en' => 'Сategories'),
+        'Категории отсутствуют'  => array('ru' => 'Категории отсутствуют', 'en' => 'Categories are missing')
     ),
 );
 
@@ -888,7 +860,7 @@ HTML
  */
 Micro_Init::$pages['cart'] = array(
     'tpl' => <<<HTML
-        <h3>##'Информация о вашем заказе'##:</h3>
+        <h3>##'Информация о вашем заказе'##</h3>
 
         <!-- BEGIN empty_cart -->
         <h3>##'Нет заказов'##!</h3>
@@ -896,12 +868,13 @@ Micro_Init::$pages['cart'] = array(
 
 
         <!-- BEGIN orders -->
+        <br>
+        <br>
         <form action="?view=order&lang=[LANG]" method="post">
             <table width="100%">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th></th>
+                        <th colspan="2" align="center">##'Заказ'##</th>
                         <th>##'Цена'##</th>
                         <th>##'Количество'##</th>
                         <th></th>
@@ -910,37 +883,41 @@ Micro_Init::$pages['cart'] = array(
                 <tbody>
                     <!-- BEGIN order -->
                     <tr>
-                        <td>
+                        <td width="100" align="center">
                             <img src="[PHOTO_URL]" alt="[TITLE]">
                         </td>
                         <td>
                             [TITLE]
                         </td>
-                        <td>
-                            [COST]
+                        <td width="100" align="center">
+                            [COST] ##'руб'##
                         </td>
-                        <td>
+                        <td width="90" align="center">
                             <input type="hidden" name="[PARAM_NAME]" value="[PARAM_VALUE]">
                             <input min="1" step="1" type="number" name="[COUNT_NAME]" value="1"
                                    data-cost="[COST]" class="product-count" onchange="recalculation()">
                         </td>
-                        <td>
-                            <input class="btn btn-delete" type="button" class="delete"
-                                   data-photo-path="[PARAM_VALUE]" onclick="removeInCart(this)">
+                        <td width="50" align="center">
+                            <span class="btn btn-link" data-photo-path="[PARAM_VALUE]"
+                                  onclick="removeInCart(this)">##'удалить'##</span>
                         </td>
                     </tr>
                     <!-- END order -->
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="5">
-                            ##'Общая сумма'##: <b><span id="cost-sum">[COST_SUM]</span> ##'руб'##</b>
+                        <td colspan="5" align="right">
+                            <br>
+                            <b>##'Общая сумма'##: <span id="cost-sum">[COST_SUM]</span> ##'руб'##</b>
+                            <br>
+                            <br>
                         </td>
                     </tr>
                 </tfoot>
             </table>
+            <br>
 
-            <input value="##'Продолжить'##" type="submit">
+            <input class="btn pull-right" value="##'Продолжить'##" type="submit">
         </form>
         <!-- END orders -->
 HTML
@@ -1006,20 +983,14 @@ HTML
 ,
     'style' => <<<HTML
     <style>
+        th { font-weight: bold; }
+        td {
+            border: 1px solid #999999;
+            padding: 5px;
+            vertical-align: middle;
+        }
         input[type=number] {
             width: 40px;
-        }
-        .btn-delete {
-            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACrklEQVQ4jZ2TT0zTZxjHvwezo3Hzogc8eJqLZluWEMwSzSRzm8Ys2S5bNNEZNzaYnKYjzoSNRJHg30UxhhBQmSKSMcgmBGd0M4ul0MIstdAWftg/a6Fr+yuFQinl46EEgkYPfi5vnrzP582bJ99HegqnYazpDWUrbL6pnv6+R+G+7v6o3R3yWkM0OQP/b3u6fxkD/5lf2gOpueEbpzGr3yNTlUemcjVTVW8RrPkKh/1f7BHaLRbLymflseRPLk+AZPk7cEhwRlAvuCy4KPhRZEuF0V6HYwKX1Wpdsyi7gpFdw6Eo099tgKOCZkGr4JagS9AmaBHUCPaLYEcDzgluLj7gmcaSuFgKBxdEowkiTXBb0CFwfApxG/y5EU6K9Ner8RtDOAKRnXroD20NDw6QLlmV+3ZXAYuEvwf3RshO5mrnUagX8yUieqWCoSkuyW1SF7t9hbkiwVXBDYH9Y8jOsIzHlfDbwn2ZSBzbzmgiZZdnkrvRX38mUyy4vtBQJxg5viRnbLm51AtuCspFovxNjDFzVK7o3KXxrkYSuwXnF6b/YN+SPJ/KnaEmqF0BF0S6WIyX72Q0nrSpZ9D77rjHzeNP1jL7jeCX/CW59wtoXwcz0VzdUw0Vwv++CDacZXg6WyNJ8qVm/w5Wl2FsEZwUWM+D7RRUC6oELTtg5C+ofx1zr3B9lEfUb9A94PlAkmRxuLYnJmK4Ps/Hu1lwRHBMcEpwTlCZC1J8j+jdJGL3WvGak9eWJbFvxHckETfxln5I/9vCv0uYB8REkQh/JpwFoq9wJfF//sA3k7F1dna+9kycrYOe3dEsk+N32hj+YQ+uA2/g3L+eoW8L8deewIyM4U6mG5ubm1957kL9fv/+q4Ox1OHw7Oy9cDxhjMWSgXAy+dCXps5ie1Twwm18GZ4AOZhb0IBxCUwAAAAASUVORK5CYII=");
-            background-repeat: no-repeat;
-            background-position: 3px 50%;
-            padding-left: 12px;
-        }
-        .btn-preloader {
-            background-image: url("data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==");
-            background-repeat: no-repeat;
-            background-position: 3px 50%;
-            padding-left: 12px;
         }
     </style>
 HTML
@@ -1046,6 +1017,8 @@ HTML
         'Общая сумма'               => array('ru' => 'Общая сумма', 'en' => 'Total amount'),
         'руб'                       => array('ru' => 'руб', 'en' => 'rubles'),
         'Продолжить'                => array('ru' => 'Продолжить', 'en' => 'Continue'),
+        'удалить'                   => array('ru' => 'удалить', 'en' => 'remove'),
+        'Заказ'                     => array('ru' => 'Заказ', 'en' => 'Order'),
     )
 );
 
@@ -1074,7 +1047,8 @@ Micro_Init::$pages['order'] = array(
                 <tr>
                     <td align="right">
                         <label for="field_name">
-                            <span class="red-star">*</span>##'Имя и Фамилия'##:
+                            <span class="red-star">*</span>
+                            ##'Имя и Фамилия'##:
                         </label>
                     </td>
                     <td>
@@ -1085,7 +1059,8 @@ Micro_Init::$pages['order'] = array(
                 <tr>
                     <td align="right">
                         <label for="field_tel">
-                            <span class="red-star">*</span>##'Контактный телефон'##:
+                            <span class="red-star">*</span>
+                            ##'Контактный телефон'##:
                         </label>
                     </td>
                     <td>
@@ -1106,7 +1081,8 @@ Micro_Init::$pages['order'] = array(
                 <tr>
                     <td align="right">
                         <label for="field_adres">
-                            <span class="red-star">*</span>##'Адрес доставки'##:
+                            <span class="red-star">*</span>
+                            ##'Адрес доставки'##:
                         </label>
                     </td>
                     <td>
@@ -1121,7 +1097,7 @@ Micro_Init::$pages['order'] = array(
                         </label>
                     </td>
                     <td>
-                        <textarea name="info" rows="4" id="field_info" style="width:100%"></textarea>
+                        <textarea name="info" rows="4" id="field_info"></textarea>
                     </td>
                 </tr>
                 <tr>
@@ -1156,6 +1132,10 @@ HTML
 ,
     'style' => <<<HTML
     <style>
+        td {
+            padding: 5px;
+            vertical-align: top;
+        }
         .red-star {
             color: red;
         }
@@ -1263,53 +1243,21 @@ Micro_Init::$pages['help'] = array(
     'tpl' => array(
         'ru' => <<<HTML
     <p>
-        Для того чтобы заказать понравившиеся фотографии, нажмите кнопку <b>"В корзину"</b> находящейся под картинкой.
-        Если вы кликните мышкой на изображение, вы увидите его в увеличенном виде. Затем в разделе <b>"Ваш заказ"</b> уточните  количество.
-        Если вам понадобится дополнительная обработка, кадрирование или другие изменения, заполните поле <b>"Дополнительная информация"</b>.
-        Сбоку страницы вы увидите общую стоимость заказаных Вами фотографий.
-        Дополнительное редактирование, указанное в поле <b>"Дополнительная информация"</b> оплачивается отдельно, согласно расценкам студии.
-        Если Вы уверены в правильности заказа, нажмите на кнопку <b>"Завершить формирование заказа"</b>.
-        <p>
-            Вы увидите форму для отправки заказа нашему администратору. После правильного заполнения формы нажмите кнопку <b>"Отправить заказ"</b>.
-            Если после этого вы решили изменить заказ или отменить его, свяжитесь с администратором. Печать заказанных фотографий производится после предоплаты.
-                <p>
-                    Адрес студии: <br>
-                    Тел./факс  (017) xxx xx xx<br>
-                    Тел. (017) xxx xx xx<br>
-                    <br>
-                    <img alt="как до нас добраться?" src="data:image/gif;base64,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"/>
-                    <br>
-                    <br>
-                    Время работы: с 9.00 до 19.00, в субботу с 9.00 до 17.00, воскресенье - выходной.<br><br>
-                    <a href="mailto:easter@tut.by">easter@tut.by<a>
-                </p>
-        </p>
+        Для того чтобы заказать товар, нажмите кнопку <b>"В корзину"</b> находящейся под картинкой.
+        Если вы кликните мышкой на изображение, вы увидите его в увеличенном виде. Затем в разделе <b>"Ваш заказ"</b> уточните количество.
+        Внизу списка товаров вы увидите общую стоимость.
+        Если вы уверены в правильности заказа, нажмите на кнопку <b>"Продолжить"</b>.
+        Вы увидите форму для отправки заказа нашему администратору. После правильного заполнения формы нажмите кнопку <b>"Отправить заказ"</b>.
     </p>
 HTML
 ,
         'en' => <<<HTML
     <p>
-        To order your favorite photos , click on <b>"Add to Cart"</b> under the picture.
-        If you click the mouse on the image , you will see it in a larger size . Then in the <b>"Your order"</b> specify the amount.
-        If you need additional processing , framing, or other changes , fill in the <b>"Additional Information"</b>.
-        Side of the page you will see the total cost zakazanyh your photos.
-        Additional editing is specified in the <b>"Additional Information"</b> separately , according to studio rates.
-        If you are unsure of the order, click on <b>" Complete order generation"</b>.
-        <p>
-            You will see a form to order our administrator. After properly filling out the form, click <b>"Submit Order"</b>.
-            If you then decide to change the order or cancel it, please contact the administrator. Printing photos ordered after payment is made.
-                <p>
-                    Address studio: <br>
-                    Tel./Fax  (017) xxx xx xx<br>
-                    Tel. (017) xxx xx xx<br>
-                    <br>
-                    <img alt="how to reach us?" src="data:image/gif;base64,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"/>
-                    <br>
-                    <br>
-                    Operation time: с 9.00 до 19.00, on saturday from 9.00 to 17.00, sunday - day off.<br><br>
-                    <a href="mailto:easter@tut.by">easter@tut.by<a>
-                </p>
-        </p>
+        To order a product, click <b>"Add to Cart"</b> under the picture.
+        If you click the mouse on the image, you will see it in a larger size. Then under <b>"Your order"</b> specify the amount.
+        Bottom of the list of goods you will see the total cost.
+        If you are unsure of the order, click <b>"Continue"</b>.
+        You will see a form to order our administrator. After filling out the form correctly, click <b>"Submit Order"</b>.
     </p>
 HTML
     ),
@@ -1421,7 +1369,7 @@ class Micro_Pages {
      */
     public function view ($name) {
 
-        $page = new Micro_Page();
+        $page = new Micro_Page($name);
 
         $page->title      = Micro_Init::pageProp($name, 'title');
         $page->meta_keys  = Micro_Init::pageProp($name, 'meta_keys');
@@ -1511,14 +1459,23 @@ class Micro_Pages {
 
 
             // Директории
-            foreach ($dir_content['dir'] as $dir_name) {
-                $gallery_path = isset($_GET['path']) && $_GET['path'] != ''
-                    ?  $_GET['path'] . '-' . Micro_Tools::pathToHash($dir_name)
-                    :  Micro_Tools::pathToHash($dir_name);
+            if (empty($dir_content['dir'])) {
+                $tpl->touchBlock('no_albums');
 
-                $tpl->albums->album->assign('[GALLERY_URL]',  "index.php?view=gallery&path={$gallery_path}{$lang}");
-                $tpl->albums->album->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
-                if ($dir_name != end($dir_content['dir'])) $tpl->albums->album->reassign();
+            } else {
+                foreach ($dir_content['dir'] as $dir_name) {
+                    $gallery_path = isset($_GET['path']) && $_GET['path'] != ''
+                        ?  $_GET['path'] . '-' . Micro_Tools::pathToHash($dir_name)
+                        :  Micro_Tools::pathToHash($dir_name);
+
+                    $tpl->albums->album->assign('[GALLERY_URL]',  "index.php?view=gallery&path={$gallery_path}{$lang}");
+                    $tpl->albums->album->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
+                    if ($dir_name != end($dir_content['dir'])) $tpl->albums->album->reassign();
+
+                    $tpl->albums->comboalbum->assign('[GALLERY_URL]',  "index.php?view=gallery&path={$gallery_path}{$lang}");
+                    $tpl->albums->comboalbum->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
+                    if ($dir_name != end($dir_content['dir'])) $tpl->albums->comboalbum->reassign();
+                }
             }
 
 
@@ -1574,7 +1531,7 @@ class Micro_Pages {
         }
 
 
-        $page = new Micro_Page();
+        $page = new Micro_Page('gallery');
         $page->title      = Micro_Init::pageProp('gallery', 'title');
         $page->meta_keys  = Micro_Init::pageProp('gallery', 'meta_keys');
         $page->meta_desc  = Micro_Init::pageProp('gallery', 'meta_desc');
@@ -1638,7 +1595,7 @@ class Micro_Pages {
         }
 
 
-        $page = new Micro_Page();
+        $page = new Micro_Page('cart');
         $page->title      = Micro_Init::pageProp('cart', 'title');
         $page->meta_keys  = Micro_Init::pageProp('cart', 'meta_keys');
         $page->meta_desc  = Micro_Init::pageProp('cart', 'meta_desc');
@@ -1705,7 +1662,7 @@ class Micro_Pages {
         }
 
 
-        $page = new Micro_Page();
+        $page = new Micro_Page('order');
         $page->title      = Micro_Init::pageProp('order', 'title');
         $page->meta_keys  = Micro_Init::pageProp('order', 'meta_keys');
         $page->meta_desc  = Micro_Init::pageProp('order', 'meta_desc');
@@ -1808,7 +1765,7 @@ class Micro_Pages {
             exit;
         }
 
-        $page = new Micro_Page();
+        $page = new Micro_Page('order_result');
         $page->title      = Micro_Init::pageProp('order_result', 'title');
         $page->meta_keys  = Micro_Init::pageProp('order_result', 'meta_keys');
         $page->meta_desc  = Micro_Init::pageProp('order_result', 'meta_desc');
@@ -1953,6 +1910,11 @@ class Micro_Pages {
  */
 class Micro_Page {
 
+    public function __construct($name = '') {
+        $this->name = $name;
+    }
+
+    public $name = '';
     public $title = '';
     public $meta_keys = '';
     public $meta_desc = '';
@@ -2037,7 +1999,8 @@ class Micro_Init {
             // существует ли плагин Micro_Plugin_Rewrite
             } elseif (
                 class_exists('Micro_Plugin_Rewrite') && Micro_Plugin_Rewrite::$is_active &&
-                preg_match('~^([^?]+)(?|)~', ltrim($_SERVER['REQUEST_URI'], '/'), $matches)
+                preg_match('~^([^?]+)(?|)~', ltrim($_SERVER['REQUEST_URI'], '/'), $matches) &&
+                $matches[1] != 'index.php'
             ) {
                 $rewrite   = new Micro_Plugin_Rewrite();
                 $page_name = $rewrite->searchPage(self::$pages, $matches[1]);
@@ -2104,18 +2067,23 @@ class Micro_Init {
         $tpl->assign('[JAVASCRIPT]', $page->javascript);
         $tpl->assign('[CONTENT]',    $page->content);
         $tpl->assign('[LANG]',       isset($_GET['lang']) && $_GET['lang'] ? $_GET['lang'] : DEFAULT_LANG);
+        $tpl->assign('[SITE_NAME]',  SITE_NAME);
 
 
         // Меню
         self::$menu = Micro_Tools::arraySort(self::$menu, 'position');
         foreach (self::$menu as $menu) {
-            $is_active = isset($_GET['view']) && in_array($_GET['view'], $menu['active']) ? 'current' : '';
+            $is_active = in_array($page->name, $menu['active']) ? 'current' : '';
             $lang      = isset($_GET['lang']) && $_GET['lang'] ? "&lang={$_GET['lang']}" : '';
 
             $tpl->menu->assign('[CURRENT]',   $is_active);
             $tpl->menu->assign('[MENU_URL]',  '?view=' . $menu['view'] . $lang);
             $tpl->menu->assign('[MENU_NAME]', $menu['title']);
             if ($menu != end(self::$menu)) $tpl->menu->reassign();
+
+            $tpl->combonav->assign('[MENU_URL]',  '?view=' . $menu['view'] . $lang);
+            $tpl->combonav->assign('[MENU_NAME]', $menu['title']);
+            if ($menu != end(self::$menu)) $tpl->combonav->reassign();
         }
 
 
