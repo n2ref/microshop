@@ -24,32 +24,49 @@
  * @see: microshop.by
  * @version: 1.0.0
  */
-
+ini_set('display_errors', 1);
 /**
  * Название сайта.
- * И будет ли оно отображаться в загаловке страницы.
  */
-define('SITE_NAME',              'Microshop');
-define('USE_SITE_NAME_IN_TITLE', true);
-
+define('SITE_NAME', 'Gallery');
 
 /**
- * Названия валют сайта
+ * Названия валют на сайте для разных языков
  */
 define('CURRENCY_RU', 'руб');
 define('CURRENCY_EN', 'publes');
-
 
 /**
  * Адрес электронной почты на который будет приходить заказы.
  * А так же отбратный адрес который будет указан в письмах
  * TODO отправляемых заказчику на указанный им адрес.
- * Метод отправки писем - по умолчанию равен MAIL
  */
 define('ORDER_EMAIL_TO',     'yourmail@domain.com');
 define('ORDER_EMAIL_FROM',   'info@microshop.com');
-define('ORDER_EMAIL_METHOD', 'MAIL');
 
+/**
+ * Язык сайта по умолчанию и активные языки
+ */
+define('DEFAULT_LANG', 'ru');
+define('LANGUAGES',    'ru,en');
+
+/**
+ * Будет ли название сайта отображаться в загаловке страницы.
+ */
+define('USE_SITE_NAME_IN_TITLE', true);
+
+/**
+ * Директории используемые приложением.
+ */
+define('USE_CACHE',   true);
+define('CACHE_DIR',   './cache');
+define('GALLERY_DIR', './gallery');
+define('PLUGINS_DIR', './plugins');
+
+/**
+ * Метод отправки писем - по умолчанию равен MAIL
+ */
+define('ORDER_EMAIL_METHOD', 'MAIL');
 
 /**
  * Параметры для отправки писем при помощи метода SMTP
@@ -61,24 +78,6 @@ define('EMAIL_SMTP_AUTH',   false);
 define('EMAIL_SMTP_USER',   '');
 define('EMAIL_SMTP_PASS',   '');
 
-
-/**
- * Директории используемые приложением.
- * Их наличие не обязательно.
- */
-define('USE_CACHE',   true);
-define('CACHE_DIR',   './cache');
-define('GALLERY_DIR', './gallery');
-define('PLUGINS_DIR', './plugins');
-
-
-/**
- * Язык сайта по умолчанию и активные языки
- */
-define('DEFAULT_LANG', 'ru');
-define('LANGUAGES',    'ru,en');
-
-
 /**
  * Количество фотографий на странице.
  * Путь до изображения с водяным знаком.
@@ -86,14 +85,12 @@ define('LANGUAGES',    'ru,en');
 define('GALLERY_PHOTOS_ON_PAGE', 18);
 define('WATERMARK_IMAGE',        '');
 
-
 /**
  *  Настройки для каких изображений будет применен водяной знак
  */
 define('USE_WATERMARK_BIG_IMAGE',  true);
 define('USE_WATERMARK_LIST_IMAGE', false);
 define('USE_WATERMARK_CART_IMAGE', false);
-
 
 /**
  * Размеры для картинок
@@ -106,41 +103,95 @@ define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
 
 
+Micro_Init::$menu = array(
+    'gallery' => 'Галерея',
+    'cart'    => 'Ваш заказ',
+    'help'    => 'Помощь'
+);
+
+
+
+/**
+ * Маршрутизатор
+ */
+Micro_Init::$router = array(
+    'home' => array(
+        'menu'    => array( 'Micro_MainMenu' ),
+        'content' => array( 'Micro_Gallery' ),
+        'sidebar' => array( 'Micro_Categories' )
+    ),
+    'gallery' => array(
+        'menu'    => array( 'Micro_MainMenu' ),
+        'content' => array( 'Micro_Gallery' ),
+        'sidebar' => array( 'Micro_Categories' )
+    ),
+    'cart' => array(
+        'menu'    => array( 'Micro_MainMenu' ),
+        'content' => array( 'Micro_Cart' )
+    ),
+    'help' => array(
+        'menu'    => array( 'Micro_MainMenu' ),
+        'content' => array( 'Micro_Help' )
+    )
+);
+
+
+
+Micro_Init::$locutions = array(
+    'en' => array(
+        'Цена'                      => 'Price',
+        'Галерея'                   => 'Gallery',
+        'Ваш заказ'                 => 'Your order',
+        'Помощь'                    => 'Help',
+        'Меню'                      => 'Menu',
+        'В корзину'                 => 'Add to cart',
+        'Отмена'                    => 'Cancel',
+        'Предыдущая'                => 'Previous',
+        'Следующая'                 => 'Next',
+        'Ошибка'                    => 'Error',
+        'Категории'                 => 'Categories',
+        'Категории отсутствуют'     => 'Categories are missing',
+        'Информация о вашем заказе' => 'Information about your order',
+        'Нет заказов'               => 'No orders',
+        'Вид'                       => 'View',
+        'Название'                  => 'Title',
+        'Количество'                => 'Quantity',
+        'Общая сумма'               => 'Total amount',
+        'Продолжить'                => 'Continue',
+        'удалить'                   => 'remove',
+        'Заказ'                     => 'Order',
+        'Имя и Фамилия'             => 'Name and Surname',
+        'Контактный телефон'        => 'Contact phone',
+        'Ваш email'                 => 'Your email',
+        'Адрес доставки'            => 'Delivery Address',
+        'Дополнительная информация' => 'Additional information',
+        'Отправить заказ'           => 'Send order',
+        'назад'                     => 'back',
+        'Заказ отправлен'           => 'Orders sent',
+        'Назад в галерею'           => 'Back to gallery',
+        'Страница не найдена'       => 'Page Not Found',
+        'Укажите пожалуйста адрес доставки'              => 'Please specify the delivery address',
+        'Укажите пожалуйста контактный телефон'          => 'Please fill in contact phone number',
+        'Укажите пожалуйста ваше имя'                    => 'Please fill in your name',
+        'поля, обязательные для заполнения'              => 'fields are required',
+        'Для оформления заказа нужен хотя бы один товар' => 'Ordering need at least one item',
+        'Благодарим за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.' => 'Thank you for your order. Soon you will be contacted to confirm your order.',
+        'Во время отправки заказа что-то пошло не так. Пожалуйста попробуйте повторить заказ.' => 'While sending order something went wrong. Please try to repeat the order.',
+        'Извините, но страница которую вы пытаетесь просмотреть, не существует.' => 'Sorry, but the page you were trying to view does not exist.',
+    ),
+);
+
 
 /***************************
  *====== HTML секция ======*
  **************************/
 
 
-/**
- * Меню сайта
- */
-Micro_Init::$menu = array(
-    array(
-        'view'     => 'gallery',
-        'active'   => array('gallery'),
-        'title'    => 'Галерея',
-        'position' => 10,
-    ),
-    array(
-        'view'     => 'cart',
-        'active'   => array('cart', 'order', 'order_send'),
-        'title'    => 'Ваш заказ',
-        'position' => 20,
-    ),
-    array(
-        'view'     => 'help',
-        'active'   => array('help'),
-        'title'    => 'Помощь',
-        'position' => 30,
-    )
-);
-
 
 /**
- * Шаблон
+ * Планировка страницы
  */
-Micro_Init::$template = array(
+Micro_Init::$components['Micro_Layout'] = array(
     'tpl' => <<<HTML
 <!DOCTYPE html>
 <html>
@@ -215,7 +266,6 @@ Micro_Init::$template = array(
         }
         body p {
             margin-bottom:21px;
-            text-indent: 20px;
             text-align: justify;
         }
         body a {
@@ -277,32 +327,6 @@ Micro_Init::$template = array(
             margin-left:20px;
             padding:0 20px;
         }
-        nav {
-            height:30px;
-            margin-top:0;
-        }
-        nav a {
-            color:#E2E0D7;
-            text-decoration:none;
-        }
-        #nav li {
-            display:inline-block;
-            margin-right:20px;
-        }
-        #nav>li>a {
-            font-size:18px;
-            font-weight:300;
-            overflow:hidden;
-            padding:0 0 7px;
-            text-shadow:2px 2px 0 rgba(0,0,0,.6);
-        }
-        #nav>li.current>a {
-            border-bottom:solid #ebebe8 5px;
-        }
-        #comboNav {
-            display: none;
-            width: 100%;
-        }
         footer { min-height: 100px; }
         footer .wrapper {
             background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFRJREFUeNpifPXqlTEDEAQEBDBs2LCBARkgizHBBEECIAlkgCzGCDMRmynIYoxWVlbG+KyEASZCVsIVEuM+GnkGSKMoxAUY////zzDYFRLrGYAAAwBmmUERGMSYkwAAAABJRU5ErkJggg==) repeat-x top center;
@@ -331,11 +355,6 @@ Micro_Init::$template = array(
             width: 200px;
         }
         #sidebar h4 { margin-bottom: 20px; }
-        #select_lang {
-            float: right;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
         input[type=text], input[type=number], input[type=password],
         input[type=tel], input[type=search], input[type=email], textarea {
             background: none repeat scroll 0 0 #fbfbfb;
@@ -449,58 +468,37 @@ Micro_Init::$template = array(
           padding: 5px;
           vertical-align: middle;
         }
+        .taxonomy {
+            border-bottom: 1px solid #B2B2B2;
+            list-style: none outside none;
+            margin: 0 0 20px;
+            padding: 0 15px 8px 15px;
+        }
+        .taxonomy li {
+            display: inline-block;
+            text-shadow: 0 1px 0 #FFFFFF;
+        }
+        .taxonomy li.active {
+            color: #999999;
+        }
+        .taxonomy li.divider {
+            color: #CCCCCC;
+            padding: 0 5px;
+        }
         @media only screen and (min-width: 768px) and (max-width: 991px) {
-            #nav { display: block; }
-            #comboNav { display: none; }
             .wrapper { width: 712px;}
         }
         @media only screen and (max-width: 767px) {
             #nav { display: none; }
-            #comboNav { display: block; }
             .wrapper { width: 252px; }
-            #nav>li{
-                display: block;
-                width: 252px;
-                margin-right: 15px;
-            }
-            #nav>li a{
-                border-bottom: solid #333 1px;
-                padding: 10px 0px;
-                text-align: center;
-            }
-            #nav>li.current>a,
-            #nav>li.current>a{
-                border-bottom: solid #333 1px;
-                background: rgba(0,0,0,.2);
-            }
-            #nav>li ul{
-                float:left;
-                position:relative;
-                width: 100%;
-            }
         }
         @media only screen and (min-width: 480px) and (max-width: 767px) {
             .wrapper { width: 436px; }
-            #nav>li{ width: 436px; }
         }
     </style>
     [STYLE]
 
     <script type="text/javascript">
-        function selectNav (select) {
-            document.location.href = select.value;
-        }
-        function selectLang (lang) {
-            if (document.location.search.indexOf('lang=') >= 0) {
-                document.location.href = document.location.href.replace(/([?|&])lang=([a-z]*)/, '$1lang=' + lang);
-            } else {
-                if (document.location.search == '') {
-                    document.location.href += '?lang=' + lang;
-                } else {
-                    document.location.href += '&lang=' + lang;
-                }
-            }
-        }
         function getXmlHttp () {
             if (typeof XMLHttpRequest === 'undefined') {
                 XMLHttpRequest = function() {
@@ -551,84 +549,205 @@ Micro_Init::$template = array(
 <body lang="[LANG]">
 
     <header class="clearfix">
-
         <div class="wrapper clearfix">
-
             <a href="index.php" id="logo">[SITE_NAME]</a>
-
-            <nav>
-                <ul id="nav">
-                    <!-- BEGIN menu -->
-                    <li class="[CURRENT]">
-                        <a href="[MENU_URL]">##'[MENU_NAME]'##</a>
-                    </li>
-                    <!-- END menu -->
-                </ul>
-
-                <select id="comboNav" onchange="selectNav(this)">
-                    <option value="" selected="selected">##'Меню'##</option>
-                    <!-- BEGIN combonav -->
-                    <option value="[MENU_URL]">##'[MENU_NAME]'##</option>
-                    <!-- END combonav -->
-                </select>
-            </nav>
+            <!-- BEGIN header -->
+            [HEADER]
+            <!-- END header -->
+            <!-- BEGIN menu -->
+            [MENU]
+            <!-- END menu -->
         </div>
     </header>
 
     <div id="main">
         <div class="wrapper">
+            <!-- BEGIN taxonomy -->
+            <ul class="taxonomy">
+                <!-- BEGIN step -->
+                <li class="[IS_ACTIVE]">
+                    <a href="[STEP_URL]">[STEP_TITLE]</a>
+
+                    <!-- BEGIN divider -->
+                    <span class="divider">/</span>
+                    <!-- END divider -->
+                </li>
+                <!-- END step -->
+            </ul>
+            <!-- END taxonomy -->
+
+            <!-- BEGIN top -->
+            [TOP]
+            <!-- END top -->
+
+            <!-- BEGIN sidebar -->
+            <aside id="sidebar">
+                [SIDEBAR]
+            </aside>
+            <!-- END sidebar -->
+
+            <!-- BEGIN content -->
             [CONTENT]
+            <!-- END content -->
         </div>
     </div>
 
     <footer>
         <div class="wrapper">
-            <!-- BEGIN select_lang -->
-            <div id="select_lang">
-                <select onchange="selectLang(this.value)" name="lang">
-                    <!-- BEGIN languages -->
-                    <option value="[LANG_ISO]" [SELECTED]>[LANG_ISO]</option>
-                    <!-- END languages -->
-                </select>
-            </div>
-            <!-- END select_lang -->
+            <!-- BEGIN footer -->
+            [FOOTER]
+            <!-- END footer -->
+
+            <!-- BEGIN lang_switcher -->
+            [CONTROL]
+            <!-- END lang_switcher -->
         </div>
     </footer>
 
 </body>
 </html>
 HTML
-,
-    'locutions' => array(
-        'Галерея'   => array('ru' => 'Галерея', 'en' => 'Gallery'),
-        'Ваш заказ' => array('ru' => 'Ваш заказ', 'en' => 'Your order'),
-        'Помощь'    => array('ru' => 'Помощь', 'en' => 'Help'),
-        'Меню'      => array('ru' => 'Меню', 'en' => 'Menu'),
-    ),
 );
 
 
 /**
- * Галлерея товаров
+ * Языки
  */
-Micro_Init::$pages['gallery'] = array(
+Micro_Init::$components['Micro_Lang'] = array(
     'tpl' => <<<HTML
+        <div id="lang-switcher">
+            <select onchange="selectLang(this.value)" name="lang">
+                <!-- BEGIN languages -->
+                <option value="[LANG_ISO]" [SELECTED]>[LANG_ISO]</option>
+                <!-- END languages -->
+            </select>
+        </div>
+HTML
+    ,'javascript' => <<<HTML
+        <script type="text/javascript">
+            function selectLang(lang) {
+                if (document.location.search.indexOf('lang=') >= 0) {
+                    document.location.href = document.location.href.replace(/([?|&])lang=([a-z]*)/, '$1lang=' + lang);
+                } else {
+                    if (document.location.search == '') {
+                        document.location.href += '?lang=' + lang;
+                    } else {
+                        document.location.href += '&lang=' + lang;
+                    }
+                }
+            }
+        </script>
+HTML
+    ,'style' => <<<HTML
+        <style>
+            #lang-switcher {
+                float: right;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        </style>
+HTML
+);
 
-    <!-- BEGIN taxonomy -->
-    <ul class="taxonomy">
-        <!-- BEGIN step -->
-        <li class="[IS_ACTIVE]">
-            <a href="[STEP_URL]">[STEP_NAME]</a>
 
-            <!-- BEGIN divider -->
-            <span class="divider">/</span>
-            <!-- END divider -->
-        </li>
-        <!-- END step -->
-    </ul>
-    <!-- END taxonomy -->
+/**
+ * Меню
+ */
+Micro_Init::$components['Micro_MainMenu'] = array(
+    'tpl' => <<<HTML
+        <nav>
+            <ul id="nav">
+                <!-- BEGIN menu -->
+                <li class="[CURRENT]">
+                    <a href="[MENU_URL]">##'[MENU_NAME]'##</a>
+                </li>
+                <!-- END menu -->
+            </ul>
 
-    <aside id="sidebar">
+            <select id="combonav" onchange="selectNav(this)">
+                <option value="" selected="selected">##'Меню'##</option>
+                <!-- BEGIN combonav -->
+                <option value="[MENU_URL]">##'[MENU_NAME]'##</option>
+                <!-- END combonav -->
+            </select>
+        </nav>
+HTML
+    ,
+    'javascript' => <<<HTML
+        <script type="text/javascript">
+            function selectNav(select) {
+                document.location.href = select.value;
+            }
+        </script>
+HTML
+    ,
+    'style' => <<<HTML
+        <style>
+            nav {
+                height:30px;
+                margin-top:0;
+            }
+            nav a {
+                color:#E2E0D7;
+                text-decoration:none;
+            }
+            #nav li {
+                display:inline-block;
+                margin-right:20px;
+            }
+            #nav>li>a {
+                font-size:18px;
+                font-weight:300;
+                overflow:hidden;
+                padding:0 0 7px;
+                text-shadow:2px 2px 0 rgba(0,0,0,.6);
+            }
+            #nav>li.current>a { border-bottom:solid #ebebe8 5px; }
+            #combonav {
+                display: none;
+                width: 100%;
+            }
+            @media only screen and (min-width: 768px) and (max-width: 991px) {
+                #nav { display: block; }
+                #combonav { display: none; }
+            }
+            @media only screen and (max-width: 767px) {
+                #nav>li{
+                    display: block;
+                    width: 252px;
+                    margin-right: 15px;
+                }
+                #nav>li a{
+                    border-bottom: solid #333 1px;
+                    padding: 10px 0px;
+                    text-align: center;
+                }
+                #nav>li.current>a,
+                #nav>li.current>a{
+                    border-bottom: solid #333 1px;
+                    background: rgba(0,0,0,.2);
+                }
+                #nav>li ul{
+                    float:left;
+                    position:relative;
+                    width: 100%;
+                }
+                #combonav { display: block; }
+            }
+            @media only screen and (min-width: 480px) and (max-width: 767px) {
+                #nav>li{ width: 436px; }
+                #combonav { display: block; }
+            }
+        </style>
+HTML
+);
+
+
+/**
+ * Категории
+ */
+Micro_Init::$components['Micro_Categories'] = array(
+    'tpl' => <<<HTML
         <h4>##'Категории'##</h4>
         <!-- BEGIN albums -->
         <ul id="albums">
@@ -651,7 +770,44 @@ Micro_Init::$pages['gallery'] = array(
             ##'Категории отсутствуют'##
         </p>
         <!-- END no_albums -->
-    </aside>
+HTML
+    ,
+    'style' => <<<HTML
+    <style>
+        #albums {
+            list-style: none outside none;
+            margin: 0 0 20px;
+            padding: 0;
+        }
+        #albums li {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcklEQVQ4je3TMQqDYAyG4ceh4I08lBeqmw5CXTr3As5eQPAqDv6DaMGGv6OBd0jgewmEQIFyx0OwejR4Jj6oIoL20JdpdkWH+psgUm+YMOAVZEhZS8YGC8wZgvkvgjFDMJJ3hfYWbNnjM/1Kk7Knd45QrNe2LfSKk3ZjAAAAAElFTkSuQmCC");
+            background-repeat: no-repeat;
+            background-position: 1px 50%;
+            text-shadow: 0 1px 0 #FFFFFF;
+            padding: 8px 10px 8px 24px;
+        }
+        #combo-albums {
+            display: none;
+            width: 100%;
+        }
+        @media only screen and (min-width: 480px) and (max-width: 767px) {
+            #albums { display: none; }
+            #combo-albums { display: inline; }
+        }
+        @media only screen and (max-width: 480px) {
+            #albums { display: none; }
+            #combo-albums { display: inline; }
+        }
+    </style>
+HTML
+);
+
+
+/**
+ * Галлерея товаров
+ */
+Micro_Init::$components['Micro_Gallery'] = array(
+    'tpl' => <<<HTML
 
     <!-- BEGIN photos -->
     <div id="photo_wrapper">
@@ -659,7 +815,7 @@ Micro_Init::$pages['gallery'] = array(
         <div class="photo">
             <div class="image-container">
                 <div class="div-img">
-                    <a href="[PHOTO_BIG_URL]" target="_blank">
+                    <a href="[PHOTO_BIG_URL]">
                         <img class="photo_img" src="[PHOTO_SMALL_URL]" alt="[PHOTO_NAME]" title="[PHOTO_NAME]"/>
                     </a>
                 </div>
@@ -683,7 +839,7 @@ Micro_Init::$pages['gallery'] = array(
     <!-- END photos -->
     <div class="clearfix"></div>
 HTML
-,
+    ,
     'tpl_pay' => <<<HTML
         <div class="div-data">
             <div class="currency">
@@ -702,7 +858,7 @@ HTML
             </div>
         </div>
 HTML
-,
+    ,
     'style' => <<<HTML
     <style>
         #photo_wrapper {
@@ -794,39 +950,6 @@ HTML
         .remove_in_cart {
             background-color: #3D83A0;
         }
-        .taxonomy {
-            border-bottom: 1px solid #B2B2B2;
-            list-style: none outside none;
-            margin: 0 0 20px;
-            padding: 0 15px 8px 15px;
-        }
-        .taxonomy li {
-            display: inline-block;
-            text-shadow: 0 1px 0 #FFFFFF;
-        }
-        .taxonomy li.active {
-            color: #999999;
-        }
-        .taxonomy li.divider {
-            color: #CCCCCC;
-            padding: 0 5px;
-        }
-        #albums {
-            list-style: none outside none;
-            margin: 0 0 20px;
-            padding: 0;
-        }
-        #albums li {
-            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcklEQVQ4je3TMQqDYAyG4ceh4I08lBeqmw5CXTr3As5eQPAqDv6DaMGGv6OBd0jgewmEQIFyx0OwejR4Jj6oIoL20JdpdkWH+psgUm+YMOAVZEhZS8YGC8wZgvkvgjFDMJJ3hfYWbNnjM/1Kk7Knd45QrNe2LfSKk3ZjAAAAAElFTkSuQmCC");
-            background-repeat: no-repeat;
-            background-position: 1px 50%;
-            text-shadow: 0 1px 0 #FFFFFF;
-            padding: 8px 10px 8px 24px;
-        }
-        #combo-albums {
-            display: none;
-            width: 100%;
-        }
         @media only screen and (min-width: 768px) and (max-width: 991px) {
             #photo_wrapper { width: 480px; }
             .photo {
@@ -850,7 +973,7 @@ HTML
         }
     </style>
 HTML
-,
+    ,
     'javascript' => <<<HTML
     <script type="text/javascript">
         function selectAlbum (select) {
@@ -862,7 +985,7 @@ HTML
                 obj.classList.add('btn-preloader');
 
                 if (obj.classList.contains('add_in_cart')) {
-                    doPost('index.php?view=add_in_cart', {item : photo_path}, function (data) {
+                    doPost('index.php?view=cart&action=add_in_cart', {item : photo_path}, function (data) {
                         var json = JSON.parse(data);
                         if (json.error == 0) {
                             obj.classList.remove('add_in_cart');
@@ -875,7 +998,7 @@ HTML
                     });
 
                 } else {
-                    doPost('index.php?view=remove_in_cart', {item : photo_path}, function (data) {
+                    doPost('index.php?view=cart&action=remove_in_cart', {item : photo_path}, function (data) {
                         var json = JSON.parse(data);
                         if (json.error == 0) {
                             obj.classList.remove('remove_in_cart');
@@ -891,7 +1014,7 @@ HTML
         }
     </script>
 HTML
-,
+    ,
     'title' => array(
         'ru' => 'Галерея',
         'en' => 'Gallery'
@@ -904,340 +1027,334 @@ HTML
         'ru' => 'галерея, магазин, сайт, каталог',
         'en' => 'gallery, shop, site, catalog'
     ),
-    'locutions' => array(
-        'Цена'       => array('ru' => 'Цена', 'en' => 'Price'),
-        'В корзину'  => array('ru' => 'В корзину', 'en' => 'Add to cart'),
-        'Отмена'     => array('ru' => 'Отмена', 'en' => 'Cancel'),
-        'Предыдущая' => array('ru' => 'Предыдущая', 'en' => 'Previous'),
-        'Следующая'  => array('ru' => 'Следующая', 'en' => 'Next'),
-        'Ошибка'     => array('ru' => 'Ошибка', 'en' => 'Error'),
-        'Категории'  => array('ru' => 'Категории', 'en' => 'Сategories'),
-        'Категории отсутствуют'  => array('ru' => 'Категории отсутствуют', 'en' => 'Categories are missing')
-    ),
 );
+
 
 /**
  * Корзина пользователя
  */
-Micro_Init::$pages['cart'] = array(
-    'tpl' => <<<HTML
-        <h3>##'Информация о вашем заказе'##</h3>
+Micro_Init::$components['Micro_Cart'] = array(
+    'cart' => array(
+        'tpl' => <<<HTML
+            <h3>##'Информация о вашем заказе'##</h3>
 
-        <!-- BEGIN empty_cart -->
-        <h3>##'Нет заказов'##!</h3>
-        <!-- END empty_cart -->
+            <!-- BEGIN empty_cart -->
+            <h3>##'Нет заказов'##!</h3>
+            <!-- END empty_cart -->
 
 
-        <!-- BEGIN orders -->
-        <br>
-        <br>
-        <form action="?view=order&lang=[LANG]" method="post">
-            <table width="100%" class="ms-table">
-                <thead>
-                    <tr>
-                        <th colspan="2" align="center">##'Заказ'##</th>
-                        <th>##'Цена'##</th>
-                        <th>##'Количество'##</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- BEGIN order -->
-                    <tr>
-                        <td width="85" align="center">
-                            <img src="[PHOTO_URL]" alt="[TITLE]">
-                        </td>
-                        <td>
-                            [TITLE]
-                        </td>
-                        <td width="100" align="center">
-                            [COST] [CURRENCY]
-                        </td>
-                        <td width="90" align="center">
-                            <input type="hidden" name="[PARAM_NAME]" value="[PARAM_VALUE]">
-                            <input min="1" step="1" type="number" name="[COUNT_NAME]" value="1"
-                                   data-cost="[COST]" class="product-count" onchange="recalculation()">
-                        </td>
-                        <td width="50" align="center">
-                            <span class="btn btn-link" data-photo-path="[PARAM_VALUE]"
-                                  onclick="removeInCart(this)">##'удалить'##</span>
-                        </td>
-                    </tr>
-                    <!-- END order -->
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5" align="right">
-                            <br>
-                            <b>##'Общая сумма'##: <span id="cost-sum">[COST_SUM]</span> [CURRENCY]</b>
-                            <br>
-                            <br>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+            <!-- BEGIN orders -->
             <br>
+            <br>
+            <form action="?view=cart&action=order&lang=[LANG]" method="post">
+                <table width="100%" class="ms-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2" align="center">##'Заказ'##</th>
+                            <th>##'Цена'##</th>
+                            <th>##'Количество'##</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- BEGIN order -->
+                        <tr>
+                            <td width="85" align="center">
+                                <a href="[PHOTO_BIG_URL]">
+                                    <img src="[PHOTO_URL]" alt="[TITLE]">
+                                </a>
+                            </td>
+                            <td>
+                                [TITLE]
+                            </td>
+                            <td width="100" align="center">
+                                [COST] [CURRENCY]
+                            </td>
+                            <td width="90" align="center">
+                                <input type="hidden" name="[PARAM_NAME]" value="[PARAM_VALUE]">
+                                <input min="1" step="1" type="number" name="[COUNT_NAME]" value="1"
+                                       data-cost="[COST]" class="product-count" onchange="recalculation()">
+                            </td>
+                            <td width="50" align="center">
+                                <span class="btn btn-link" data-photo-path="[PARAM_VALUE]"
+                                      onclick="removeInCart(this)">##'удалить'##</span>
+                            </td>
+                        </tr>
+                        <!-- END order -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" align="right">
+                                <br>
+                                <b>##'Общая сумма'##: <span id="cost-sum">[COST_SUM]</span> [CURRENCY]</b>
+                                <br>
+                                <br>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br>
 
-            <input class="btn pull-right" value="##'Продолжить'##" type="submit">
-        </form>
-        <!-- END orders -->
+                <input class="btn btn-success pull-right" value="##'Продолжить'##" type="submit">
+            </form>
+            <!-- END orders -->
 HTML
-,
-    'javascript' => <<<HTML
-    <script type="text/javascript">
-        if (document.getElementsByClassName) {
-            getElementsByClass = function (classList, node) {
-                return (node || document).getElementsByClassName(classList)
-            }
+        ,
+        'javascript' => <<<HTML
+            <script type="text/javascript">
+                if (document.getElementsByClassName) {
+                    getElementsByClass = function (classList, node) {
+                        return (node || document).getElementsByClassName(classList)
+                    }
 
-        } else {
-            getElementsByClass = function (classList, node) {
-                var node = node || document,
-                list = node.getElementsByTagName('*'),
-                length = list.length,
-                classArray = classList.split(/\s+/),
-                classes = classArray.length,
-                result = [], i,j
-                for (i = 0; i < length; i++) {
-                    for (j = 0; j < classes; j++)  {
-                        if (list[i].className.search('\\b' + classArray[j] + '\\b') != -1) {
-                            result.push(list[i])
-                            break
+                } else {
+                    getElementsByClass = function (classList, node) {
+                        var node = node || document,
+                        list = node.getElementsByTagName('*'),
+                        length = list.length,
+                        classArray = classList.split(/\s+/),
+                        classes = classArray.length,
+                        result = [], i,j
+                        for (i = 0; i < length; i++) {
+                            for (j = 0; j < classes; j++)  {
+                                if (list[i].className.search('\\b' + classArray[j] + '\\b') != -1) {
+                                    result.push(list[i])
+                                    break
+                                }
+                            }
                         }
+
+                        return result
                     }
                 }
 
-                return result
-            }
-        }
+                function removeInCart (obj) {
+                    var photo_path = obj.getAttribute("data-photo-path");
+                    obj.classList.add('btn-preloader');
+                    obj.classList.remove('btn-delete');
 
-        function removeInCart (obj) {
-            var photo_path = obj.getAttribute("data-photo-path");
-            obj.classList.add('btn-preloader');
-            obj.classList.remove('btn-delete');
-
-            doPost('?view=remove_in_cart', {item : photo_path}, function (data) {
-                var json = JSON.parse(data);
-                if (json.error == 0) {
-                    obj.parentNode.parentNode.remove();
-                    recalculation();
-                } else {
-                    obj.classList.add('btn-delete');
-                    alert("##'Ошибка'##:" + json.error_messages);
+                    doPost('?view=remove_in_cart', {item : photo_path}, function (data) {
+                        var json = JSON.parse(data);
+                        if (json.error == 0) {
+                            obj.parentNode.parentNode.remove();
+                            recalculation();
+                        } else {
+                            obj.classList.add('btn-delete');
+                            alert("##'Ошибка'##:" + json.error_messages);
+                        }
+                    });
                 }
-            });
-        }
 
-        function recalculation () {
-            var elements = getElementsByClass('product-count');
-            var sum      = 0;
+                function recalculation () {
+                    var elements = getElementsByClass('product-count');
+                    var sum      = 0;
 
-            for (var i = 0; i < elements.length; i++) {
-                var cost = parseFloat(elements[i].getAttribute('data-cost'));
-                sum += parseFloat(elements[i].value) * cost;
+                    for (var i = 0; i < elements.length; i++) {
+                        var cost = parseFloat(elements[i].getAttribute('data-cost'));
+                        sum += parseFloat(elements[i].value) * cost;
 
-            }
+                    }
 
-            document.getElementById('cost-sum').innerHTML = +sum.toFixed(10);
-        }
-    </script>
+                    document.getElementById('cost-sum').innerHTML = +sum.toFixed(10);
+                }
+            </script>
 HTML
-,
-    'style' => <<<HTML
-    <style>
-        th { font-weight: bold; }
-        td {
-            padding: 5px;
-            vertical-align: middle;
-        }
-        input[type=number] {
-            width: 40px;
-            height: 20px;
-        }
-    </style>
+        ,
+        'style' => <<<HTML
+            <style>
+                th { font-weight: bold; }
+                td {
+                    padding: 5px;
+                    vertical-align: middle;
+                }
+                input[type=number] {
+                    width: 40px;
+                    height: 20px;
+                }
+            </style>
 HTML
-,
-    'title' => array(
-        'ru' => 'Корзина',
-        'en' => 'Cart'
+        ,
+        'title' => array(
+            'ru' => 'Корзина',
+            'en' => 'Cart'
+        ),
+        'meta_desc' => array(
+            'ru' => 'Корзина пользователя с его заказом',
+            'en' => 'Users basket with his order'
+        ),
+        'meta_keys' => array(
+            'ru' => 'магазин, сайт, каталог, карзина',
+            'en' => 'site, catalog, cart, basket'
+        )
     ),
-    'meta_desc' => array(
-        'ru' => 'Корзина пользователя с его заказом',
-        'en' => 'Users basket with his order'
-    ),
-    'meta_keys' => array(
-        'ru' => 'магазин, сайт, каталог, карзина',
-        'en' => 'site, catalog, cart, basket'
-    ),
-    'locutions' => array(
-        'Информация о вашем заказе' => array('ru' => 'Информация о вашем заказе', 'en' => 'Information about your order'),
-        'Нет заказов'               => array('ru' => 'Нет заказов', 'en' => 'No orders'),
-        'Вид'                       => array('ru' => 'Вид', 'en' => 'View'),
-        'Название'                  => array('ru' => 'Название', 'en' => 'Title'),
-        'Цена'                      => array('ru' => 'Цена', 'en' => 'Price'),
-        'Количество'                => array('ru' => 'Количество', 'en' => 'Quantity'),
-        'Общая сумма'               => array('ru' => 'Общая сумма', 'en' => 'Total amount'),
-        'Продолжить'                => array('ru' => 'Продолжить', 'en' => 'Continue'),
-        'удалить'                   => array('ru' => 'удалить', 'en' => 'remove'),
-        'Заказ'                     => array('ru' => 'Заказ', 'en' => 'Order'),
-    )
-);
+    'order' => array(
+        'tpl' => <<<HTML
+            <!-- BEGIN empty_order -->
+            <h3>##'Для оформления заказа нужен хотя бы один товар'##</h3>
+            <br>
+            <a href="javascript:window.history.back()">##'назад'##</a>
+            <!-- END empty_order -->
 
+            <!-- BEGIN order_form -->
+            <form method="post" action="?view=cart&action=order_send&lang=[LANG]"
+                  onsubmit="return ValidateForm(this)">
 
-/**
- * Оформление заказа
- */
-Micro_Init::$pages['order'] = array(
-    'tpl' => <<<HTML
-    <!-- BEGIN empty_order -->
-    <h3>##'Для оформления заказа нужен хотя бы один товар'##</h3>
-    <br>
-    <a href="javascript:window.history.back()">##'назад'##</a>
-    <!-- END empty_order -->
+                <!-- BEGIN orders -->
+                <input type="hidden" name="[ORDER_PARAM_NAME]" value="[ORDER_NAME]">
+                <input type="hidden" name="[ORDER_PARAM_COUNT]" value="[ORDER_COUNT]">
+                <!-- END orders -->
 
-    <!-- BEGIN order_form -->
-    <form method="post" action="?view=order_send&lang=[LANG]" onsubmit="return ValidateForm(this)">
-
-        <!-- BEGIN orders -->
-        <input type="hidden" name="[ORDER_PARAM_NAME]" value="[ORDER_NAME]">
-        <input type="hidden" name="[ORDER_PARAM_COUNT]" value="[ORDER_COUNT]">
-        <!-- END orders -->
-
-        <table align="center">
-            <tbody>
-                <tr>
-                    <td align="right">
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
                         <label for="field_name">
                             <span class="red-star">*</span>
                             ##'Имя и Фамилия'##:
                         </label>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="ms-field-input">
                         <input type="text" name="name" id="field_name"
-                               required="required" data-required-message="##'Укажите пожалуйста ваше имя'##">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
+                               required="required"
+                               data-required-message="##'Укажите пожалуйста ваше имя'##">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
                         <label for="field_tel">
                             <span class="red-star">*</span>
                             ##'Контактный телефон'##:
                         </label>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="ms-field-input">
                         <input type="tel" name="tel" id="field_tel"
-                               required="required" data-required-message="##'Укажите пожалуйста контактный телефон'##">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
+                               required="required"
+                               data-required-message="##'Укажите пожалуйста контактный телефон'##">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
                         <label for="field_email">
                             ##'Ваш email'##:
                         </label>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="ms-field-input">
                         <input type="email" id="field_email" name="email">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
+                        <label for="field_email">
+                            ##'Ваш email'##:
+                        </label>
+                    </div>
+                    <div class="ms-field-input">
+                        <input type="email" id="field_email" name="email">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
                         <label for="field_adres">
                             <span class="red-star">*</span>
                             ##'Адрес доставки'##:
                         </label>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="ms-field-input">
                         <input type="text" name="adres" id="field_adres"
-                               required="required" data-required-message="##'Укажите пожалуйста адрес доставки'##">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right" valign="top">
+                               required="required"
+                               data-required-message="##'Укажите пожалуйста адрес доставки'##">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="ms-field-container">
+                    <div class="ms-field-label">
                         <label for="field_info">
                             ##'Дополнительная информация'##:
                         </label>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="ms-field-input">
                         <textarea name="info" rows="4" id="field_info"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
 
-                    </td>
-                    <td>
+                <div class="ms-field-container">
+                    <div class="ms-field-label"></div>
+                    <div class="ms-field-input">
                         <input type="submit" class="btn btn-success" value="##'Отправить заказ'##">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-    <span class="red-star">*</span> - ##'поля, обязательные для заполнения'##
-    <!-- END order_form -->
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </form>
+            <span class="red-star">*</span> - ##'поля, обязательные для заполнения'##
+            <!-- END order_form -->
 HTML
-,
-    'javascript' => <<<HTML
-    <script type="text/javascript">
-        function ValidateForm (form) {
-            for (var i = 0; i < form.length; i++) {
-                if (form[i].hasAttribute('required') && (form[i].value == null || form[i].value == "")) {
-                    if (form[i].hasAttribute('data-required-message')) {
-                        alert(form[i].getAttribute('data-required-message'));
+        ,
+        'javascript' => <<<HTML
+            <script type="text/javascript">
+                function ValidateForm (form) {
+                    for (var i = 0; i < form.length; i++) {
+                        if (form[i].hasAttribute('required') && (form[i].value == null || form[i].value == "")) {
+                            if (form[i].hasAttribute('data-required-message')) {
+                                alert(form[i].getAttribute('data-required-message'));
+                            }
+                            return false;
+                        }
                     }
-                    return false;
                 }
-            }
-        }
-    </script>
+            </script>
 HTML
-,
-    'style' => <<<HTML
-    <style>
-        td {
-            padding: 5px;
-            vertical-align: top;
-        }
-        .red-star { color: red; }
-    </style>
+        ,
+        'style' => <<<HTML
+            <style>
+                .ms-field-container {
+                    margin-bottom: 14px;
+                }
+                .ms-field-label {
+                    float: left;
+                    margin-right: 5px;
+                    text-align: right;
+                    width: 190px;
+                    height: 20px;
+                }
+                .ms-field-input {
+                    width: 225px;
+                    float: left;
+                }
+                @media only screen and (max-width: 480px) {
+                    .ms-field-label {
+                        width: 190px;
+                        text-align: left;
+                    }
+                    .ms-field-input { width: 225px }
+                }
+                .red-star { color: red; }
+            </style>
 HTML
-,
-    'title' => array(
-        'ru' => 'Оформление заказа',
-        'en' => 'Like to order'
-    ),
-    'meta_desc' => array(
-        'ru' => 'Оформление заказа пользователем',
-        'en' => 'Like to order user'
-    ),
-    'meta_keys' => array(
-        'ru' => 'магазин, сайт, заказ, карзина',
-        'en' => 'shop, site, cart, basket, order'
-    ),
-    'locutions' => array(
-        'Для оформления заказа нужен хотя бы один товар' => array(
-            'ru' => 'Для оформления заказа нужен хотя бы один товар',
-            'en' => 'Ordering need at least one item'
+        ,
+        'title' => array(
+            'ru' => 'Оформление заказа',
+            'en' => 'Like to order'
         ),
-        'Имя и Фамилия'                         => array('ru' => 'Имя и Фамилия', 'en' => 'Name and Surname'),
-        'Контактный телефон'                    => array('ru' => 'Контактный телефон', 'en' => 'Contact phone'),
-        'Ваш email'                             => array('ru' => 'Ваш email', 'en' => 'Your email'),
-        'Адрес доставки'                        => array('ru' => 'Адрес доставки', 'en' => 'Delivery Address'),
-        'Дополнительная информация'             => array('ru' => 'Дополнительная информация', 'en' => 'Additional information'),
-        'поля, обязательные для заполнения'     => array('ru' => 'поля, обязательные для заполнения', 'en' => 'fields are required'),
-        'Отправить заказ'                       => array('ru' => 'Отправить заказ', 'en' => 'Send order'),
-        'назад'                                 => array('ru' => 'назад', 'en' => 'back'),
-        'Укажите пожалуйста адрес доставки'     => array('ru' => 'Укажите пожалуйста адрес доставки', 'en' => 'Please specify the delivery address'),
-        'Укажите пожалуйста контактный телефон' => array('ru' => 'Укажите пожалуйста контактный телефон', 'en' => 'Please fill in contact phone number'),
-        'Укажите пожалуйста ваше имя'           => array('ru' => 'Укажите пожалуйста ваше имя', 'en' => 'Please fill in your name'),
-    )
-);
-
-
-/**
- * Завершение заказа
- */
-Micro_Init::$pages['order_result'] = array(
-    'tpl' => <<<HTML
+        'meta_desc' => array(
+            'ru' => 'Оформление заказа пользователем',
+            'en' => 'Like to order user'
+        ),
+        'meta_keys' => array(
+            'ru' => 'магазин, сайт, заказ, карзина',
+            'en' => 'shop, site, cart, basket, order'
+        )
+    ),
+    'order_result' => array(
+        'tpl' => <<<HTML
     <!-- BEGIN success -->
     <h3>##'Заказ отправлен'##</h3>
     <br>
@@ -1254,153 +1371,23 @@ Micro_Init::$pages['order_result'] = array(
     <a href="javascript:window.history.back()">##'назад'##</a>
     <!-- END error -->
 HTML
-,
-    'title' => array(
-        'ru' => 'Завершение заказа',
-        'en' => 'Сompletion order'
-    ),
-    'meta_desc' => array(
-        'ru' => 'Завершение заказа',
-        'en' => 'Сompletion order'
-    ),
-    'meta_keys' => array(
-        'ru' => 'магазин, сайт, заказ, карзина, завершение заказа',
-        'en' => 'site, cart, basket, order, completion order'
-    ),
-    'locutions' => array(
-        'Заказ отправлен' => array('ru' => 'Заказ отправлен', 'en' => 'Orders sent'),
-        'Благодарим за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.' => array(
-            'ru' => 'Благодарим за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.',
-            'en' => 'Thank you for your order. Soon you will be contacted to confirm your order.'
+        ,
+        'title' => array(
+            'ru' => 'Завершение заказа',
+            'en' => 'Сompletion order'
         ),
-        'Ошибка' => array('ru' => 'Ошибка', 'en' => 'Error'),
-        'Во время отправки заказа что-то пошло не так. Пожалуйста попробуйте повторить заказ.' => array(
-            'ru' => 'Во время отправки заказа что-то пошло не так. Пожалуйста попробуйте повторить заказ.',
-            'en' => 'While sending order something went wrong. Please try to repeat the order.'
+        'meta_desc' => array(
+            'ru' => 'Завершение заказа',
+            'en' => 'Сompletion order'
         ),
-        'Назад в галерею' => array('ru' => 'Назад в галерею', 'en' => 'Back to gallery'),
-    )
-);
-
-
-/**
- * Справочная информация
- */
-Micro_Init::$pages['help'] = array(
-    'tpl' => array(
-        'ru' => <<<HTML
-    <p>
-        Для того чтобы заказать товар, нажмите кнопку <b>"В корзину"</b> находящейся под картинкой.
-        Если вы кликните мышкой на изображение, вы увидите его в увеличенном виде. Затем в разделе <b>"Ваш заказ"</b> уточните количество.
-        Внизу списка товаров вы увидите общую стоимость.
-        Если вы уверены в правильности заказа, нажмите на кнопку <b>"Продолжить"</b>.
-        Вы увидите форму для отправки заказа нашему администратору. После правильного заполнения формы нажмите кнопку <b>"Отправить заказ"</b>.
-    </p>
-HTML
-    ,
-        'en' => <<<HTML
-    <p>
-        To order a product, click <b>"Add to Cart"</b> under the picture.
-        If you click the mouse on the image, you will see it in a larger size. Then under <b>"Your order"</b> specify the amount.
-        Bottom of the list of goods you will see the total cost.
-        If you are unsure of the order, click <b>"Continue"</b>.
-        You will see a form to order our administrator. After filling out the form correctly, click <b>"Submit Order"</b>.
-    </p>
-HTML
+        'meta_keys' => array(
+            'ru' => 'магазин, сайт, заказ, карзина, завершение заказа',
+            'en' => 'site, cart, basket, order, completion order'
+        )
     ),
-    'title' => array(
-        'ru' => 'Помощь',
-        'en' => 'Help'
-    ),
-    'meta_desc' => array(
-        'ru' => 'Помощь пользователю в работе с сайтом',
-        'en' => 'Help the user to work with the site'
-    ),
-    'meta_keys' => array(
-        'ru' => 'магазин, сайт, помощь',
-        'en' => 'shop, site, help'
-    )
-);
-
-
-/**
- * Страница 404
- */
-Micro_Init::$pages['404'] = array(
-    'tpl' => <<<HTML
-<!doctype html>
-<!--
-This content is licensed under Creative Commons Attribution 4.0. The full text of the license can be located at http://creativecommons.org/licenses/by/4.0/legalcode
--->
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>[TITLE]</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-        <style>
-            * {
-                line-height: 1.5;
-                margin: 0;
-            }
-            html {
-                color: #888;
-                font-family: sans-serif;
-                text-align: center;
-            }
-            body {
-                left: 50%;
-                margin: -43px 0 0 -150px;
-                position: absolute;
-                top: 50%;
-                width: 320px;
-            }
-            h1 {
-                color: #555;
-                font-size: 2em;
-                font-weight: 400;
-            }
-            p { line-height: 1.2; }
-            @media only screen and (max-width: 270px) {
-                body {
-                    margin: 10px auto;
-                    position: static;
-                    width: 95%;
-                }
-                h1 { font-size: 1.5em; }
-            }
-        </style>
-    </head>
-    <body>
-        <h1>##'Page Not Found'##</h1>
-        <p>##'Sorry, but the page you were trying to view does not exist.'##</p>
-    </body>
-</html>
-<!-- IE needs 512+ bytes: http://blogs.msdn.com/b/ieinternals/archive/2010/08/19/http-error-pages-in-internet-explorer.aspx -->
-HTML
-,
-    'title' => array(
-        'ru' => 'Страница не найдена',
-        'en' => 'Page Not Found'
-    ),
-    'locutions' => array(
-        'Page Not Found' => array(
-            'ru' => 'Страница не найдена',
-            'en' => 'Page Not Found'
-        ),
-        'Sorry, but the page you were trying to view does not exist.' => array(
-            'ru' => 'Извините, но страница которую вы пытаетесь просмотреть, не существует.',
-            'en' => 'Sorry, but the page you were trying to view does not exist.'
-        ),
-    )
-);
-
-
-/**
- * Шаблон письма используещегося при отправке заказа администратору
- */
-Micro_Init::$order_email = array(
-    'subject' => SITE_NAME . ' - ' . 'Новый заказ',
-    'tpl' => <<<HTML
+    'order_email_admin' => array(
+        'subject' => SITE_NAME . ' - ' . 'Новый заказ',
+        'tpl' => <<<HTML
     <html>
         <header>
             <title>Заказ от [NAME]</title>
@@ -1445,7 +1432,166 @@ Micro_Init::$order_email = array(
         </body>
     </html>
 HTML
+    ),
+    'order_email_client' => array(
+        'subject' => SITE_NAME . ' - ' . '',
+        'tpl' => <<<HTML
+    <html>
+        <header>
+            <title>Заказ от [NAME]</title>
+        </header>
+        <body>
+            <b>Заказ от:</b> [NAME]<br>
+            <b>Email:</b> [EMAIL]<br>
+            <b>Контактный телефон:</b> [TEL]<br>
+            <b>Адрес доставки:</b> [ADRES]<br>
+            <br>
+            <b>Дополнительная информация:</b><br>
+            [INFO]
+            <br>
+            <br>
+
+            <table border="1">
+                <caption>Содержание заказа</caption>
+                <thead>
+                    <tr>
+                        <th>Заказ</th>
+                        <th width="50">Цнена 1шт.</th>
+                        <th width="50">Количество шт.</th>
+                        <th width="50">Цнена всего</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- BEGIN order -->
+                    <tr>
+                        <td>[PATH]</td>
+                        <td>[PRICE]</td>
+                        <td>[COUNT]</td>
+                        <td>[PRICE_TOTAL]</td>
+                    </tr>
+                    <!-- END order -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" align="right"><b>Общая стоимость:</b> [GLOBAL_PRICE]</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </body>
+    </html>
+HTML
+    )
 );
+
+
+
+/**
+ * Справочная информация
+ */
+Micro_Init::$components['Micro_Help'] = array(
+    'tpl' => array(
+        'ru' => <<<HTML
+    <p>
+        Для того чтобы заказать товар, нажмите кнопку <b>"В корзину"</b> находящейся под картинкой.
+        Если вы кликните мышкой на изображение, вы увидите его в увеличенном виде. Затем в разделе <b>"Ваш заказ"</b> уточните количество.
+        Внизу списка товаров вы увидите общую стоимость.
+        Если вы уверены в правильности заказа, нажмите на кнопку <b>"Продолжить"</b>.
+        Вы увидите форму для отправки заказа нашему администратору. После правильного заполнения формы нажмите кнопку <b>"Отправить заказ"</b>.
+    </p>
+HTML
+    ,
+        'en' => <<<HTML
+    <p>
+        To order a product, click <b>"Add to Cart"</b> under the picture.
+        If you click the mouse on the image, you will see it in a larger size. Then under <b>"Your order"</b> specify the amount.
+        Bottom of the list of goods you will see the total cost.
+        If you are unsure of the order, click <b>"Continue"</b>.
+        You will see a form to order our administrator. After filling out the form correctly, click <b>"Submit Order"</b>.
+    </p>
+HTML
+    ),
+    'style' => <<<HTML
+    <style>
+        body p { text-indent: 20px; }
+    </style>
+HTML
+    ,
+    'title' => array(
+        'ru' => 'Помощь',
+        'en' => 'Help'
+    ),
+    'meta_desc' => array(
+        'ru' => 'Помощь пользователю в работе с сайтом',
+        'en' => 'Help the user to work with the site'
+    ),
+    'meta_keys' => array(
+        'ru' => 'магазин, сайт, помощь',
+        'en' => 'shop, site, help'
+    )
+);
+
+
+/**
+ * Страница 404
+ */
+Micro_Init::$components['Micro_Page404'] = array(
+    'tpl' => <<<HTML
+<!doctype html>
+<!--
+This content is licensed under Creative Commons Attribution 4.0. The full text of the license can be located at http://creativecommons.org/licenses/by/4.0/legalcode
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>[TITLE]</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+        <style>
+            * {
+                line-height: 1.5;
+                margin: 0;
+            }
+            html {
+                color: #888;
+                font-family: sans-serif;
+                text-align: center;
+            }
+            body {
+                left: 50%;
+                margin: -43px 0 0 -150px;
+                position: absolute;
+                top: 50%;
+                width: 325px;
+            }
+            h1 {
+                color: #555;
+                font-size: 2em;
+                font-weight: 400;
+            }
+            p { line-height: 1.2; }
+            @media only screen and (max-width: 270px) {
+                body {
+                    margin: 10px auto;
+                    position: static;
+                    width: 95%;
+                }
+                h1 { font-size: 1.5em; }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>##'Страница не найдена'##</h1>
+        <p>##'Извините, но страница которую вы пытаетесь просмотреть, не существует.'##</p>
+    </body>
+</html>
+<!-- IE needs 512+ bytes: http://blogs.msdn.com/b/ieinternals/archive/2010/08/19/http-error-pages-in-internet-explorer.aspx -->
+HTML
+    ,
+    'title' => array(
+        'ru' => 'Страница не найдена',
+        'en' => 'Page Not Found'
+    )
+);
+
 
 
 /*************************
@@ -1453,64 +1599,439 @@ HTML
  ************************/
 
 
+
 /**
- * Class Micro_Pages
+ * Class Micro_Init
  */
-class Micro_Pages {
+class Micro_Init {
+
+    public static $router     = array();
+    public static $menu       = array();
+    public static $locutions  = array();
+    public static $components = array();
+
+    private static $taxonomy     = array();
+    private static $registry     = array();
+    private static $plugins      = array();
+    private static $current_page = '';
+    private static $current_lang = '';
+
 
     /**
-     * Показ статичной страницы
-     * @param string $name
-     * @return Micro_Page
+     * Инициализация плагинов
      */
-    public function view($name) {
+    public static function getPlugins() {
 
-        $page = new Micro_Page($name);
+        if ( ! empty(self::$plugins)) return self::$plugins;
 
-        $page->title      = Micro_Init::pageProp($name, 'title');
-        $page->meta_keys  = Micro_Init::pageProp($name, 'meta_keys');
-        $page->meta_desc  = Micro_Init::pageProp($name, 'meta_desc');
-        $page->style      = Micro_Init::pageProp($name, 'style');
-        $page->javascript = Micro_Init::pageProp($name, 'javascript');
-        $page->content    = Micro_Init::pageProp($name, 'tpl');
-        $page->locutions  = Micro_Init::pageProp($name, 'locutions');
+        $plugins = array();
+        if (is_dir(PLUGINS_DIR)) {
+            $h = opendir(PLUGINS_DIR);
+            while ($element = readdir($h)) {
+                if ($element != '.' && $element != '..' &&
+                    is_file(PLUGINS_DIR . '/' . $element) &&
+                    substr($element, strrpos($element, '.')+1) == 'php'
+                ) {
+                    require_once PLUGINS_DIR . '/' . $element;
+
+                    $plugin_name = substr($element, 0, strrpos($element, '.'));
+                    if (class_exists($plugin_name)) {
+                        $extend_class          = current(class_parents($plugin_name));
+                        $plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Astract'
+                            ? $plugin_name
+                            : $extend_class;
+                    }
+                }
+            }
+        }
+
+        return self::$plugins = $plugins;
+    }
+
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public static function getRegistry($name) {
+        return isset(self::$registry[$name])
+            ? self::$registry[$name]
+            : null;
+    }
+
+
+    /**
+     * @param string $name
+     * @param mixed $var
+     */
+    public static function setRegistry($name, $var) {
+        self::$registry[$name] = $var;
+    }
+
+
+    /**
+     * Добавление пути в таксонамию
+     * @param string $title
+     * @param string $url
+     */
+    public static function addTaxonomy($title, $url) {
+        self::$taxonomy[] = array('title' => $title, 'url' => $url);
+    }
+
+
+    /**
+     * Получение содержимого таксономии
+     * @return array
+     */
+    public static function getTaxonomy() {
+         return self::$taxonomy;
+    }
+}
+
+
+/**
+ * Class Micro_Layout
+ */
+class Micro_Layout extends Micro_Plugin_Abstract {
+
+    protected $title      = '';
+    protected $meta_desc  = '';
+    protected $meta_keys  = '';
+    protected $style      = array();
+    protected $javascript = array();
+    protected $places     = array();
+
+
+    /**
+     * @param $page
+     * @param $place
+     * @param $plugin_name
+     * @param int $position
+     */
+    public function addToStructure($page, $place, $plugin_name, $position = 0) {
+
+        if (isset($this->pages_structure[$page]) && isset($this->pages_structure[$page][$place])) {
+            if (empty($this->pages_structure[$page][$place])) {
+                $this->pages_structure[$page][$place][] = $plugin_name;
+
+            } else {
+                if (isset($this->pages_structure[$page][$place][$position])) {
+                    $tmp_array = array();
+
+                    foreach ($this->pages_structure[$page][$place] as $class_position=>$class) {
+                        if ($class_position >= $position) {
+                            $tmp_array[++$class_position] = $plugin_name;
+                        } else {
+                            $tmp_array[$class_position] = $plugin_name;
+                        }
+                    }
+                    $tmp_array[$position] = $plugin_name;
+
+                    $this->pages_structure[$page][$place] = $tmp_array;
+
+                } else {
+                    $this->pages_structure[$page][$place][$position] = $plugin_name;
+                }
+
+                ksort($this->pages_structure[$page][$place]);
+            }
+        }
+    }
+
+
+
+    /**
+     * @param $content
+     */
+    protected function addToMenu($content) {
+
+        $this->places['menu'][] = $content;
+    }
+
+
+    /**
+     * @param string $content
+     */
+    protected function addToHeader($content) {
+
+        $this->places['header'][] = $content;
+    }
+
+
+    /**
+     * @param $place_name
+     * @return bool|string
+     */
+    protected function getPlace($place_name) {
+        return array_key_exists($place_name, $this->places)
+            ? implode('', $this->places[$place_name])
+            : false;
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getTitle() {
+        return USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $this->title : $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTemplate() {
+        return $this->getComponent('Micro_Layout', 'tpl');
+    }
+
+
+    /**
+     * @return string
+     */
+    public function index() {
+
+        $page_structure = $this->getPageStructure();
+        $plugins        = Micro_Init::getPlugins();
+
+        if ($page_structure === false) return $this->page404();
+
+
+        foreach ($page_structure as $place=>$classes) {
+            foreach ($classes as $class) {
+                if (in_array($class, $plugins)) {
+                    $class = array_search($class, $plugins);
+                    $p_class = new $class();
+                } else {
+                    $p_class = new $class();
+                }
+
+                $content = $p_class->index();
+
+                if ($content instanceof stdClass) {
+                    if (isset($content->title))      $this->title = $content->title;
+                    if (isset($content->meta_desc))  $this->meta_desc = $content->meta_desc;
+                    if (isset($content->meta_keys))  $this->meta_keys = $content->meta_keys;
+                    if (isset($content->style))      $this->style[] = $content->style;
+                    if (isset($content->javascript)) $this->javascript[] = $content->javascript;
+                    if (isset($content->content)) {
+                        $content = $content->content;
+                    } else {
+                        continue;
+                    }
+                }
+
+                switch ($place) {
+                    case 'header'  : $this->places['header'][] = $content;  break;
+                    case 'menu'    : $this->places['menu'][] = $content;    break;
+                    case 'top'     : $this->places['top'][] = $content;     break;
+                    case 'content' : $this->places['content'][] = $content; break;
+                    case 'sidebar' : $this->places['sidebar'][] = $content; break;
+                    case 'footer'  : $this->places['footer'][] = $content;  break;
+                }
+            }
+        }
+
+
+
+        $tpl = new Micro_Templater();
+        $tpl->setTemplate($this->getTemplate());
+
+        $header  = $this->getPlace('header');
+        $menu    = $this->getPlace('menu');
+        $top     = $this->getPlace('top');
+        $content = $this->getPlace('content');
+        $sidebar = $this->getPlace('sidebar');
+        $footer  = $this->getPlace('footer');
+
+        if ($header != '')  $tpl->header->assign('[HEADER]', $header);
+        if ($top != '')     $tpl->top->assign('[TOP]', $top);
+        if ($menu != '')    $tpl->menu->assign('[MENU]', $menu);
+        if ($content != '') $tpl->content->assign('[CONTENT]', $content);
+        if ($sidebar != '') $tpl->sidebar->assign('[SIDEBAR]', $sidebar);
+        if ($footer != '')  $tpl->$footer->assign('[FOOTER]', $footer);
+
+        $tpl->assign('[LANG]',       $this->getLang());
+        $tpl->assign('[SITE_NAME]',  SITE_NAME);
+
+
+        $taxonomy = Micro_Init::getTaxonomy();
+
+        if ( ! empty($taxonomy)) {
+            foreach ($taxonomy as $step) {
+                $tpl->taxonomy->step->assign('[STEP_URL]',   $step['url']);
+                $tpl->taxonomy->step->assign('[STEP_TITLE]', "##'{$step['title']}'##");
+                if ($step != end($taxonomy)) {
+                    $tpl->taxonomy->step->touchBlock('divider');
+                    $tpl->taxonomy->step->reassign();
+                }
+            }
+        }
+
+
+        // Контрол для выбора языка сайта
+        $micro_lang = $this->getRegistry('Micro_Lang');
+        $lang_switcher = $micro_lang->getLangSwitcher();
+
+        if ($lang_switcher instanceof stdClass) {
+            if (isset($lang_switcher->style))$this->style[] = $lang_switcher->style;
+            if (isset($lang_switcher->javascript))$this->javascript[] = $lang_switcher->javascript;
+
+            $tpl->lang_switcher->assign('[CONTROL]', $lang_switcher->content);
+        }
+
+
+        $tpl->assign('[TITLE]',      $this->getTitle());
+        $tpl->assign('[META_KEYS]',  $this->meta_keys ? $this->meta_keys : '');
+        $tpl->assign('[META_DESC]',  $this->meta_desc ? $this->meta_desc : '');
+        $tpl->assign('[STYLE]',      implode("\n", $this->style));
+        $tpl->assign('[JAVASCRIPT]', implode("\n", $this->javascript));
+
+
+        $result = $tpl->parse();
+
+        // Перевод и вывод финальной страницы
+        return Micro_Tools::replaceLocutions($result, $this->getLocutions());
+    }
+}
+
+
+
+/**
+ * Class Micro_MainMenu
+ */
+class Micro_MainMenu extends Micro_Plugin_Abstract {
+
+    public function index() {
+
+        $tpl= new Micro_Templater();
+        $tpl->setTemplate($this->getComponent('Micro_MainMenu', 'tpl'));
+
+        $menu = $this->getMeta('menu');
+
+        foreach ($menu as $page_name=>$title) {
+            $is_current = $this->getCurrentPage() == $page_name ? 'current' : '';
+            $lang       = $this->getLang();
+
+            $tpl->menu->assign('[CURRENT]',   $is_current);
+            $tpl->menu->assign('[MENU_URL]',  '?view=' . $page_name . "&lang={$lang}");
+            $tpl->menu->assign('[MENU_NAME]', $title);
+            if ($title != end($menu)) $tpl->menu->reassign();
+
+            $tpl->combonav->assign('[MENU_URL]',  '?view=' . $page_name . "&lang={$lang}");
+            $tpl->combonav->assign('[MENU_NAME]', $title);
+            if ($title != end($menu)) $tpl->combonav->reassign();
+        }
+
+        $page = new stdClass();
+        $page->style      = $this->getComponent('Micro_MainMenu', 'style');
+        $page->javascript = $this->getComponent('Micro_MainMenu', 'javascript');
+        $page->content    = $tpl->parse();
 
         return $page;
     }
+}
 
+
+
+/**
+ * Class Micro_Categories
+ */
+class Micro_Categories extends Micro_Plugin_Abstract  {
+
+    public function index() {
+
+        // путь до каталога
+        if (isset($_GET['path']) && $_GET['path'] != '') {
+            $request_path = Micro_Tools::hashToPath($_GET['path']);
+            if ($request_path != '') {
+                $path = GALLERY_DIR . '/' . $request_path;
+            } else {
+                return $this->page404();
+            }
+        } else {
+            $path = GALLERY_DIR;
+        }
+
+        $dirs = array();
+
+        if ($handle = opendir($path)) {
+            while ($element_name = readdir($handle)) {
+                if ($element_name != "." && $element_name != ".." && is_dir($path . '/' . $element_name)) {
+                    $dirs[] = $element_name;
+                }
+            }
+        }
+
+
+        $lang = $this->getLang();
+        $tpl  = new Micro_Templater();
+        $tpl->setTemplate($this->getComponent('Micro_Categories', 'tpl'));
+
+
+        // Директории
+        if (empty($dirs)) {
+            $tpl->touchBlock('no_albums');
+
+        } else {
+            foreach ($dirs as $dir_name) {
+                $gallery_path = isset($_GET['path']) && $_GET['path'] != ''
+                    ?  $_GET['path'] . '-' . Micro_Tools::pathToHash($dir_name)
+                    :  Micro_Tools::pathToHash($dir_name);
+
+                $tpl->albums->album->assign('[GALLERY_URL]',  "?view=gallery&path={$gallery_path}&lang={$lang}");
+                $tpl->albums->album->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
+                if ($dir_name != end($dirs)) $tpl->albums->album->reassign();
+
+                $tpl->albums->comboalbum->assign('[GALLERY_URL]',  "?view=gallery&path={$gallery_path}&lang={$lang}");
+                $tpl->albums->comboalbum->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
+                if ($dir_name != end($dirs)) $tpl->albums->comboalbum->reassign();
+            }
+        }
+
+        $page = new stdClass();
+        $page->style      = $this->getComponent('Micro_Categories', 'style');
+        $page->javascript = $this->getComponent('Micro_Categories', 'javascript');
+        $page->content    = $tpl->parse();
+
+        return $page;
+    }
+}
+
+
+
+/**
+ * Class Micro_Gallery
+ */
+class Micro_Gallery extends Micro_Plugin_Abstract {
 
     /**
-     * Страница с кодом 404
-     * @return Micro_Page
+     * Получение названия действия которое нужно выпонить
+     * @return string|bool
      */
-    public function page404() {
+    protected function getAction() {
+        return isset($_GET['action'])
+            ? $_GET['action']
+            : false;
+    }
 
-        header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 
-        $template  = Micro_Init::pageProp('404', 'tpl');
-        $title     = Micro_Init::pageProp('404', 'title');
-        $locutions = Micro_Init::pageProp('404', 'locutions');
+    public function index() {
 
-        $tpl = new Micro_Templater();
-        $tpl->setTemplate($template);
+        $action = $this->getAction();
 
-        $tpl->assign('[TITLE]', USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $title : $title);
+        if ($action == 'photo') {
+            $this->photo();
 
-        return Micro_Tools::replaceLocutions($tpl->parse(), $locutions);
+        } elseif ($action == 'gallery') {
+            return $this->gallery();
+        }
     }
 
 
     /**
-     * Страница галлереи фотографий
-     * @return Micro_Page
+     * Показ галереи
+     * @return int|stdClass
      */
-    public function gallery() {
-
-        $tpl = new Micro_Templater();
-        $tpl->setTemplate(Micro_Init::pageProp('gallery', 'tpl'));
-
-        $lang = isset($_GET['lang']) && $_GET['lang'] ? "&lang={$_GET['lang']}" : '';
-
+    protected function gallery() {
 
         // путь до каталога
         if (isset($_GET['path']) && $_GET['path'] != '') {
@@ -1525,33 +2046,35 @@ class Micro_Pages {
         }
 
 
-
-        // Хлебные крошки
+        $lang = $this->getLang();
         $quote_gallery_dir = preg_quote(GALLERY_DIR);
         $taxonomy = preg_replace("~^{$quote_gallery_dir}~", '', $path);
-        $explode_taxonomy = explode('/', trim($taxonomy, '/'));
-        $steps = '';
+        $explode_taxonomy = $taxonomy ? explode('/', trim($taxonomy, '/')) : false;
 
-        $tpl->taxonomy->step->assign('[IS_ACTIVE]', '');
-        $tpl->taxonomy->step->assign('[STEP_URL]',  "index.php?view=gallery{$lang}");
-        $tpl->taxonomy->step->assign('[STEP_NAME]', "##'Галерея'##");
-        $tpl->taxonomy->step->touchBlock('divider');
-        $tpl->taxonomy->step->reassign();
+        $this->addTaxonomy('Галерея', "?view=gallery&lang={$lang}");
 
-        foreach ($explode_taxonomy as $step) {
-            $steps .= $steps == ''
-                ? Micro_Tools::pathToHash($step)
-                : '-' . Micro_Tools::pathToHash($step);
-            $tpl->taxonomy->step->assign('[STEP_URL]',  "index.php?view=gallery&path={$steps}{$lang}");
-            $tpl->taxonomy->step->assign('[STEP_NAME]', Micro_Tools::convertEncoding($step));
-            if ($step != end($explode_taxonomy)) {
-                $tpl->taxonomy->step->assign('[IS_ACTIVE]', '');
-                $tpl->taxonomy->step->touchBlock('divider');
-                $tpl->taxonomy->step->reassign();
-            } else {
-                $tpl->taxonomy->step->assign('[IS_ACTIVE]', 'active');
+        if ( ! empty($explode_taxonomy)) {
+            $steps = '';
+            foreach ($explode_taxonomy as $step) {
+                $steps .= $steps == ''
+                    ? Micro_Tools::pathToHash($step)
+                    : '-' . Micro_Tools::pathToHash($step);
+                $this->addTaxonomy(
+                    Micro_Tools::convertEncoding($step),
+                    "?view=gallery&path={$steps}&lang={$lang}"
+                );
             }
         }
+
+
+        $tpl  = new Micro_Templater();
+        $tpl->setTemplate($this->getComponent('Micro_Gallery', 'tpl'));
+
+
+        // Валюта
+        $tpl->assign('[CURRENCY]', defined(strtoupper('CURRENCY_' . $lang))
+            ? constant(strtoupper('CURRENCY_' . $lang))
+            : '');
 
 
         if ($handle = opendir($path)) {
@@ -1561,16 +2084,30 @@ class Micro_Pages {
                 'image/jpeg', 'image/bmp',
             );
             $dir_content = array(
-                'dir'         => array(),
                 'file'        => array(),
                 'total_files' => 0
             );
+            if( ! function_exists('mime_content_type')) {
+                function mime_content_type($filename) {
+                    $fh=fopen($filename,'rb');
+                    if ($fh) {
+                        $bytes6=fread($fh,6);
+                        fclose($fh);
+                        if ($bytes6===false) return false;
+                        if (substr($bytes6,0,3)=="\xff\xd8\xff") return 'image/jpeg';
+                        if ($bytes6=="\x89PNG\x0d\x0a") return 'image/png';
+                        if ($bytes6=="GIF87a" || $bytes6=="GIF89a") return 'image/gif';
+                        return 'application/octet-stream';
+                    }
+                    return false;
+                }
+            }
             while ($element_name = readdir($handle)) {
                 if ($element_name != "." && $element_name != "..") {
-                    if (is_dir($path . '/' .  $element_name)) {
-                        $dir_content['dir'][] = $element_name;
-
-                    } elseif (in_array(mime_content_type($path . '/' . $element_name), $available_types)) {
+                    if (
+                        is_file($path . '/' . $element_name) &&
+                        in_array(mime_content_type($path . '/' . $element_name), $available_types)
+                    ) {
                         if (
                             ($page * GALLERY_PHOTOS_ON_PAGE) - GALLERY_PHOTOS_ON_PAGE <= $dir_content['total_files'] &&
                             count($dir_content['file']) < GALLERY_PHOTOS_ON_PAGE)
@@ -1583,30 +2120,9 @@ class Micro_Pages {
             }
 
 
-            // Проверка ну сеществование зхапрошенной строницы
+            // Проверка на существование запрошенной строницы
             if (($page * GALLERY_PHOTOS_ON_PAGE) - GALLERY_PHOTOS_ON_PAGE > $dir_content['total_files']) {
                 return $this->page404();
-            }
-
-
-            // Директории
-            if (empty($dir_content['dir'])) {
-                $tpl->touchBlock('no_albums');
-
-            } else {
-                foreach ($dir_content['dir'] as $dir_name) {
-                    $gallery_path = isset($_GET['path']) && $_GET['path'] != ''
-                        ?  $_GET['path'] . '-' . Micro_Tools::pathToHash($dir_name)
-                        :  Micro_Tools::pathToHash($dir_name);
-
-                    $tpl->albums->album->assign('[GALLERY_URL]',  "index.php?view=gallery&path={$gallery_path}{$lang}");
-                    $tpl->albums->album->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
-                    if ($dir_name != end($dir_content['dir'])) $tpl->albums->album->reassign();
-
-                    $tpl->albums->comboalbum->assign('[GALLERY_URL]',  "index.php?view=gallery&path={$gallery_path}{$lang}");
-                    $tpl->albums->comboalbum->assign('[GALLERY_NAME]', Micro_Tools::convertEncoding($dir_name));
-                    if ($dir_name != end($dir_content['dir'])) $tpl->albums->comboalbum->reassign();
-                }
             }
 
 
@@ -1620,7 +2136,7 @@ class Micro_Pages {
                 if (preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)) {
 
                     $tpl_pay = new Micro_Templater();
-                    $tpl_pay->setTemplate(Micro_Init::pageProp('gallery', 'tpl_pay'));
+                    $tpl_pay->setTemplate($this->getComponent('Micro_Gallery', 'tpl_pay'));
 
                     $file_name_cut = preg_replace('~^__[0-9\.,]+__~sU', '', $file_name);
                     $file_name_utf = Micro_Tools::convertEncoding($file_name_cut);
@@ -1642,8 +2158,8 @@ class Micro_Pages {
 
 
                 $tpl->photos->photo->assign('[PHOTO_PATH]',      $photo_path);
-                $tpl->photos->photo->assign('[PHOTO_BIG_URL]',   "index.php?view=photo&path={$photo_path}&size=big");
-                $tpl->photos->photo->assign('[PHOTO_SMALL_URL]', "index.php?view=photo&path={$photo_path}&size=list");
+                $tpl->photos->photo->assign('[PHOTO_BIG_URL]',   "?view=gallery&action=photo&path={$photo_path}&size=big");
+                $tpl->photos->photo->assign('[PHOTO_SMALL_URL]', "?view=gallery&action=photo&path={$photo_path}&size=list");
                 $tpl->photos->photo->assign('[PHOTO_NAME]',      substr($file_name_utf, 0, strrpos($file_name_utf, '.')));
 
                 if ($file_name != end($dir_content['file'])) $tpl->photos->photo->reassign();
@@ -1666,246 +2182,9 @@ class Micro_Pages {
         }
 
 
-        $page = new Micro_Page('gallery');
-        $page->title      = Micro_Init::pageProp('gallery', 'title');
-        $page->meta_keys  = Micro_Init::pageProp('gallery', 'meta_keys');
-        $page->meta_desc  = Micro_Init::pageProp('gallery', 'meta_desc');
-        $page->style      = Micro_Init::pageProp('gallery', 'style');
-        $page->javascript = Micro_Init::pageProp('gallery', 'javascript');
-        $page->locutions  = Micro_Init::pageProp('gallery', 'locutions');
-        $page->content    = $tpl->parse();
-
-        return $page;
-    }
-
-
-    /**
-     * Страница корзины
-     * @return Micro_Page
-     */
-    public function cart() {
-
-        $tpl = new Micro_Templater();
-        $tpl->setTemplate(Micro_Init::pageProp('cart', 'tpl'));
-
-        if ( ! isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-            $tpl->touchBlock('empty_cart');
-
-        } else {
-            $orders   = $_SESSION['cart'];
-            $cost_sum = 0;
-
-            foreach ($orders as $key=>$order) {
-                $file_path = Micro_Tools::hashToPath($order);
-                $file_name = strstr($file_path, '/')
-                    ? end(explode('/', $file_path))
-                    : $file_path;
-
-                if ($file_name) {
-                    $matches = array();
-                    if (preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)) {
-                        $file_name_cut = preg_replace('~^__[0-9\.,]+__~sU', '', $file_name);
-                        $file_name_utf = Micro_Tools::convertEncoding($file_name_cut);
-                        $cost      = str_replace(',', '.', $matches[1]);
-                        $cost_sum += $cost;
-
-                    } else {
-                        $file_name_utf = Micro_Tools::convertEncoding($file_name);
-                        $cost = 0;
-                    }
-
-                    $tpl->orders->order->assign('[TITLE]',        substr($file_name_utf, 0, strrpos($file_name_utf, '.')));
-                    $tpl->orders->order->assign('[COST]',         $cost);
-                    $tpl->orders->order->assign('[PHOTO_URL]',    'index.php?view=photo&path=' . $order . '&size=cart');
-                    $tpl->orders->order->assign('[PARAM_NAME]',   'orders[' . $key . '][path]');
-                    $tpl->orders->order->assign('[PARAM_VALUE]',  $order);
-                    $tpl->orders->order->assign('[COUNT_NAME]',   'orders[' . $key . '][count]');
-
-                    if ($order != end($orders)) $tpl->orders->order->reassign();
-                }
-            }
-
-            $tpl->orders->assign('[COST_SUM]', $cost_sum);
-        }
-
-
-        $page = new Micro_Page('cart');
-        $page->title      = Micro_Init::pageProp('cart', 'title');
-        $page->meta_keys  = Micro_Init::pageProp('cart', 'meta_keys');
-        $page->meta_desc  = Micro_Init::pageProp('cart', 'meta_desc');
-        $page->style      = Micro_Init::pageProp('cart', 'style');
-        $page->javascript = Micro_Init::pageProp('cart', 'javascript');
-        $page->locutions  = Micro_Init::pageProp('cart', 'locutions');
-        $page->content    = $tpl->parse();
-
-        return $page;
-    }
-
-
-    /**
-     * Добавление в корзину товара
-     * @return string
-     */
-    public function add_in_cart() {
-
-        if ( ! isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = array();
-        }
-
-        if ( ! isset($_SESSION['cart'][$_POST['item']])) {
-            $_SESSION['cart'][$_POST['item']] = $_POST['item'];
-        }
-        return json_encode(array('error' => 0));
-    }
-
-
-    /**
-     * Удаление из корзины товара
-     * @return string
-     */
-    public function remove_in_cart() {
-
-        if (isset($_SESSION['cart'][$_POST['item']])) {
-            unset($_SESSION['cart'][$_POST['item']]);
-        }
-        return json_encode(array('error' => 0));
-    }
-
-
-    /**
-     * Страница с оформлением заказа
-     * @return Micro_Page
-     */
-    public function order() {
-
-        $tpl = new Micro_Templater();
-        $tpl->setTemplate(Micro_Init::pageProp('order', 'tpl'));
-
-
-        if (empty($_POST['orders'])) {
-            $tpl->touchBlock('empty_order');
-
-        } else {
-            foreach ($_POST['orders'] as $k=>$order) {
-                $tpl->order_form->orders->assign('[ORDER_PARAM_NAME]', "orders[{$k}][path]");
-                $tpl->order_form->orders->assign('[ORDER_NAME]', $order['path']);
-                $tpl->order_form->orders->assign('[ORDER_PARAM_COUNT]', "orders[{$k}][count]");
-                $tpl->order_form->orders->assign('[ORDER_COUNT]', $order['count']);
-                if ($order != end($_POST['orders'])) $tpl->order_form->orders->reassign();
-            }
-        }
-
-
-        $page = new Micro_Page('order');
-        $page->title      = Micro_Init::pageProp('order', 'title');
-        $page->meta_keys  = Micro_Init::pageProp('order', 'meta_keys');
-        $page->meta_desc  = Micro_Init::pageProp('order', 'meta_desc');
-        $page->style      = Micro_Init::pageProp('order', 'style');
-        $page->javascript = Micro_Init::pageProp('order', 'javascript');
-        $page->locutions  = Micro_Init::pageProp('order', 'locutions');
-        $page->content    = $tpl->parse();
-
-        return $page;
-    }
-
-
-    /**
-     * Отправка сообщеня о новом заказе
-     * @return void
-     */
-    public function order_send() {
-
-        try {
-            if (empty($_POST['orders'])) throw new Exception('Нет товаров для заказа');
-
-            $tpl_email = new Micro_Templater();
-            $tpl_email->setTemplate(Micro_Init::$order_email['tpl']);
-
-            $tpl_email->assign('[NAME]',  $_POST['name']);
-            $tpl_email->assign('[EMAIL]', $_POST['email']);
-            $tpl_email->assign('[TEL]',   $_POST['tel']);
-            $tpl_email->assign('[ADRES]', $_POST['adres']);
-            $tpl_email->assign('[INFO]',  nl2br($_POST['info']));
-
-            $global_price = 0;
-            foreach ($_POST['orders'] as $order) {
-                $realpath = Micro_Tools::hashToPath($order['path']);
-                $file_name = strstr($realpath, '/')
-                    ? end(explode('/', $realpath))
-                    : $realpath;
-
-                if ($file_name) {
-                    $matches = array();
-                    $price = preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)
-                        ? str_replace(',', '.', $matches[1])
-                        : 0;
-
-                    $tpl_email->order->assign('[PATH]', Micro_Tools::convertEncoding($realpath));
-                    $tpl_email->order->assign('[PRICE]', $price);
-                    $tpl_email->order->assign('[COUNT]', $order['count']);
-                    $tpl_email->order->assign('[PRICE_TOTAL]', $order['count'] * $price);
-                    if ($order != end($_POST['orders'])) $tpl_email->order->reassign();
-
-                    $global_price += $order['count'] * $price;
-                }
-            }
-
-            $tpl_email->assign('[GLOBAL_PRICE]', $global_price);
-
-
-            $is_send = Micro_Tools::sendMail(ORDER_EMAIL_TO, Micro_Init::$order_email['subject'], $tpl_email->parse(), array(
-                'from'        => ORDER_EMAIL_FROM,
-                'method'      => ORDER_EMAIL_METHOD,
-                'smtp_host'   => EMAIL_SMTP_HOST,
-                'smtp_port'   => EMAIL_SMTP_PORT,
-                'smtp_secure' => EMAIL_SMTP_SECURE,
-                'smtp_auth'   => EMAIL_SMTP_AUTH,
-                'smtp_user'   => EMAIL_SMTP_USER,
-                'smtp_pass'   => EMAIL_SMTP_PASS
-            ));
-
-            if ( ! $is_send) throw new Exception('Письмо не отправлено по неизвестной причине');
-
-            unset($_SESSION['cart']);
-            $lang = isset($_GET['lang']) && $_GET['lang'] ? '&lang=' . $_GET['lang'] : '';
-            header('Location: ?view=order_result&result=success' . $lang);
-            exit;
-
-        } catch (Exception $e) {
-            $lang = isset($_GET['lang']) && $_GET['lang'] ? '&lang=' . $_GET['lang'] : '';
-            header('Location: ?view=order_result&result=error' . $lang);
-            exit;
-        }
-    }
-
-
-    /**
-     * Страница с успешной или неудачной отправкой заказа
-     * @return Micro_Page
-     */
-    public function order_result() {
-
-        $tpl = new Micro_Templater();
-        $tpl->setTemplate(Micro_Init::pageProp('order_result', 'tpl'));
-
-        if ($_GET['result'] == 'success') {
-            $tpl->touchBlock('success');
-
-        } elseif ($_GET['result'] == 'error') {
-            $tpl->touchBlock('error');
-
-        } else {
-            header('Location: ?view=404');
-            exit;
-        }
-
-        $page = new Micro_Page('order_result');
-        $page->title      = Micro_Init::pageProp('order_result', 'title');
-        $page->meta_keys  = Micro_Init::pageProp('order_result', 'meta_keys');
-        $page->meta_desc  = Micro_Init::pageProp('order_result', 'meta_desc');
-        $page->style      = Micro_Init::pageProp('order_result', 'style');
-        $page->javascript = Micro_Init::pageProp('order_result', 'javascript');
-        $page->locutions  = Micro_Init::pageProp('order_result', 'locutions');
+        $page = new stdClass();
+        $page->style      = $this->getComponent('Micro_Gallery', 'style');
+        $page->javascript = $this->getComponent('Micro_Gallery', 'javascript');
         $page->content    = $tpl->parse();
 
         return $page;
@@ -1917,7 +2196,7 @@ class Micro_Pages {
      * @return void
      * @throws Exception
      */
-    public function photo() {
+    protected function photo() {
 
         if (defined('USE_CACHE') && USE_CACHE) {
             if ( ! isset($_GET['path']) || $_GET['path'] == '') {
@@ -2039,200 +2318,357 @@ class Micro_Pages {
 }
 
 
-/**
- * Class Micro_Page
- */
-class Micro_Page {
-
-    public function __construct($name = '') {
-        $this->name = $name;
-    }
-
-    public $name = '';
-    public $title = '';
-    public $meta_keys = '';
-    public $meta_desc = '';
-    public $style = '';
-    public $javascript = '';
-    public $content = '';
-    public $locutions = array();
-}
-
 
 /**
- * Class Micro_Init
+ * Class Micro_Cart
  */
-class Micro_Init {
-
-    public static $pages       = array();
-    public static $template    = array();
-    public static $menu        = array();
-    public static $order_email = array();
-    public static $home_page   = 'gallery';
+class Micro_Cart extends Micro_Plugin_Abstract {
 
 
-    public function __construct() {
+    public function index() {
 
-        if (is_dir(PLUGINS_DIR)) {
-            $h = opendir(PLUGINS_DIR);
-            while ($element = readdir($h)) {
-                if (
-                    $element != '.' && $element != '..' &&
-                    is_file(PLUGINS_DIR . '/' . $element) &&
-                    substr($element, strrpos($element, '.')+1) == 'php'
-                ) {
-                    require_once PLUGINS_DIR . '/' . $element;
-                }
-            }
-        }
-    }
+        if (isset($_GET['action']) && $_GET['action'] == 'remove_in_cart') {
+            $this->removeInCart();
 
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'add_in_cart') {
+            $this->addInCart();
 
-    /**
-     * Ответ пользователю на запрос
-     * return string
-     */
-    public function dispatch() {
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'order') {
+            return $this->order();
 
-        // проверка существует ли запрошенный язык в перечне
-        if (isset($_GET['lang']) && $_GET['lang'] != '') {
-            $languages = explode(',', LANGUAGES);
-            foreach ($languages as $k=>$iso) if (trim($iso)) $languages[$k] = trim($iso);
-            if ( ! in_array($_GET['lang'], $languages)) {
-                $pages = new Micro_Pages();
-                $page = $pages->page404();
-            }
-        }
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'order_send') {
+            $this->orderSend();
 
-        if ( ! isset($page)) {
-            $matches = array();
-            if (isset($_GET['view']) && $_GET['view']) {
-
-                // показ страницы для которой есть логика отбражения
-                $page_name = strtolower($_GET['view']);
-                if (is_callable(array('Micro_pages', $page_name))) {
-                    $pages = new Micro_Pages();
-                    $page  = $pages->$page_name();
-
-                    // показ страницы плагина
-                } elseif (isset(self::$pages[$page_name]) && isset(self::$pages[$page_name]['plugin'])) {
-                    $plugin = new self::$pages[$page_name]['plugin']();
-                    $page   = $plugin->$page_name();
-
-                    // показ страницы для которой нет логики отбражения
-                } elseif (isset(self::$pages[$page_name]) && $page_name != '404') {
-                    $pages = new Micro_Pages();
-                    $page  = $pages->view($page_name);
-
-                    // показ 404
-                } else {
-                    $pages = new Micro_Pages();
-                    $page  = $pages->page404();
-                }
-
-                // существует ли плагин Micro_Plugin_Rewrite
-            } elseif (
-                class_exists('Micro_Plugin_Rewrite') && Micro_Plugin_Rewrite::$is_active &&
-                preg_match('~^([^?]+)(?|)~', ltrim($_SERVER['REQUEST_URI'], '/'), $matches) &&
-                $matches[1] != 'index.php'
-            ) {
-                $rewrite   = new Micro_Plugin_Rewrite();
-                $page_name = $rewrite->searchPage(self::$pages, $matches[1]);
-
-                // страница найдена
-                if ($page_name != '') {
-                    if (isset(self::$pages[$page_name]['plugin'])) {
-                        $plugin = new self::$pages[$page_name]['plugin']();
-                        $page   = $plugin->$page_name();
-                    } else {
-                        $pages = new Micro_Pages();
-                        $page  = $pages->view($page_name);
-                    }
-
-                    // показ 404
-                } else {
-                    $pages = new Micro_Pages();
-                    $page  = $pages->page404();
-                }
-
-                // главная страница
-            } else {
-                if (is_callable(array('Micro_Pages', self::$home_page))) {
-                    $pages = new Micro_Pages();
-                    $page = $pages->{self::$home_page}();
-
-                } elseif (isset(self::$pages[self::$home_page]['plugin'])) {
-                    $plugin = new self::$pages[self::$home_page]['plugin']();
-                    $page = $plugin->{self::$home_page}();
-
-                } elseif (isset(self::$pages[self::$home_page])) {
-                    $pages = new Micro_Pages();
-                    $page = $pages->view(self::$home_page);
-
-                } else {
-                    throw new Exception('Домашняя страница "' . self::$home_page . '" не найдена');
-                }
-            }
-        }
-
-
-        if ($page instanceof Micro_Page) {
-            return $this->renderPage($page);
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'order_result') {
+            return $this->orderResult();
 
         } else {
-            return $page;
+            return $this->cart();
         }
     }
 
 
     /**
-     * @param Micro_Page $page
-     * @return string
+     * Страница корзины
+     * @return stdClass
      */
-    public function renderPage(Micro_Page $page) {
+    protected function cart() {
 
         $tpl = new Micro_Templater();
-        $tpl->setTemplate(self::$template['tpl']);
+        $tpl->setTemplate($this->getComponent('Micro_Cart', 'cart', 'tpl'));
 
-        $lang = isset($_GET['lang']) && $_GET['lang'] ? $_GET['lang'] : DEFAULT_LANG;
+        if ( ! isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+            $tpl->touchBlock('empty_cart');
 
-        $tpl->assign('[TITLE]',      USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $page->title : $page->title);
-        $tpl->assign('[META_KEYS]',  $page->meta_keys);
-        $tpl->assign('[META_DESC]',  $page->meta_desc);
-        $tpl->assign('[STYLE]',      $page->style);
-        $tpl->assign('[JAVASCRIPT]', $page->javascript);
-        $tpl->assign('[CONTENT]',    $page->content);
-        $tpl->assign('[LANG]',       $lang);
-        $tpl->assign('[SITE_NAME]',  SITE_NAME);
+        } else {
+            $orders   = $_SESSION['cart'];
+            $cost_sum = 0;
+
+            foreach ($orders as $key=>$order) {
+                $file_path = Micro_Tools::hashToPath($order);
+                $file_name = strstr($file_path, '/')
+                    ? end(explode('/', $file_path))
+                    : $file_path;
+
+                if ($file_name) {
+                    $matches = array();
+                    if (preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)) {
+                        $file_name_cut = preg_replace('~^__[0-9\.,]+__~sU', '', $file_name);
+                        $file_name_utf = Micro_Tools::convertEncoding($file_name_cut);
+                        $cost      = str_replace(',', '.', $matches[1]);
+                        $cost_sum += $cost;
+
+                    } else {
+                        $file_name_utf = Micro_Tools::convertEncoding($file_name);
+                        $cost = 0;
+                    }
+
+                    $tpl->orders->order->assign('[TITLE]',         substr($file_name_utf, 0, strrpos($file_name_utf, '.')));
+                    $tpl->orders->order->assign('[COST]',          $cost);
+                    $tpl->orders->order->assign('[PHOTO_URL]',     '?view=gallery&action=photo&path=' . $order . '&size=cart');
+                    $tpl->orders->order->assign('[PHOTO_BIG_URL]', '?view=gallery&action=photo&path=' . $order . '&size=big');
+                    $tpl->orders->order->assign('[PARAM_NAME]',    'orders[' . $key . '][path]');
+                    $tpl->orders->order->assign('[PARAM_VALUE]',   $order);
+                    $tpl->orders->order->assign('[COUNT_NAME]',    'orders[' . $key . '][count]');
+
+                    if ($order != end($orders)) $tpl->orders->order->reassign();
+                }
+            }
+
+            $tpl->orders->assign('[COST_SUM]', $cost_sum);
+        }
 
         // Валюта
+        $lang = $this->getLang();
         $tpl->assign('[CURRENCY]', defined(strtoupper('CURRENCY_' . $lang))
             ? constant(strtoupper('CURRENCY_' . $lang))
             : '');
 
+        $page = new stdClass();
+        $page->title      = $this->getComponent('Micro_Cart', 'cart', 'title');
+        $page->meta_desk  = $this->getComponent('Micro_Cart', 'cart', 'meta_desk');
+        $page->meta_keys  = $this->getComponent('Micro_Cart', 'cart', 'meta_keys');
+        $page->style      = $this->getComponent('Micro_Cart', 'cart', 'style');
+        $page->javascript = $this->getComponent('Micro_Cart', 'cart', 'javascript');
+        $page->content    = $tpl->parse();
 
-        // Меню
-        self::$menu = Micro_Tools::arraySort(self::$menu, 'position');
-        foreach (self::$menu as $menu) {
-            $is_active = in_array($page->name, $menu['active']) ? 'current' : '';
-            $lang      = isset($_GET['lang']) && $_GET['lang'] ? "&lang={$_GET['lang']}" : '';
+        return $page;
+    }
 
-            $tpl->menu->assign('[CURRENT]',   $is_active);
-            $tpl->menu->assign('[MENU_URL]',  '?view=' . $menu['view'] . $lang);
-            $tpl->menu->assign('[MENU_NAME]', $menu['title']);
-            if ($menu != end(self::$menu)) $tpl->menu->reassign();
 
-            $tpl->combonav->assign('[MENU_URL]',  '?view=' . $menu['view'] . $lang);
-            $tpl->combonav->assign('[MENU_NAME]', $menu['title']);
-            if ($menu != end(self::$menu)) $tpl->combonav->reassign();
+    /**
+     * Удаление из корзины товара
+     * @return string
+     */
+    protected function removeInCart() {
+
+        if (isset($_POST['item']) && isset($_SESSION['cart'][$_POST['item']])) {
+            unset($_SESSION['cart'][$_POST['item']]);
+        }
+        echo json_encode(array('error' => 0));
+        exit;
+    }
+
+
+    /**
+     * Добавление в корзину товара
+     * @return string
+     */
+    protected function addInCart() {
+
+        if ( ! isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = array();
+        }
+
+        if (isset($_POST['item']) && ! isset($_SESSION['cart'][$_POST['item']])) {
+            $_SESSION['cart'][$_POST['item']] = $_POST['item'];
+        }
+        echo json_encode(array('error' => 0));
+        exit;
+    }
+
+
+    /**
+     * Страница с оформлением заказа
+     * @return stdClass
+     */
+    protected function order() {
+
+        $tpl = new Micro_Templater();
+        $tpl->setTemplate($this->getComponent('Micro_Cart', 'order', 'tpl'));
+
+
+        if (empty($_POST['orders'])) {
+            $tpl->touchBlock('empty_order');
+
+        } else {
+            foreach ($_POST['orders'] as $k=>$order) {
+                $tpl->order_form->orders->assign('[ORDER_PARAM_NAME]', "orders[{$k}][path]");
+                $tpl->order_form->orders->assign('[ORDER_NAME]', $order['path']);
+                $tpl->order_form->orders->assign('[ORDER_PARAM_COUNT]', "orders[{$k}][count]");
+                $tpl->order_form->orders->assign('[ORDER_COUNT]', $order['count']);
+                if ($order != end($_POST['orders'])) $tpl->order_form->orders->reassign();
+            }
         }
 
 
-        // Контрол для выбора языка сайта
+        $page = new stdClass();
+        $page->title      = $this->getComponent('Micro_Cart', 'order', 'title');
+        $page->meta_keys  = $this->getComponent('Micro_Cart', 'order', 'meta_keys');
+        $page->meta_desc  = $this->getComponent('Micro_Cart', 'order', 'meta_desc');
+        $page->style      = $this->getComponent('Micro_Cart', 'order', 'style');
+        $page->javascript = $this->getComponent('Micro_Cart', 'order', 'javascript');
+        $page->locutions  = $this->getComponent('Micro_Cart', 'order', 'locutions');
+        $page->content    = $tpl->parse();
+
+        return $page;
+    }
+
+
+    /**
+     * Отправка сообщеня о новом заказе
+     * @return void
+     */
+    protected function orderSend() {
+
+        try {
+            if (empty($_POST['orders'])) throw new Exception('Нет товаров для заказа');
+
+            $tpl_email = new Micro_Templater();
+            $tpl_email->setTemplate($this->getComponent('Micro_Cart', 'order_email', 'tpl'));
+
+            $tpl_email->assign('[NAME]',  $_POST['name']);
+            $tpl_email->assign('[EMAIL]', $_POST['email']);
+            $tpl_email->assign('[TEL]',   $_POST['tel']);
+            $tpl_email->assign('[ADRES]', $_POST['adres']);
+            $tpl_email->assign('[INFO]',  nl2br($_POST['info']));
+
+            $global_price = 0;
+            foreach ($_POST['orders'] as $order) {
+                $realpath = Micro_Tools::hashToPath($order['path']);
+                $file_name = strstr($realpath, '/')
+                    ? end(explode('/', $realpath))
+                    : $realpath;
+
+                if ($file_name) {
+                    $matches = array();
+                    $price = preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)
+                        ? str_replace(',', '.', $matches[1])
+                        : 0;
+
+                    $tpl_email->order->assign('[PATH]', GALLERY_DIR . '/' . Micro_Tools::convertEncoding($realpath));
+                    $tpl_email->order->assign('[PRICE]', $price);
+                    $tpl_email->order->assign('[COUNT]', $order['count']);
+                    $tpl_email->order->assign('[PRICE_TOTAL]', $order['count'] * $price);
+                    if ($order != end($_POST['orders'])) $tpl_email->order->reassign();
+
+                    $global_price += $order['count'] * $price;
+                }
+            }
+
+            $tpl_email->assign('[GLOBAL_PRICE]', $global_price);
+
+
+            $is_send = Micro_Tools::sendMail(ORDER_EMAIL_TO, $this->getComponent('Micro_Cart', 'order_email', 'subject'), $tpl_email->parse(), array(
+                'from'        => ORDER_EMAIL_FROM,
+                'method'      => ORDER_EMAIL_METHOD,
+                'smtp_host'   => EMAIL_SMTP_HOST,
+                'smtp_port'   => EMAIL_SMTP_PORT,
+                'smtp_secure' => EMAIL_SMTP_SECURE,
+                'smtp_auth'   => EMAIL_SMTP_AUTH,
+                'smtp_user'   => EMAIL_SMTP_USER,
+                'smtp_pass'   => EMAIL_SMTP_PASS
+            ));
+
+            if ( ! $is_send) throw new Exception('Письмо не отправлено по неизвестной причине');
+
+            unset($_SESSION['cart']);
+            $lang = $this->getLang();
+            header('Location: ?view=cart&action=order_result&result=success&lang=' . $lang);
+            exit;
+
+        } catch (Exception $e) {
+            $lang = $this->getLang();
+            header('Location: ?view=cart&action=order_result&result=error&lang=' . $lang);
+            exit;
+        }
+    }
+
+
+    /**
+     * Страница с успешной или неудачной отправкой заказа
+     * @return stdClass
+     */
+    protected function orderResult() {
+
+        $tpl = new Micro_Templater();
+        $tpl->setTemplate($this->getComponent('Micro_Cart', 'order_result', 'tpl'));
+
+        if ($_GET['result'] == 'success') {
+            $tpl->touchBlock('success');
+
+        } elseif ($_GET['result'] == 'error') {
+            $tpl->touchBlock('error');
+
+        } else {
+            return $this->page404();
+        }
+
+        $page = new stdClass();
+        $page->title      = $this->getComponent('Micro_Cart', 'order_result', 'title');
+        $page->meta_keys  = $this->getComponent('Micro_Cart', 'order_result', 'meta_keys');
+        $page->meta_desc  = $this->getComponent('Micro_Cart', 'order_result', 'meta_desc');
+        $page->style      = $this->getComponent('Micro_Cart', 'order_result', 'style');
+        $page->javascript = $this->getComponent('Micro_Cart', 'order_result', 'javascript');
+        $page->content    = $tpl->parse();
+
+        return $page;
+    }
+}
+
+
+
+/**
+ * Class Micro_Help
+ */
+class Micro_Help extends Micro_Plugin_Abstract {
+
+    public function index() {
+        return $this->getComponent('Micro_Help', 'tpl');
+    }
+}
+
+
+
+/**
+ * Class Micro_Page404
+ */
+class Micro_Page404 extends Micro_Plugin_Abstract {
+
+    /**
+     * Страница 404
+     */
+    public function index() {
+
+        header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+
+        $template  = $this->getComponent('Micro_Page404', 'tpl');
+        $title     = $this->getComponent('Micro_Page404', 'title');
+        $locutions = $this->getLocutions();
+
+        $tpl = new Micro_Templater();
+        $tpl->setTemplate($template);
+
+        $tpl->assign('[TITLE]', USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $title : $title);
+
+        echo Micro_Tools::replaceLocutions($tpl->parse(), $locutions);
+        exit;
+    }
+}
+
+
+
+/**
+ * Class Micro_Lang
+ */
+class Micro_Lang extends Micro_Plugin_Abstract {
+
+    /**
+     * Возвращает двухбуквенное обозначение текущего языка
+     * @return string
+     */
+    public function index() {
+
+        // проверка существует ли запрошенный язык в перечне
+        if (isset($_GET['lang']) && $_GET['lang'] != '') {
+            $languages = explode(',', LANGUAGES);
+            $languages = array_map('trim', $languages);
+            if ( ! in_array($_GET['lang'], $languages)) {
+                return $this->page404();
+            }
+
+            return $_GET['lang'];
+
+        } else {
+            return DEFAULT_LANG;
+        }
+    }
+
+
+    /**
+     * Возвращает переключатель языков
+     * для вставки его на страницу
+     * @return string
+     */
+    public function getLangSwitcher() {
+
         $languages = explode(',', trim(LANGUAGES, ' ,'));
         if (count($languages) > 1 && $_SERVER['REQUEST_METHOD'] == 'GET') {
+            $tpl = new Micro_Templater();
+            $tpl->setTemplate($this->getComponent('Micro_Lang', 'tpl'));
+
             foreach ($languages as $iso) {
-                $tpl->select_lang->languages->assign('[LANG_ISO]', $iso);
+                $tpl->languages->assign('[LANG_ISO]', $iso);
                 if (isset($_GET['lang'])) {
                     $selected = $_GET['lang'] == $iso
                         ? 'selected="selected"'
@@ -2243,62 +2679,205 @@ class Micro_Init {
                         : '';
                 }
 
-                $tpl->select_lang->languages->assign('[SELECTED]', $selected);
-                if ($iso != end($languages)) $tpl->select_lang->languages->reassign();
+                $tpl->languages->assign('[SELECTED]', $selected);
+                if ($iso != end($languages)) $tpl->languages->reassign();
+            }
+
+            $page = stdClass();
+            $page->style      = $this->getComponent('Micro_Lang', 'style');
+            $page->javascript = $this->getComponent('Micro_Lang', 'javascript');
+            $page->content    = $tpl->parse();
+            return $page;
+        }
+
+        return '';
+    }
+}
+
+
+/**
+ * Class Micro_Plugin_Abstract
+ */
+abstract class Micro_Plugin_Abstract {
+
+    public static $is_active = true;
+
+    abstract public function index();
+
+
+    /**
+     * Страница 404
+     * @return string
+     */
+    public function page404() {
+
+        $plugins = Micro_Init::getPlugins();
+
+        foreach ($plugins as $plugin) {
+            if ($plugin == 'Micro_Page404') {
+                $page404 = new $plugin();
+                break;
             }
         }
 
-        $result = $tpl->parse();
-
-
-        // Перевод текста
-        if ( ! empty($page->locutions) && isset(self::$template['locutions'])) {
-            $locutions = array_merge($page->locutions, self::$template['locutions']);
-            $result = Micro_Tools::replaceLocutions($result, $locutions);
-
-        } elseif ( ! empty($page->locutions)) {
-            $result = Micro_Tools::replaceLocutions($result, $page->locutions);
-
-        } elseif (isset(self::$template['locutions'])) {
-            $result = Micro_Tools::replaceLocutions($result, self::$template['locutions']);
+        if ( ! isset($page404)) {
+            $page404 = new Micro_Page404();
         }
 
-
-        return $result;
+        return $page404->index();
     }
 
 
     /**
-     * Возвращает указанное свойство страницы.
-     * Выбирает перевод свойства если это возможно.
-     * @return mixed
-     *      Возвраещает значение свойства
-     *      или если свойство не найдено, то null
+     *
      */
-    public static function pageProp() {
+    public function getPageStructure() {
 
-        $args  = func_get_args();
-        $pages = self::$pages;
-        $prop  = array();
+        $matches = array();
+        preg_match('~^([^?]+)(?|)~', $_SERVER['REQUEST_URI'], $matches);
+        $current_url = $matches[1];
+        foreach (Micro_Init::$router as $page=>$structure) {
+            if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
+                ($page == 'home' && $current_url == '/' && ! isset($_GET['view'])) ||
+                preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
+            ) {
+                return $structure;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * @param string $title
+     * @param string $url
+     */
+    public function addTaxonomy($title, $url) {
+        Micro_Init::addTaxonomy($title, $url);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getTaxonomy() {
+        return Micro_Init::getTaxonomy();
+    }
+
+
+    /**
+     * @param string $name
+     * @param string $var
+     */
+    public function setRegistry($name, $var) {
+        Micro_Init::setRegistry($name, $var);
+    }
+
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getRegistry($name) {
+        return Micro_Init::getRegistry($name);
+    }
+
+
+    /**
+     * @return array|null
+     */
+    public function getLocutions() {
+
+        $lang      = $this->getLang();
+        $locutions = Micro_Init::$locutions;
+
+        if (isset($locutions[$lang]) && is_array($locutions[$lang])) {
+            return $locutions[$lang];
+        }
+
+        return null;
+    }
+
+
+    /**
+     * @return array|null
+     */
+    public function getComponent() {
+
+        $lang       = $this->getLang();
+        $args       = func_get_args();
+        $components = Micro_Init::$components;
+        $prop       = array();
 
         foreach ($args as $arg) {
-            if (isset($pages[$arg])) {
-                $pages = $pages[$arg];
-                $prop  = $pages;
+            if (isset($components[$arg])) {
+                $components = $components[$arg];
+                $prop  = $components;
             } else {
                 return null;
             }
         }
 
-        if (isset($_GET['lang']) && $_GET['lang'] && is_array($prop) && isset($prop[$_GET['lang']])) {
-            return $prop[$_GET['lang']];
-
-        } elseif (is_array($prop) && isset($prop[DEFAULT_LANG])) {
-            return $prop[DEFAULT_LANG];
-
-        } else {
-            return $prop;
+        if (is_array($prop) && isset($prop[$lang])) {
+            return $prop[$lang];
         }
+
+        return $prop;
+    }
+
+
+    /**
+     * Возвращает текущий язык на странице
+     * @return mixed
+     */
+    public function getLang() {
+
+        if ( ! ($micro_lang = Micro_Init::getRegistry('Micro_Lang'))) {
+            $plugins = Micro_Init::getPlugins();
+            foreach ($plugins as $plugin=>$extend) {
+                if ($extend == 'Micro_Lang') {
+                    $micro_lang = new $plugin();
+                    break;
+                }
+            }
+
+            if ( ! isset($micro_lang)) {
+                $micro_lang = new Micro_Lang();
+            }
+            Micro_Init::setRegistry('Micro_Lang', $micro_lang);
+        }
+
+        return $micro_lang->index();
+    }
+}
+
+
+
+/**
+ * Class Micro
+ */
+class Micro {
+
+    /**
+     * Ответ пользователю на запрос
+     * return string
+     */
+    public function dispatch() {
+
+        $plugins = Micro_Init::getPlugins();
+        foreach ($plugins as $plugin=>$extend) {
+            if ($extend == 'Micro_Layout') {
+                $layout = new $plugin();
+                break;
+            }
+        }
+
+        if ( ! isset($layout)) {
+            $layout = new Micro_Layout();
+        }
+        Micro_Init::setRegistry('Micro_Layout', $layout);
+
+        return $layout->index();
     }
 }
 
@@ -2308,6 +2887,7 @@ class Micro_Init {
  */
 class Micro_Tools {
 
+    private static $hash_to_path = array();
 
     /**
      * Отправка письма
@@ -2443,7 +3023,7 @@ class Micro_Tools {
      * @param $str
      * @param array $locutions
      * @param string $embrace
-     * @return mixed
+     * @return string
      */
     public static function replaceLocutions($str, $locutions = array(), $embrace = "##''##") {
 
@@ -2455,7 +3035,8 @@ class Micro_Tools {
             $embrace_start = preg_quote(substr($embrace, 0, $i));
             $embrace_end   = preg_quote(substr($embrace, $i));
 
-        } else {            trigger_error('Embrace error', E_USER_WARNING);
+        } else {
+            trigger_error('Embrace error', E_USER_WARNING);
             return $str;
         }
 
@@ -2463,18 +3044,7 @@ class Micro_Tools {
             function replaceLocutionCondition ($matches) {
                 global $global_locutions;
                 if (isset($global_locutions[$matches[2]])) {
-                    if (
-                        isset($_GET['lang']) && $_GET['lang'] != '' &&
-                        is_array($global_locutions[$matches[2]]) && isset($global_locutions[$matches[2]][$_GET['lang']])
-                    ) {
-                        return $global_locutions[$matches[2]][$_GET['lang']];
-
-                    } elseif (is_array($global_locutions[$matches[2]]) && isset($global_locutions[$matches[2]][DEFAULT_LANG])) {
-                        return $global_locutions[$matches[2]][DEFAULT_LANG];
-
-                    } else {
-                        return $matches[2];
-                    }
+                    return $global_locutions[$matches[2]];
 
                 } else {
                     return $matches[2];
@@ -2691,12 +3261,15 @@ class Micro_Tools {
 
     /**
      * Конвертирует хэшированный путь в настоящий
-     * TODO добавить статическую переменную для хранения полученого содержимого директорий
      * @param string $hash_path
      * @param string $algo
      * @return string
      */
     public static function hashToPath($hash_path, $algo = 'crc32b') {
+
+        if (isset(self::$hash_to_path[$hash_path])) {
+            return self::$hash_to_path[$hash_path];
+        }
 
         $explode_path = explode('-', $hash_path);
         $real_path    = array();
@@ -2722,7 +3295,7 @@ class Micro_Tools {
             }
         }
 
-        return implode('/', $real_path);
+        return self::$hash_to_path[$hash_path] = implode('/', $real_path);
     }
 
 
@@ -2766,6 +3339,7 @@ class Micro_Tools {
 
         return $new_array;
     }
+
 
     /**
      * Создание массива с пагинацией
@@ -3064,6 +3638,10 @@ class Micro_Templater {
 
     }
 
+
+    /**
+     * @return void
+     */
     private function clear() {
         $this->blocks = array();
         $this->vars = array();
@@ -3103,25 +3681,10 @@ class Micro_Templater {
 }
 
 
-/**
- * Interface Micro_Plugins_Interface
- */
-interface Micro_Plugin_Interface {
-
-
-}
-
-abstract class Micro_Plugin {
-
-    protected  $is_active = false;
-
-    public abstract function install();
-}
-
 
 try {
     session_start();
-    $init = new Micro_Init();
+    $init = new Micro();
     echo $init->dispatch();
 
 } catch (Exception $e) {
