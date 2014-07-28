@@ -24,11 +24,12 @@
  * @see: microshop.by
  * @version: 1.0.0
  */
+
 ini_set('display_errors', 1);
 /**
  * Название сайта.
  */
-define('SITE_NAME', 'Gallery');
+define('SITE_NAME', 'Microshop');
 
 /**
  * Названия валют на сайте для разных языков
@@ -103,7 +104,7 @@ define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
 
 
-Micro_Init::$menu = array(
+Micro_Init::$_menu = array(
     'gallery' => 'Галерея',
     'cart'    => 'Ваш заказ',
     'help'    => 'Помощь'
@@ -114,7 +115,7 @@ Micro_Init::$menu = array(
 /**
  * Маршрутизатор
  */
-Micro_Init::$router = array(
+Micro_Init::$_router = array(
     'home' => array(
         'menu'    => array( 'Micro_MainMenu' ),
         'content' => array( 'Micro_Gallery' ),
@@ -137,7 +138,7 @@ Micro_Init::$router = array(
 
 
 
-Micro_Init::$locutions = array(
+Micro_Init::$_locutions = array(
     'en' => array(
         'Цена'                      => 'Price',
         'Галерея'                   => 'Gallery',
@@ -191,7 +192,7 @@ Micro_Init::$locutions = array(
 /**
  * Планировка страницы
  */
-Micro_Init::$components['Micro_Layout'] = array(
+Micro_Init::$_components['Micro_Layout'] = array(
     'tpl' => <<<HTML
 <!DOCTYPE html>
 <html>
@@ -201,8 +202,6 @@ Micro_Init::$components['Micro_Layout'] = array(
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="content-type"       content="text/META; charset=utf-8"/>
     <meta name="robots"             content="all"/>
-    <meta name="revisit-afte"       content="7 days"/>
-    <meta name="distributionrobots" content="global"/>
     <meta name="description"        content="[META_DESC]"/>
     <meta name="keywords"           content="[META_KEYS]"/>
     <meta name="viewport"           content="width=device-width, initial-scale=1"/>
@@ -284,6 +283,7 @@ Micro_Init::$components['Micro_Layout'] = array(
             color:#444;
             font-family:Arial, sans-serif;
             font-weight:400;
+            line-height: 100%;
         }
         h1 { font-size:48px; }
         h2 { font-size:36px; }
@@ -491,6 +491,7 @@ Micro_Init::$components['Micro_Layout'] = array(
         @media only screen and (max-width: 767px) {
             #nav { display: none; }
             .wrapper { width: 252px; }
+            h1 { font-size: 40px }
         }
         @media only screen and (min-width: 480px) and (max-width: 767px) {
             .wrapper { width: 436px; }
@@ -551,12 +552,12 @@ Micro_Init::$components['Micro_Layout'] = array(
     <header class="clearfix">
         <div class="wrapper clearfix">
             <a href="index.php" id="logo">[SITE_NAME]</a>
-            <!-- BEGIN header -->
+            <!-- BEGIN position_header -->
             [HEADER]
-            <!-- END header -->
-            <!-- BEGIN menu -->
+            <!-- END position_header -->
+            <!-- BEGIN position_menu -->
             [MENU]
-            <!-- END menu -->
+            <!-- END position_menu -->
         </div>
     </header>
 
@@ -576,27 +577,27 @@ Micro_Init::$components['Micro_Layout'] = array(
             </ul>
             <!-- END taxonomy -->
 
-            <!-- BEGIN top -->
+            <!-- BEGIN position_top -->
             [TOP]
-            <!-- END top -->
+            <!-- END position_top -->
 
-            <!-- BEGIN sidebar -->
+            <!-- BEGIN position_sidebar -->
             <aside id="sidebar">
                 [SIDEBAR]
             </aside>
-            <!-- END sidebar -->
+            <!-- END position_sidebar -->
 
-            <!-- BEGIN content -->
+            <!-- BEGIN position_content -->
             [CONTENT]
-            <!-- END content -->
+            <!-- END position_content -->
         </div>
     </div>
 
     <footer>
         <div class="wrapper">
-            <!-- BEGIN footer -->
+            <!-- BEGIN position_footer -->
             [FOOTER]
-            <!-- END footer -->
+            <!-- END position_footer -->
 
             <!-- BEGIN lang_switcher -->
             [CONTROL]
@@ -613,7 +614,7 @@ HTML
 /**
  * Языки
  */
-Micro_Init::$components['Micro_Lang'] = array(
+Micro_Init::$_components['Micro_Lang'] = array(
     'tpl' => <<<HTML
         <div id="lang-switcher">
             <select onchange="selectLang(this.value)" name="lang">
@@ -653,7 +654,7 @@ HTML
 /**
  * Меню
  */
-Micro_Init::$components['Micro_MainMenu'] = array(
+Micro_Init::$_components['Micro_MainMenu'] = array(
     'tpl' => <<<HTML
         <nav>
             <ul id="nav">
@@ -746,7 +747,7 @@ HTML
 /**
  * Категории
  */
-Micro_Init::$components['Micro_Categories'] = array(
+Micro_Init::$_components['Micro_Categories'] = array(
     'tpl' => <<<HTML
         <h4>##'Категории'##</h4>
         <!-- BEGIN albums -->
@@ -806,7 +807,7 @@ HTML
 /**
  * Галлерея товаров
  */
-Micro_Init::$components['Micro_Gallery'] = array(
+Micro_Init::$_components['Micro_Gallery'] = array(
     'tpl' => <<<HTML
 
     <!-- BEGIN photos -->
@@ -843,7 +844,7 @@ HTML
     'tpl_pay' => <<<HTML
         <div class="div-data">
             <div class="currency">
-                ##'Цена'## [PHOTO_COST] [CURRENCY]
+                [PHOTO_COST] [CURRENCY]
             </div>
             <div class="choose">
                 <!-- BEGIN add_in_cart -->
@@ -1033,7 +1034,7 @@ HTML
 /**
  * Корзина пользователя
  */
-Micro_Init::$components['Micro_Cart'] = array(
+Micro_Init::$_components['Micro_Cart'] = array(
     'cart' => array(
         'tpl' => <<<HTML
             <h3>##'Информация о вашем заказе'##</h3>
@@ -1133,7 +1134,7 @@ HTML
                     obj.classList.add('btn-preloader');
                     obj.classList.remove('btn-delete');
 
-                    doPost('?view=remove_in_cart', {item : photo_path}, function (data) {
+                    doPost('?view=cart&action=remove_in_cart', {item : photo_path}, function (data) {
                         var json = JSON.parse(data);
                         if (json.error == 0) {
                             obj.parentNode.parentNode.remove();
@@ -1230,18 +1231,6 @@ HTML
                         <input type="tel" name="tel" id="field_tel"
                                required="required"
                                data-required-message="##'Укажите пожалуйста контактный телефон'##">
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-                <div class="ms-field-container">
-                    <div class="ms-field-label">
-                        <label for="field_email">
-                            ##'Ваш email'##:
-                        </label>
-                    </div>
-                    <div class="ms-field-input">
-                        <input type="email" id="field_email" name="email">
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -1488,7 +1477,7 @@ HTML
 /**
  * Справочная информация
  */
-Micro_Init::$components['Micro_Help'] = array(
+Micro_Init::$_components['Micro_Help'] = array(
     'tpl' => array(
         'ru' => <<<HTML
     <p>
@@ -1534,7 +1523,7 @@ HTML
 /**
  * Страница 404
  */
-Micro_Init::$components['Micro_Page404'] = array(
+Micro_Init::$_components['Micro_Page404'] = array(
     'tpl' => <<<HTML
 <!doctype html>
 <!--
@@ -1605,27 +1594,24 @@ HTML
  */
 class Micro_Init {
 
-    public static $router     = array();
-    public static $menu       = array();
-    public static $locutions  = array();
-    public static $components = array();
+    public static $_router     = array();
+    public static $_menu       = array();
+    public static $_locutions  = array();
+    public static $_components = array();
 
-    private static $taxonomy     = array();
-    private static $registry     = array();
-    private static $plugins      = array();
-    private static $current_page = '';
-    private static $current_lang = '';
+
+    private static $_taxonomy = array();
+    private static $_registry = array();
+    private static $_plugins  = array();
 
 
     /**
      * Инициализация плагинов
+     * @return array
      */
     public static function getPlugins() {
 
-        if ( ! empty(self::$plugins)) return self::$plugins;
-
-        $plugins = array();
-        if (is_dir(PLUGINS_DIR)) {
+        if (empty(self::$_plugins) && is_dir(PLUGINS_DIR)) {
             $h = opendir(PLUGINS_DIR);
             while ($element = readdir($h)) {
                 if ($element != '.' && $element != '..' &&
@@ -1636,16 +1622,68 @@ class Micro_Init {
 
                     $plugin_name = substr($element, 0, strrpos($element, '.'));
                     if (class_exists($plugin_name)) {
-                        $extend_class          = current(class_parents($plugin_name));
-                        $plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Astract'
-                            ? $plugin_name
-                            : $extend_class;
+                        $parents = class_parents($plugin_name);
+                        if ((in_array('Micro_Plugin_Abstract', $parents) || in_array('Micro_Component_Abstract', $parents)) &&
+                            $plugin_name::$is_active
+                        ) {
+                            self::addRoute($plugin_name);
+                            self::addMenu($plugin_name);
+                            self::addLocutions($plugin_name);
+
+                            $extend_class                = current($parents);
+                            self::$_plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Abstract' ||
+                            $extend_class == 'Micro_Component_Abstract'
+                                ? $plugin_name
+                                : $extend_class;
+                        }
                     }
                 }
             }
         }
 
-        return self::$plugins = $plugins;
+        return self::$_plugins;
+    }
+
+
+    private static function addRoute($plugin) {
+
+        if ( ! empty($plugin::$router)) {
+            foreach ($plugin::$router as $page=>$content) {
+                if ( ! empty($content)) {
+                    foreach ($content as $place=>$classes) {
+                        if ( ! empty($classes)) {
+                            foreach ($classes as $class) {
+                                self::$_router[$page][$place][] = $class;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private static function addMenu($plugin) {
+
+        if ( ! empty($plugin::$menu)) {
+            foreach ($plugin::$menu as $path=>$title) {
+                self::$_menu[$path] = $title;
+            }
+        }
+    }
+
+
+    private static function addLocutions($plugin) {
+
+        if ( ! empty($plugin::$locutions)) {
+            foreach ($plugin::$locutions as $lang=>$locutions) {
+                if ( ! empty($locutions)) {
+                    foreach ($locutions as $locution=>$translate) {
+                        self::$_locutions[$lang][$locution] = $translate;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -1654,8 +1692,8 @@ class Micro_Init {
      * @return mixed
      */
     public static function getRegistry($name) {
-        return isset(self::$registry[$name])
-            ? self::$registry[$name]
+        return isset(self::$_registry[$name])
+            ? self::$_registry[$name]
             : null;
     }
 
@@ -1665,7 +1703,7 @@ class Micro_Init {
      * @param mixed $var
      */
     public static function setRegistry($name, $var) {
-        self::$registry[$name] = $var;
+        self::$_registry[$name] = $var;
     }
 
 
@@ -1675,7 +1713,7 @@ class Micro_Init {
      * @param string $url
      */
     public static function addTaxonomy($title, $url) {
-        self::$taxonomy[] = array('title' => $title, 'url' => $url);
+        self::$_taxonomy[] = array('title' => $title, 'url' => $url);
     }
 
 
@@ -1683,104 +1721,188 @@ class Micro_Init {
      * Получение содержимого таксономии
      * @return array
      */
-    public static function getTaxonomy() {
-         return self::$taxonomy;
+    public function getTaxonomy() {
+        return self::$_taxonomy;
     }
+
+
+    /**
+     * Страница 404
+     * @return string
+     */
+    public function page404() {
+
+        if ( ! ($page404 = self::getRegistry('page404'))) {
+            $plugins = self::getPlugins();
+
+            foreach ($plugins as $plugin) {
+                if ($plugin == 'Micro_Page404') {
+                    $page404 = new $plugin();
+                    break;
+                }
+            }
+
+            if ( ! isset($page404)) {
+                $page404 = new Micro_Page404();
+            }
+            self::setRegistry('page404', $page404);
+        }
+
+        return $page404->index();
+    }
+
+
+    /**
+     * Получение структуры страниц
+     * @return array|bool
+     */
+    public function getPageStructure() {
+
+        $matches = array();
+        preg_match('~^([^?]+)(?|)~', $_SERVER['REQUEST_URI'], $matches);
+        $current_url = $matches[1];
+        foreach (self::$_router as $page=>$structure) {
+            if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
+                (
+                    $page == 'home' && ! isset($_GET['view']) &&
+                    ($current_url == '/' || preg_match('~' . preg_quote(basename(__FILE__)) .'$~', $current_url))
+                ) ||
+                preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
+            ) {
+                return $structure;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getMenu() {
+        return self::$_menu;
+    }
+
+
+    /**
+     * Получение переводов
+     * @param string $lang Язык переводов
+     * @return array|null
+     */
+    public function getLocutions($lang = '') {
+
+        if ($lang == '') $lang = $this->getLang();
+        $locutions = self::$_locutions;
+
+        if (isset($locutions[$lang]) && is_array($locutions[$lang])) {
+            return $locutions[$lang];
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Получение мета данных компонента
+     * @return array|null
+     */
+    public function getComponent() {
+
+        $lang       = $this->getLang();
+        $args       = func_get_args();
+        $components = self::$_components;
+        $prop       = array();
+
+        foreach ($args as $arg) {
+            if (isset($components[$arg])) {
+                $components = $components[$arg];
+                $prop  = $components;
+            } else {
+                return null;
+            }
+        }
+
+        if (is_array($prop) && isset($prop[$lang])) {
+            return $prop[$lang];
+        }
+
+        return $prop;
+    }
+
+
+    /**
+     * Возвращает текущий язык на странице
+     * @return mixed
+     */
+    public function getLang() {
+
+        if ( ! ($micro_lang = self::getRegistry('lang'))) {
+            $plugins = self::getPlugins();
+            foreach ($plugins as $plugin=>$extend) {
+                if ($extend == 'lang') {
+                    $micro_lang = new $plugin();
+                    break;
+                }
+            }
+
+            if ( ! isset($micro_lang)) {
+                $micro_lang = new Micro_Lang();
+            }
+            self::setRegistry('lang', $micro_lang);
+        }
+
+        return $micro_lang->index();
+    }
+}
+
+
+/**
+ * Class Micro_Component_Abstract
+ */
+abstract class Micro_Component_Abstract extends Micro_Init {
+
+    public static $is_active = true;
+    abstract public function index();
+}
+
+
+
+/**
+ * Class Micro_Plugin_Abstract
+ */
+abstract class Micro_Plugin_Abstract extends Micro_Init {
+
+    public static $is_active = true;
+    public static $router    = array();
+    public static $locutions = array();
+    public static $meta      = array();
+    public static $menu      = array();
+
+
+    abstract public function index();
 }
 
 
 /**
  * Class Micro_Layout
  */
-class Micro_Layout extends Micro_Plugin_Abstract {
+class Micro_Layout extends Micro_Component_Abstract {
 
     protected $title      = '';
     protected $meta_desc  = '';
     protected $meta_keys  = '';
+    protected $lang       = '';
     protected $style      = array();
     protected $javascript = array();
-    protected $places     = array();
+    protected $positions     = array();
+    protected $page_structure = array();
 
 
-    /**
-     * @param $page
-     * @param $place
-     * @param $plugin_name
-     * @param int $position
-     */
-    public function addToStructure($page, $place, $plugin_name, $position = 0) {
+    public function __construct() {
 
-        if (isset($this->pages_structure[$page]) && isset($this->pages_structure[$page][$place])) {
-            if (empty($this->pages_structure[$page][$place])) {
-                $this->pages_structure[$page][$place][] = $plugin_name;
-
-            } else {
-                if (isset($this->pages_structure[$page][$place][$position])) {
-                    $tmp_array = array();
-
-                    foreach ($this->pages_structure[$page][$place] as $class_position=>$class) {
-                        if ($class_position >= $position) {
-                            $tmp_array[++$class_position] = $plugin_name;
-                        } else {
-                            $tmp_array[$class_position] = $plugin_name;
-                        }
-                    }
-                    $tmp_array[$position] = $plugin_name;
-
-                    $this->pages_structure[$page][$place] = $tmp_array;
-
-                } else {
-                    $this->pages_structure[$page][$place][$position] = $plugin_name;
-                }
-
-                ksort($this->pages_structure[$page][$place]);
-            }
-        }
-    }
-
-
-
-    /**
-     * @param $content
-     */
-    protected function addToMenu($content) {
-
-        $this->places['menu'][] = $content;
-    }
-
-
-    /**
-     * @param string $content
-     */
-    protected function addToHeader($content) {
-
-        $this->places['header'][] = $content;
-    }
-
-
-    /**
-     * @param $place_name
-     * @return bool|string
-     */
-    protected function getPlace($place_name) {
-        return array_key_exists($place_name, $this->places)
-            ? implode('', $this->places[$place_name])
-            : false;
-    }
-
-
-    /**
-     * @return string
-     */
-    protected function getTitle() {
-        return USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $this->title : $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTemplate() {
-        return $this->getComponent('Micro_Layout', 'tpl');
+        $this->lang           = $this->getLang();
+        $this->page_structure = $this->getPageStructure();
+        $this->plugins        = $this->getPlugins();
     }
 
 
@@ -1789,16 +1911,12 @@ class Micro_Layout extends Micro_Plugin_Abstract {
      */
     public function index() {
 
-        $page_structure = $this->getPageStructure();
-        $plugins        = Micro_Init::getPlugins();
+        if ($this->page_structure === false) return $this->page404();
 
-        if ($page_structure === false) return $this->page404();
-
-
-        foreach ($page_structure as $place=>$classes) {
+        foreach ($this->page_structure as $position=>$classes) {
             foreach ($classes as $class) {
-                if (in_array($class, $plugins)) {
-                    $class = array_search($class, $plugins);
+                if (in_array($class, $this->plugins)) {
+                    $class = array_search($class, $this->plugins);
                     $p_class = new $class();
                 } else {
                     $p_class = new $class();
@@ -1819,41 +1937,26 @@ class Micro_Layout extends Micro_Plugin_Abstract {
                     }
                 }
 
-                switch ($place) {
-                    case 'header'  : $this->places['header'][] = $content;  break;
-                    case 'menu'    : $this->places['menu'][] = $content;    break;
-                    case 'top'     : $this->places['top'][] = $content;     break;
-                    case 'content' : $this->places['content'][] = $content; break;
-                    case 'sidebar' : $this->places['sidebar'][] = $content; break;
-                    case 'footer'  : $this->places['footer'][] = $content;  break;
-                }
+                $this->setPosition($position, $content);
             }
         }
-
 
 
         $tpl = new Micro_Templater();
         $tpl->setTemplate($this->getTemplate());
 
-        $header  = $this->getPlace('header');
-        $menu    = $this->getPlace('menu');
-        $top     = $this->getPlace('top');
-        $content = $this->getPlace('content');
-        $sidebar = $this->getPlace('sidebar');
-        $footer  = $this->getPlace('footer');
+        $positions = $this->getPositions();
+        foreach ($positions as $position=>$content) {
+            $uc_position = strtoupper($position);
+            if ($content != '')  $tpl->{"position_{$position}"}->assign("[{$uc_position}]", $content);
+        }
 
-        if ($header != '')  $tpl->header->assign('[HEADER]', $header);
-        if ($top != '')     $tpl->top->assign('[TOP]', $top);
-        if ($menu != '')    $tpl->menu->assign('[MENU]', $menu);
-        if ($content != '') $tpl->content->assign('[CONTENT]', $content);
-        if ($sidebar != '') $tpl->sidebar->assign('[SIDEBAR]', $sidebar);
-        if ($footer != '')  $tpl->$footer->assign('[FOOTER]', $footer);
 
-        $tpl->assign('[LANG]',       $this->getLang());
+        $tpl->assign('[LANG]',       $this->lang);
         $tpl->assign('[SITE_NAME]',  SITE_NAME);
 
 
-        $taxonomy = Micro_Init::getTaxonomy();
+        $taxonomy = $this->getTaxonomy();
 
         if ( ! empty($taxonomy)) {
             foreach ($taxonomy as $step) {
@@ -1868,8 +1971,8 @@ class Micro_Layout extends Micro_Plugin_Abstract {
 
 
         // Контрол для выбора языка сайта
-        $micro_lang = $this->getRegistry('Micro_Lang');
-        $lang_switcher = $micro_lang->getLangSwitcher();
+        $class_lang    = $this->getRegistry('lang');
+        $lang_switcher = $class_lang->getLangSwitcher();
 
         if ($lang_switcher instanceof stdClass) {
             if (isset($lang_switcher->style))$this->style[] = $lang_switcher->style;
@@ -1891,6 +1994,69 @@ class Micro_Layout extends Micro_Plugin_Abstract {
         // Перевод и вывод финальной страницы
         return Micro_Tools::replaceLocutions($result, $this->getLocutions());
     }
+
+
+    /**
+     * @param $content
+     */
+    protected function addToMenu($content) {
+
+        $this->positions['menu'][] = $content;
+    }
+
+
+    /**
+     * @param string $content
+     */
+    protected function addToHeader($content) {
+
+        $this->positions['header'][] = $content;
+    }
+
+
+    /**
+     * @param string $position
+     * @param string $content
+     */
+    protected function setPosition($position, $content) {
+        $this->positions[$position][] = $content;
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getPositions() {
+
+        $tmp_positions = array();
+        foreach ($this->positions as $place=>$contents) {
+            $tmp_positions[$place] = implode('', $contents);
+        }
+        return $tmp_positions;
+    }
+
+
+    /**
+     * Пполучение загаловка страницы
+     * @return string
+     */
+    protected function getTitle() {
+
+        if (is_array($this->title) && isset($this->title[$this->lang])) {
+            $this->title[$this->lang];
+        }
+
+        return USE_SITE_NAME_IN_TITLE
+            ? ($this->title != '' ? SITE_NAME . ' - ' . $this->title : SITE_NAME)
+            : $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTemplate() {
+        return $this->getComponent('Micro_Layout', 'tpl');
+    }
 }
 
 
@@ -1898,14 +2064,14 @@ class Micro_Layout extends Micro_Plugin_Abstract {
 /**
  * Class Micro_MainMenu
  */
-class Micro_MainMenu extends Micro_Plugin_Abstract {
+class Micro_MainMenu extends Micro_Component_Abstract {
 
     public function index() {
 
         $tpl= new Micro_Templater();
         $tpl->setTemplate($this->getComponent('Micro_MainMenu', 'tpl'));
 
-        $menu = $this->getMeta('menu');
+        $menu = $this->getMenu();
 
         foreach ($menu as $page_name=>$title) {
             $is_current = $this->getCurrentPage() == $page_name ? 'current' : '';
@@ -1928,6 +2094,19 @@ class Micro_MainMenu extends Micro_Plugin_Abstract {
 
         return $page;
     }
+
+
+    /**
+     * @return bool|string
+     */
+    public function getCurrentPage() {
+
+        if (isset($_GET['view'])) {
+            return $_GET['view'];
+        }
+
+        return false;
+    }
 }
 
 
@@ -1935,7 +2114,7 @@ class Micro_MainMenu extends Micro_Plugin_Abstract {
 /**
  * Class Micro_Categories
  */
-class Micro_Categories extends Micro_Plugin_Abstract  {
+class Micro_Categories extends Micro_Component_Abstract  {
 
     public function index() {
 
@@ -2001,7 +2180,7 @@ class Micro_Categories extends Micro_Plugin_Abstract  {
 /**
  * Class Micro_Gallery
  */
-class Micro_Gallery extends Micro_Plugin_Abstract {
+class Micro_Gallery extends Micro_Component_Abstract {
 
     /**
      * Получение названия действия которое нужно выпонить
@@ -2018,11 +2197,10 @@ class Micro_Gallery extends Micro_Plugin_Abstract {
 
         $action = $this->getAction();
 
-        if ($action == 'photo') {
-            $this->photo();
-
-        } elseif ($action == 'gallery') {
-            return $this->gallery();
+        switch ($action) {
+            case 'photo' : $this->photo(); break;
+            case 'gallery' : return $this->gallery(); break;
+            default : return $this->gallery(); break;
         }
     }
 
@@ -2322,7 +2500,7 @@ class Micro_Gallery extends Micro_Plugin_Abstract {
 /**
  * Class Micro_Cart
  */
-class Micro_Cart extends Micro_Plugin_Abstract {
+class Micro_Cart extends Micro_Component_Abstract {
 
 
     public function index() {
@@ -2591,7 +2769,7 @@ class Micro_Cart extends Micro_Plugin_Abstract {
 /**
  * Class Micro_Help
  */
-class Micro_Help extends Micro_Plugin_Abstract {
+class Micro_Help extends Micro_Component_Abstract {
 
     public function index() {
         return $this->getComponent('Micro_Help', 'tpl');
@@ -2603,10 +2781,11 @@ class Micro_Help extends Micro_Plugin_Abstract {
 /**
  * Class Micro_Page404
  */
-class Micro_Page404 extends Micro_Plugin_Abstract {
+class Micro_Page404 extends Micro_Component_Abstract {
 
     /**
      * Страница 404
+     * @return string
      */
     public function index() {
 
@@ -2621,8 +2800,7 @@ class Micro_Page404 extends Micro_Plugin_Abstract {
 
         $tpl->assign('[TITLE]', USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $title : $title);
 
-        echo Micro_Tools::replaceLocutions($tpl->parse(), $locutions);
-        exit;
+        return Micro_Tools::replaceLocutions($tpl->parse(), $locutions);
     }
 }
 
@@ -2631,7 +2809,7 @@ class Micro_Page404 extends Micro_Plugin_Abstract {
 /**
  * Class Micro_Lang
  */
-class Micro_Lang extends Micro_Plugin_Abstract {
+class Micro_Lang extends Micro_Component_Abstract {
 
     /**
      * Возвращает двухбуквенное обозначение текущего языка
@@ -2683,7 +2861,7 @@ class Micro_Lang extends Micro_Plugin_Abstract {
                 if ($iso != end($languages)) $tpl->languages->reassign();
             }
 
-            $page = stdClass();
+            $page = new stdClass();
             $page->style      = $this->getComponent('Micro_Lang', 'style');
             $page->javascript = $this->getComponent('Micro_Lang', 'javascript');
             $page->content    = $tpl->parse();
@@ -2696,167 +2874,10 @@ class Micro_Lang extends Micro_Plugin_Abstract {
 
 
 /**
- * Class Micro_Plugin_Abstract
- */
-abstract class Micro_Plugin_Abstract {
-
-    public static $is_active = true;
-
-    abstract public function index();
-
-
-    /**
-     * Страница 404
-     * @return string
-     */
-    public function page404() {
-
-        $plugins = Micro_Init::getPlugins();
-
-        foreach ($plugins as $plugin) {
-            if ($plugin == 'Micro_Page404') {
-                $page404 = new $plugin();
-                break;
-            }
-        }
-
-        if ( ! isset($page404)) {
-            $page404 = new Micro_Page404();
-        }
-
-        return $page404->index();
-    }
-
-
-    /**
-     *
-     */
-    public function getPageStructure() {
-
-        $matches = array();
-        preg_match('~^([^?]+)(?|)~', $_SERVER['REQUEST_URI'], $matches);
-        $current_url = $matches[1];
-        foreach (Micro_Init::$router as $page=>$structure) {
-            if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
-                ($page == 'home' && $current_url == '/' && ! isset($_GET['view'])) ||
-                preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
-            ) {
-                return $structure;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * @param string $title
-     * @param string $url
-     */
-    public function addTaxonomy($title, $url) {
-        Micro_Init::addTaxonomy($title, $url);
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getTaxonomy() {
-        return Micro_Init::getTaxonomy();
-    }
-
-
-    /**
-     * @param string $name
-     * @param string $var
-     */
-    public function setRegistry($name, $var) {
-        Micro_Init::setRegistry($name, $var);
-    }
-
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getRegistry($name) {
-        return Micro_Init::getRegistry($name);
-    }
-
-
-    /**
-     * @return array|null
-     */
-    public function getLocutions() {
-
-        $lang      = $this->getLang();
-        $locutions = Micro_Init::$locutions;
-
-        if (isset($locutions[$lang]) && is_array($locutions[$lang])) {
-            return $locutions[$lang];
-        }
-
-        return null;
-    }
-
-
-    /**
-     * @return array|null
-     */
-    public function getComponent() {
-
-        $lang       = $this->getLang();
-        $args       = func_get_args();
-        $components = Micro_Init::$components;
-        $prop       = array();
-
-        foreach ($args as $arg) {
-            if (isset($components[$arg])) {
-                $components = $components[$arg];
-                $prop  = $components;
-            } else {
-                return null;
-            }
-        }
-
-        if (is_array($prop) && isset($prop[$lang])) {
-            return $prop[$lang];
-        }
-
-        return $prop;
-    }
-
-
-    /**
-     * Возвращает текущий язык на странице
-     * @return mixed
-     */
-    public function getLang() {
-
-        if ( ! ($micro_lang = Micro_Init::getRegistry('Micro_Lang'))) {
-            $plugins = Micro_Init::getPlugins();
-            foreach ($plugins as $plugin=>$extend) {
-                if ($extend == 'Micro_Lang') {
-                    $micro_lang = new $plugin();
-                    break;
-                }
-            }
-
-            if ( ! isset($micro_lang)) {
-                $micro_lang = new Micro_Lang();
-            }
-            Micro_Init::setRegistry('Micro_Lang', $micro_lang);
-        }
-
-        return $micro_lang->index();
-    }
-}
-
-
-
-/**
  * Class Micro
  */
 class Micro {
+
 
     /**
      * Ответ пользователю на запрос
@@ -2875,8 +2896,8 @@ class Micro {
         if ( ! isset($layout)) {
             $layout = new Micro_Layout();
         }
-        Micro_Init::setRegistry('Micro_Layout', $layout);
 
+        Micro_Init::setRegistry('layout', $layout);
         return $layout->index();
     }
 }

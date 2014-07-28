@@ -6,7 +6,7 @@ define('GALLEY_PLUGIN_ROOT_TAXONOMY', 'Книги');
 /**
  * Галлерея товаров
  */
-Micro_Init::$components['Micro_Plugin_Gallery'] = array(
+Micro_Plugin_Gallery::$meta = array(
     'tpl' => <<<HTML
         <!-- BEGIN photos -->
         <div id="gallery-wrapper">
@@ -182,6 +182,8 @@ HTML
 class Micro_Plugin_Gallery extends Micro_Gallery {
 
 
+    public static $meta;
+
     public function index() {
 
         if (isset($_GET['action']) && $_GET['action'] == 'view_item') {
@@ -198,7 +200,7 @@ class Micro_Plugin_Gallery extends Micro_Gallery {
      * @return array|null
      */
     protected function getTemplate() {
-        return $this->getComponent('Micro_Plugin_Gallery', 'tpl');
+        return self::$meta['tpl'];
     }
 
 
@@ -207,7 +209,7 @@ class Micro_Plugin_Gallery extends Micro_Gallery {
      * @return array|null
      */
     protected function getPayTemplate() {
-        return $this->getComponent('Micro_Plugin_Gallery', 'tpl_pay');
+        return self::$meta['tpl_pay'];
     }
 
 
@@ -216,7 +218,15 @@ class Micro_Plugin_Gallery extends Micro_Gallery {
      * @return array|null
      */
     protected function getStyle() {
-        return $this->getComponent('Micro_Plugin_Gallery', 'style');
+        return self::$meta['style'];
+    }
+
+    /**
+     * Возвращает шаблон компонента
+     * @return array|null
+     */
+    protected function getJavascript() {
+        //return self::$meta['javascript'];
     }
 
 
