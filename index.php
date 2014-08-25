@@ -40,7 +40,7 @@ define('CURRENCY_EN', 'publes');
 /**
  * Адрес электронной почты на который будет приходить заказы.
  * А так же отбратный адрес который будет указан в письмах
- * TODO отправляемых заказчику на указанный им адрес.
+ * отправляемых заказчику на указанный им адрес.
  */
 define('ORDER_EMAIL_TO',     'yourmail@domain.com');
 define('ORDER_EMAIL_FROM',   'info@microshop.com');
@@ -168,6 +168,13 @@ Micro_Init::$_locutions = array(
         'Дополнительная информация' => 'Additional information',
         'Отправить заказ'           => 'Send order',
         'назад'                     => 'back',
+        'Новый заказ'               => 'New order',
+        'Заказ от'                  => 'Order from',
+        'Содержание заказа'         => 'Contents of order',
+        'Цена 1шт.'                 => 'Price 1pc.',
+        'Количество шт.'            => 'Number of pieces.',
+        'Цена всего'                => 'Price total',
+        'Общая стоимость'           => 'The total cost',
         'Заказ отправлен'           => 'Orders sent',
         'Назад в галерею'           => 'Back to gallery',
         'Страница не найдена'       => 'Page Not Found',
@@ -176,7 +183,7 @@ Micro_Init::$_locutions = array(
         'Укажите пожалуйста ваше имя'                    => 'Please fill in your name',
         'поля, обязательные для заполнения'              => 'fields are required',
         'Для оформления заказа нужен хотя бы один товар' => 'Ordering need at least one item',
-        'Благодарим за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.' => 'Thank you for your order. Soon you will be contacted to confirm your order.',
+        'Спасибо за ваш заказ. Скоро с вами свяжутся для подтверждения.' => 'Thank you for your inquiry. Soon you will be contacted for confirmation.',
         'Во время отправки заказа что-то пошло не так. Пожалуйста попробуйте повторить заказ.' => 'While sending order something went wrong. Please try to repeat the order.',
         'Извините, но страница которую вы пытаетесь просмотреть, не существует.' => 'Sorry, but the page you were trying to view does not exist.',
     ),
@@ -222,6 +229,7 @@ Micro_Init::$_components['Micro_Layout'] = array(
             padding:0;
             vertical-align:baseline;
         }
+        html, body { height: 100%;}
         body {
             -webkit-tap-highlight-color:#ea4c88;
             color:#888;
@@ -263,6 +271,7 @@ Micro_Init::$_components['Micro_Layout'] = array(
             width:940px;
             -webkit-text-size-adjust: 100%;
         }
+        .wrapper h2 { margin-bottom: 10px; }
         body p {
             margin-bottom:21px;
             text-align: justify;
@@ -297,7 +306,14 @@ Micro_Init::$_components['Micro_Layout'] = array(
         body a:hover,#top-widget-holder a:hover,#nav>li>a:hover,.project-heading .launch:hover {
             color:#ea4c88;
         }
-        header { background:#444 bottom left repeat-x; }
+        header {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAICAYAAAAx8TU7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADFJREFUeNpifPXqlTEDEggICGBgAhHIYMOGDQxMIAJdggkmiyzBhKwNJsFImUUAAQYA5dgZ0UtKh+cAAAAASUVORK5CYII=");
+            background-position: center bottom;
+            background-repeat: repeat-x;
+            margin-bottom: 32px;
+            padding-bottom: 8px;
+        }
+        header > #h-wrap { background-color:#444; }
         #logo {
             color:#E2E0D7;
             display:inline-block;
@@ -308,9 +324,13 @@ Micro_Init::$_components['Micro_Layout'] = array(
         }
         #logo:hover { opacity:0.8; }
         #main {
-            background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAICAYAAAAx8TU7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADFJREFUeNpifPXqlTEDEggICGBgAhHIYMOGDQxMIAJdggkmiyzBhKwNJsFImUUAAQYA5dgZ0UtKh+cAAAAASUVORK5CYII=) repeat-x;
-            margin-bottom:60px;
-            padding-top:40px;
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            padding: 0;
+        }
+        #main > .wrapper {
+          padding-bottom: 160px;
         }
         #main,footer,aside {
             line-height:1.5em;
@@ -327,10 +347,16 @@ Micro_Init::$_components['Micro_Layout'] = array(
             margin-left:20px;
             padding:0 20px;
         }
-        footer { min-height: 100px; }
+        footer {
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFRJREFUeNpifPXqlTEDEAQEBDBs2LCBARkgizHBBEECIAlkgCzGCDMRmynIYoxWVlbG+KyEASZCVsIVEuM+GnkGSKMoxAUY////zzDYFRLrGYAAAwBmmUERGMSYkwAAAABJRU5ErkJggg==);
+            background-repeat: repeat-x;
+            background-position: top center;
+            margin-top: -160px;
+            min-height: 100px;
+        }
         footer .wrapper {
-            background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFRJREFUeNpifPXqlTEDEAQEBDBs2LCBARkgizHBBEECIAlkgCzGCDMRmynIYoxWVlbG+KyEASZCVsIVEuM+GnkGSKMoxAUY////zzDYFRLrGYAAAwBmmUERGMSYkwAAAABJRU5ErkJggg==) repeat-x top center;
             padding-top:45px;
+            margin-top:60px;
         }
         article,aside,details,figcaption,figure,footer,header,hgroup,
         menu,nav,section,article,aside,canvas,figure,figure img,
@@ -548,20 +574,21 @@ Micro_Init::$_components['Micro_Layout'] = array(
 
 </head>
 <body lang="[LANG]">
-
-    <header class="clearfix">
-        <div class="wrapper clearfix">
-            <a href="index.php" id="logo">[SITE_NAME]</a>
-            <!-- BEGIN position_header -->
-            [HEADER]
-            <!-- END position_header -->
-            <!-- BEGIN position_menu -->
-            [MENU]
-            <!-- END position_menu -->
-        </div>
-    </header>
-
     <div id="main">
+        <header class="clearfix">
+            <div id="h-wrap">
+                <div class="wrapper clearfix">
+                    <a href="index.php" id="logo">[SITE_NAME]</a>
+                    <!-- BEGIN position_header -->
+                    [HEADER]
+                    <!-- END position_header -->
+                    <!-- BEGIN position_menu -->
+                    [MENU]
+                    <!-- END position_menu -->
+                </div>
+            </div>
+        </header>
+
         <div class="wrapper">
             <!-- BEGIN taxonomy -->
             <ul class="taxonomy">
@@ -624,7 +651,7 @@ Micro_Init::$_components['Micro_Lang'] = array(
             </select>
         </div>
 HTML
-    ,'javascript' => <<<HTML
+,'javascript' => <<<HTML
         <script type="text/javascript">
             function selectLang(lang) {
                 if (document.location.search.indexOf('lang=') >= 0) {
@@ -639,7 +666,7 @@ HTML
             }
         </script>
 HTML
-    ,'style' => <<<HTML
+,'style' => <<<HTML
         <style>
             #lang-switcher {
                 float: right;
@@ -673,7 +700,7 @@ Micro_Init::$_components['Micro_MainMenu'] = array(
             </select>
         </nav>
 HTML
-    ,
+,
     'javascript' => <<<HTML
         <script type="text/javascript">
             function selectNav(select) {
@@ -681,7 +708,7 @@ HTML
             }
         </script>
 HTML
-    ,
+,
     'style' => <<<HTML
         <style>
             nav {
@@ -772,7 +799,7 @@ Micro_Init::$_components['Micro_Categories'] = array(
         </p>
         <!-- END no_albums -->
 HTML
-    ,
+,
     'style' => <<<HTML
     <style>
         #albums {
@@ -800,6 +827,14 @@ HTML
             #combo-albums { display: inline; }
         }
     </style>
+HTML
+,
+    'javascript' => <<<HTML
+    <script type="text/javascript">
+        function selectAlbum (select) {
+            document.location.href = select.value;
+        }
+    </script>
 HTML
 );
 
@@ -840,7 +875,7 @@ Micro_Init::$_components['Micro_Gallery'] = array(
     <!-- END photos -->
     <div class="clearfix"></div>
 HTML
-    ,
+,
     'tpl_pay' => <<<HTML
         <div class="div-data">
             <div class="currency">
@@ -859,7 +894,7 @@ HTML
             </div>
         </div>
 HTML
-    ,
+,
     'style' => <<<HTML
     <style>
         #photo_wrapper {
@@ -934,7 +969,8 @@ HTML
             text-shadow: 1px 1px 0px #777;
         }
         .choose {
-            text-align: center;
+            margin-right: 15px;
+            text-align: right;
         }
         .bottom {
             margin-top: 5px;
@@ -974,12 +1010,9 @@ HTML
         }
     </style>
 HTML
-    ,
+,
     'javascript' => <<<HTML
     <script type="text/javascript">
-        function selectAlbum (select) {
-            document.location.href = select.value;
-        }
         var gallery = {
             order : function (obj) {
                 var photo_path = obj.getAttribute("data-photo-path");
@@ -1015,7 +1048,7 @@ HTML
         }
     </script>
 HTML
-    ,
+,
     'title' => array(
         'ru' => 'Галерея',
         'en' => 'Gallery'
@@ -1037,7 +1070,7 @@ HTML
 Micro_Init::$_components['Micro_Cart'] = array(
     'cart' => array(
         'tpl' => <<<HTML
-            <h3>##'Информация о вашем заказе'##</h3>
+            <h2>##'Информация о вашем заказе'##</h2>
 
             <!-- BEGIN empty_cart -->
             <h3>##'Нет заказов'##!</h3>
@@ -1045,7 +1078,6 @@ Micro_Init::$_components['Micro_Cart'] = array(
 
 
             <!-- BEGIN orders -->
-            <br>
             <br>
             <form action="?view=cart&action=order&lang=[LANG]" method="post">
                 <table width="100%" class="ms-table">
@@ -1100,7 +1132,7 @@ Micro_Init::$_components['Micro_Cart'] = array(
             </form>
             <!-- END orders -->
 HTML
-        ,
+    ,
         'javascript' => <<<HTML
             <script type="text/javascript">
                 if (document.getElementsByClassName) {
@@ -1160,7 +1192,7 @@ HTML
                 }
             </script>
 HTML
-        ,
+    ,
         'style' => <<<HTML
             <style>
                 th { font-weight: bold; }
@@ -1174,7 +1206,7 @@ HTML
                 }
             </style>
 HTML
-        ,
+    ,
         'title' => array(
             'ru' => 'Корзина',
             'en' => 'Cart'
@@ -1286,7 +1318,7 @@ HTML
             <span class="red-star">*</span> - ##'поля, обязательные для заполнения'##
             <!-- END order_form -->
 HTML
-        ,
+    ,
         'javascript' => <<<HTML
             <script type="text/javascript">
                 function ValidateForm (form) {
@@ -1301,7 +1333,7 @@ HTML
                 }
             </script>
 HTML
-        ,
+    ,
         'style' => <<<HTML
             <style>
                 .ms-field-container {
@@ -1328,7 +1360,7 @@ HTML
                 .red-star { color: red; }
             </style>
 HTML
-        ,
+    ,
         'title' => array(
             'ru' => 'Оформление заказа',
             'en' => 'Like to order'
@@ -1347,7 +1379,7 @@ HTML
     <!-- BEGIN success -->
     <h3>##'Заказ отправлен'##</h3>
     <br>
-    <p>##'Благодарим за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.'##</p>
+    <p>##'Спасибо за ваш заказ. Скоро с вами свяжутся для подтверждения заказа.'##</p>
     <br>
     <a href="?view=gallery">##'Назад в галерею'##</a>
     <!-- END success -->
@@ -1360,7 +1392,7 @@ HTML
     <a href="javascript:window.history.back()">##'назад'##</a>
     <!-- END error -->
 HTML
-        ,
+    ,
         'title' => array(
             'ru' => 'Завершение заказа',
             'en' => 'Сompletion order'
@@ -1375,31 +1407,31 @@ HTML
         )
     ),
     'order_email_admin' => array(
-        'subject' => SITE_NAME . ' - ' . 'Новый заказ',
+        'subject' => SITE_NAME . ' - ##\'Новый заказ\'##',
         'tpl' => <<<HTML
     <html>
         <header>
-            <title>Заказ от [NAME]</title>
+            <title>##'Заказ от'## [NAME]</title>
         </header>
         <body>
-            <b>Заказ от:</b> [NAME]<br>
+            <b>##'Заказ от'##:</b> [NAME]<br>
             <b>Email:</b> [EMAIL]<br>
-            <b>Контактный телефон:</b> [TEL]<br>
-            <b>Адрес доставки:</b> [ADRES]<br>
+            <b>##'Контактный телефон'##:</b> [TEL]<br>
+            <b>##'Адрес доставки'##:</b> [ADRES]<br>
             <br>
-            <b>Дополнительная информация:</b><br>
+            <b>##'Дополнительная информация'##:</b><br>
             [INFO]
             <br>
             <br>
 
             <table border="1">
-                <caption>Содержание заказа</caption>
+                <caption>##'Содержание заказа'##</caption>
                 <thead>
                     <tr>
-                        <th>Заказ</th>
-                        <th width="50">Цнена 1шт.</th>
-                        <th width="50">Количество шт.</th>
-                        <th width="50">Цнена всего</th>
+                        <th>##'Заказ'##</th>
+                        <th width="50">##'Цена 1шт.'##</th>
+                        <th width="50">##'Количество шт.'##</th>
+                        <th width="50">##'Цена всего'##</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1414,7 +1446,7 @@ HTML
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="4" align="right"><b>Общая стоимость:</b> [GLOBAL_PRICE]</td>
+                        <td colspan="4" align="right"><b>##'Общая стоимость'##:</b> [GLOBAL_PRICE]</td>
                     </tr>
                 </tfoot>
             </table>
@@ -1423,49 +1455,11 @@ HTML
 HTML
     ),
     'order_email_client' => array(
-        'subject' => SITE_NAME . ' - ' . '',
+        'subject' => SITE_NAME . ' - ##\'Ваш заказ\'##',
         'tpl' => <<<HTML
     <html>
-        <header>
-            <title>Заказ от [NAME]</title>
-        </header>
         <body>
-            <b>Заказ от:</b> [NAME]<br>
-            <b>Email:</b> [EMAIL]<br>
-            <b>Контактный телефон:</b> [TEL]<br>
-            <b>Адрес доставки:</b> [ADRES]<br>
-            <br>
-            <b>Дополнительная информация:</b><br>
-            [INFO]
-            <br>
-            <br>
-
-            <table border="1">
-                <caption>Содержание заказа</caption>
-                <thead>
-                    <tr>
-                        <th>Заказ</th>
-                        <th width="50">Цнена 1шт.</th>
-                        <th width="50">Количество шт.</th>
-                        <th width="50">Цнена всего</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- BEGIN order -->
-                    <tr>
-                        <td>[PATH]</td>
-                        <td>[PRICE]</td>
-                        <td>[COUNT]</td>
-                        <td>[PRICE_TOTAL]</td>
-                    </tr>
-                    <!-- END order -->
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" align="right"><b>Общая стоимость:</b> [GLOBAL_PRICE]</td>
-                    </tr>
-                </tfoot>
-            </table>
+            ##'Спасибо за ваш заказ. Скоро с вами свяжутся для подтверждения.'##
         </body>
     </html>
 HTML
@@ -1504,7 +1498,7 @@ HTML
         body p { text-indent: 20px; }
     </style>
 HTML
-    ,
+,
     'title' => array(
         'ru' => 'Помощь',
         'en' => 'Help'
@@ -1574,7 +1568,7 @@ This content is licensed under Creative Commons Attribution 4.0. The full text o
 </html>
 <!-- IE needs 512+ bytes: http://blogs.msdn.com/b/ieinternals/archive/2010/08/19/http-error-pages-in-internet-explorer.aspx -->
 HTML
-    ,
+,
     'title' => array(
         'ru' => 'Страница не найдена',
         'en' => 'Page Not Found'
@@ -1622,9 +1616,10 @@ class Micro_Init {
 
                     $plugin_name = substr($element, 0, strrpos($element, '.'));
                     if (class_exists($plugin_name)) {
-                        $parents = class_parents($plugin_name);
+                        $plugin_vars = get_class_vars($plugin_name);
+                        $parents     = class_parents($plugin_name);
                         if ((in_array('Micro_Plugin_Abstract', $parents) || in_array('Micro_Component_Abstract', $parents)) &&
-                            $plugin_name::$is_active
+                            isset($plugin_vars['is_active']) && $plugin_vars['is_active']
                         ) {
                             self::addRoute($plugin_name);
                             self::addMenu($plugin_name);
@@ -1645,10 +1640,14 @@ class Micro_Init {
     }
 
 
+    /**
+     * @param $plugin
+     */
     private static function addRoute($plugin) {
 
-        if ( ! empty($plugin::$router)) {
-            foreach ($plugin::$router as $page=>$content) {
+        $plugin_vars = get_class_vars($plugin);
+        if ( ! empty($plugin_vars['router'])) {
+            foreach ($plugin_vars['router'] as $page=>$content) {
                 if ( ! empty($content)) {
                     foreach ($content as $place=>$classes) {
                         if ( ! empty($classes)) {
@@ -1663,20 +1662,28 @@ class Micro_Init {
     }
 
 
+    /**
+     * @param $plugin
+     */
     private static function addMenu($plugin) {
 
-        if ( ! empty($plugin::$menu)) {
-            foreach ($plugin::$menu as $path=>$title) {
+        $plugin_vars = get_class_vars($plugin);
+        if ( ! empty($plugin_vars['menu'])) {
+            foreach ($plugin_vars['menu'] as $path=>$title) {
                 self::$_menu[$path] = $title;
             }
         }
     }
 
 
+    /**
+     * @param $plugin
+     */
     private static function addLocutions($plugin) {
 
-        if ( ! empty($plugin::$locutions)) {
-            foreach ($plugin::$locutions as $lang=>$locutions) {
+        $plugin_vars = get_class_vars($plugin);
+        if ( ! empty($plugin_vars['locutions'])) {
+            foreach ($plugin_vars['locutions'] as $lang=>$locutions) {
                 if ( ! empty($locutions)) {
                     foreach ($locutions as $locution=>$translate) {
                         self::$_locutions[$lang][$locution] = $translate;
@@ -1763,10 +1770,7 @@ class Micro_Init {
         $current_url = $matches[1];
         foreach (self::$_router as $page=>$structure) {
             if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
-                (
-                    $page == 'home' && ! isset($_GET['view']) &&
-                    ($current_url == '/' || preg_match('~' . preg_quote(basename(__FILE__)) .'$~', $current_url))
-                ) ||
+                $page == 'home' && ! isset($_GET['view']) ||
                 preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
             ) {
                 return $structure;
@@ -2321,7 +2325,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
                     $tpl_pay->assign('[PHOTO_COST]', str_replace(',', '.', $matches[1]));
 
-                    if ( ! isset($_SESSION['cart'][$photo_path])) {
+                    if ( ! isset($_SESSION['cart'][SITE_NAME][$photo_path])) {
                         $tpl_pay->add_in_cart->assign('[PHOTO_PATH]', $photo_path);
                     } else {
                         $tpl_pay->remove_in_cart->assign('[PHOTO_PATH]', $photo_path);
@@ -2535,11 +2539,11 @@ class Micro_Cart extends Micro_Component_Abstract {
         $tpl = new Micro_Templater();
         $tpl->setTemplate($this->getComponent('Micro_Cart', 'cart', 'tpl'));
 
-        if ( ! isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+        if ( ! isset($_SESSION['cart'][SITE_NAME]) || empty($_SESSION['cart'][SITE_NAME])) {
             $tpl->touchBlock('empty_cart');
 
         } else {
-            $orders   = $_SESSION['cart'];
+            $orders   = $_SESSION['cart'][SITE_NAME];
             $cost_sum = 0;
 
             foreach ($orders as $key=>$order) {
@@ -2600,8 +2604,8 @@ class Micro_Cart extends Micro_Component_Abstract {
      */
     protected function removeInCart() {
 
-        if (isset($_POST['item']) && isset($_SESSION['cart'][$_POST['item']])) {
-            unset($_SESSION['cart'][$_POST['item']]);
+        if (isset($_POST['item']) && isset($_SESSION['cart'][SITE_NAME][$_POST['item']])) {
+            unset($_SESSION['cart'][SITE_NAME][$_POST['item']]);
         }
         echo json_encode(array('error' => 0));
         exit;
@@ -2614,12 +2618,12 @@ class Micro_Cart extends Micro_Component_Abstract {
      */
     protected function addInCart() {
 
-        if ( ! isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = array();
+        if ( ! isset($_SESSION['cart'][SITE_NAME])) {
+            $_SESSION['cart'][SITE_NAME] = array();
         }
 
-        if (isset($_POST['item']) && ! isset($_SESSION['cart'][$_POST['item']])) {
-            $_SESSION['cart'][$_POST['item']] = $_POST['item'];
+        if (isset($_POST['item']) && ! isset($_SESSION['cart'][SITE_NAME][$_POST['item']])) {
+            $_SESSION['cart'][SITE_NAME][$_POST['item']] = $_POST['item'];
         }
         echo json_encode(array('error' => 0));
         exit;
@@ -2673,7 +2677,7 @@ class Micro_Cart extends Micro_Component_Abstract {
             if (empty($_POST['orders'])) throw new Exception('Нет товаров для заказа');
 
             $tpl_email = new Micro_Templater();
-            $tpl_email->setTemplate($this->getComponent('Micro_Cart', 'order_email', 'tpl'));
+            $tpl_email->setTemplate($this->getComponent('Micro_Cart', 'order_email_admin', 'tpl'));
 
             $tpl_email->assign('[NAME]',  $_POST['name']);
             $tpl_email->assign('[EMAIL]', $_POST['email']);
@@ -2694,7 +2698,7 @@ class Micro_Cart extends Micro_Component_Abstract {
                         ? str_replace(',', '.', $matches[1])
                         : 0;
 
-                    $tpl_email->order->assign('[PATH]', GALLERY_DIR . '/' . Micro_Tools::convertEncoding($realpath));
+                    $tpl_email->order->assign('[PATH]', Micro_Tools::convertEncoding(GALLERY_DIR . '/' . $realpath));
                     $tpl_email->order->assign('[PRICE]', $price);
                     $tpl_email->order->assign('[COUNT]', $order['count']);
                     $tpl_email->order->assign('[PRICE_TOTAL]', $order['count'] * $price);
@@ -2707,20 +2711,56 @@ class Micro_Cart extends Micro_Component_Abstract {
             $tpl_email->assign('[GLOBAL_PRICE]', $global_price);
 
 
-            $is_send = Micro_Tools::sendMail(ORDER_EMAIL_TO, $this->getComponent('Micro_Cart', 'order_email', 'subject'), $tpl_email->parse(), array(
-                'from'        => ORDER_EMAIL_FROM,
-                'method'      => ORDER_EMAIL_METHOD,
-                'smtp_host'   => EMAIL_SMTP_HOST,
-                'smtp_port'   => EMAIL_SMTP_PORT,
-                'smtp_secure' => EMAIL_SMTP_SECURE,
-                'smtp_auth'   => EMAIL_SMTP_AUTH,
-                'smtp_user'   => EMAIL_SMTP_USER,
-                'smtp_pass'   => EMAIL_SMTP_PASS
-            ));
+            $admin_subject = $this->getComponent('Micro_Cart', 'order_email_admin', 'subject');
+            $admin_tpl     = $tpl_email->parse();
+            $is_send_admin = Micro_Tools::sendMail(
+                ORDER_EMAIL_TO,
+                isset(Micro_Init::$_locutions[DEFAULT_LANG])
+                    ? Micro_Tools::replaceLocutions($admin_subject, Micro_Init::$_locutions[DEFAULT_LANG])
+                    : Micro_Tools::replaceLocutions($admin_subject),
+                isset(Micro_Init::$_locutions[DEFAULT_LANG])
+                    ? Micro_Tools::replaceLocutions($admin_tpl, Micro_Init::$_locutions[DEFAULT_LANG])
+                    : Micro_Tools::replaceLocutions($admin_tpl),
+                array(
+                    'from'        => ORDER_EMAIL_FROM,
+                    'method'      => ORDER_EMAIL_METHOD,
+                    'smtp_host'   => EMAIL_SMTP_HOST,
+                    'smtp_port'   => EMAIL_SMTP_PORT,
+                    'smtp_secure' => EMAIL_SMTP_SECURE,
+                    'smtp_auth'   => EMAIL_SMTP_AUTH,
+                    'smtp_user'   => EMAIL_SMTP_USER,
+                    'smtp_pass'   => EMAIL_SMTP_PASS
+                )
+            );
+            if ( ! $is_send_admin) throw new Exception('Письмо не отправлено по неизвестной причине');
 
-            if ( ! $is_send) throw new Exception('Письмо не отправлено по неизвестной причине');
 
-            unset($_SESSION['cart']);
+            if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $client_subject = $this->getComponent('Micro_Cart', 'order_email_client', 'subject');
+                $client_tpl     = $this->getComponent('Micro_Cart', 'order_email_client', 'tpl');
+                Micro_Tools::sendMail(
+                    $_POST['email'],
+                    isset(Micro_Init::$_locutions[DEFAULT_LANG])
+                        ? Micro_Tools::replaceLocutions($client_subject, Micro_Init::$_locutions[DEFAULT_LANG])
+                        : Micro_Tools::replaceLocutions($client_subject),
+                    isset(Micro_Init::$_locutions[DEFAULT_LANG])
+                        ? Micro_Tools::replaceLocutions($client_tpl, Micro_Init::$_locutions[DEFAULT_LANG])
+                        : Micro_Tools::replaceLocutions($client_tpl),
+                    array(
+                        'from'        => ORDER_EMAIL_FROM,
+                        'method'      => ORDER_EMAIL_METHOD,
+                        'smtp_host'   => EMAIL_SMTP_HOST,
+                        'smtp_port'   => EMAIL_SMTP_PORT,
+                        'smtp_secure' => EMAIL_SMTP_SECURE,
+                        'smtp_auth'   => EMAIL_SMTP_AUTH,
+                        'smtp_user'   => EMAIL_SMTP_USER,
+                        'smtp_pass'   => EMAIL_SMTP_PASS
+                    )
+                );
+            }
+
+
+            unset($_SESSION['cart'][SITE_NAME]);
             $lang = $this->getLang();
             header('Location: ?view=cart&action=order_result&result=success&lang=' . $lang);
             exit;
