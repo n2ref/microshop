@@ -25,7 +25,7 @@
  * @version: 1.0.0
  */
 
-ini_set('display_errors', 1);
+
 /**
  * Название сайта.
  */
