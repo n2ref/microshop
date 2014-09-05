@@ -198,6 +198,12 @@ Micro_Init::$_locutions = array(
         'Заказ отправлен'           => 'Orders sent',
         'Назад в галерею'           => 'Back to gallery',
         'Страница не найдена'       => 'Page Not Found',
+        'Добавьте в папку'          => 'Add to folder',
+        'изображения ваших товаров' => 'images of your products',
+        'Директория галереи пуста'  => 'Gallery folder empty',
+        'Директория с галереей товаров отсутствует'      => 'Gallery folder do not exist',
+        'Необходимо создать директорию'                  => 'You must create a directory',
+        'Как это сделать?'                               => 'How to do it?',
         'Укажите пожалуйста адрес доставки'              => 'Please specify the delivery address',
         'Укажите пожалуйста контактный телефон'          => 'Please fill in contact phone number',
         'Укажите пожалуйста ваше имя'                    => 'Please fill in your name',
@@ -598,7 +604,7 @@ Micro_Init::$_components['Micro_Layout'] = array(
         <header class="clearfix">
             <div id="h-wrap">
                 <div class="wrapper clearfix">
-                    <a href="index.php" id="logo">[SHOP_NAME]</a>
+                    <a href="[FILE_NAME]" id="logo">[SHOP_NAME]</a>
                     <!-- BEGIN position_header -->
                     [HEADER]
                     <!-- END position_header -->
@@ -1041,7 +1047,7 @@ HTML
                 obj.classList.add('btn-preloader');
 
                 if (obj.classList.contains('add_in_cart')) {
-                    doPost('index.php?view=cart&action=add_in_cart', {item : photo_path}, function (data) {
+                    doPost('[FILE_NAME]?view=cart&action=add_in_cart', {item : photo_path}, function (data) {
                         var json = JSON.parse(data);
                         if (json.error == 0) {
                             obj.classList.remove('add_in_cart');
@@ -1054,7 +1060,7 @@ HTML
                     });
 
                 } else {
-                    doPost('index.php?view=cart&action=remove_in_cart', {item : photo_path}, function (data) {
+                    doPost('[FILE_NAME]?view=cart&action=remove_in_cart', {item : photo_path}, function (data) {
                         var json = JSON.parse(data);
                         if (json.error == 0) {
                             obj.classList.remove('remove_in_cart');
@@ -1551,6 +1557,154 @@ HTML
 );
 
 
+/**
+ * Общие мета данные
+ */
+Micro_Init::$_meta = array(
+    'empty_gallery' => array(
+        'tpl' => <<<HTML
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>[TITLE]</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+        <style>
+            * {
+                line-height: 1.5;
+                margin: 0;
+            }
+            html {
+                color: #888;
+                font-family: sans-serif;
+                text-align: center;
+            }
+            body {
+                left: 50%;
+                margin: -43px 0 0 -265px;
+                position: absolute;
+                top: 50%;
+                width: 530px;
+            }
+            h1 {
+                color: #555;
+                font-size: 2em;
+                font-weight: 400;
+            }
+            a { color: #666 }
+            p { line-height: 1.2; }
+            .help {cursor: help}
+            .label {
+                background-color: #ececec;
+                border-radius: 0.25em;
+                color: #7f7f7f;
+                display: inline;
+                font-size: 75%;
+                font-weight: 700;
+                line-height: 1;
+                padding: 0.2em 0.6em 0.3em;
+                text-align: center;
+                vertical-align: baseline;
+                white-space: nowrap;
+            }
+            @media only screen and (max-width: 270px) {
+                body {
+                    margin: 10px auto;
+                    position: static;
+                    width: 95%;
+                }
+                h1 { font-size: 1.5em; }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>##'Директория галереи пуста'##</h1>
+        <p>
+            ##'Добавьте в папку'## <span class="label help" title="[REAL_GALLERY_DIR]">[GALLERY_DIR]</span> ##'изображения ваших товаров'##.
+            <br/><a href="http://microshop.by/docs/using">##'Как это сделать?'##</a>
+        </p>
+    </body>
+</html>
+HTML
+        ,
+        'title' => array(
+            'ru' => 'Директория галереи пуста',
+            'en' => 'Gallery folder empty'
+        )
+    ),
+    'no_gallery' => array(
+        'tpl' => <<<HTML
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>[TITLE]</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+        <style>
+            * {
+                line-height: 1.5;
+                margin: 0;
+            }
+            html {
+                color: #888;
+                font-family: sans-serif;
+                text-align: center;
+            }
+            body {
+                left: 50%;
+                margin: -43px 0 0 -265px;
+                position: absolute;
+                top: 50%;
+                width: 530px;
+            }
+            h1 {
+                color: #555;
+                font-size: 2em;
+                font-weight: 400;
+            }
+            p { line-height: 1.2; }
+            a { color: #666 }
+            .help {cursor: help}
+            .label {
+                background-color: #ececec;
+                border-radius: 0.25em;
+                color: #7f7f7f;
+                display: inline;
+                font-size: 75%;
+                font-weight: 700;
+                line-height: 1;
+                padding: 0.2em 0.6em 0.3em;
+                text-align: center;
+                vertical-align: baseline;
+                white-space: nowrap;
+            }
+            @media only screen and (max-width: 270px) {
+                body {
+                    margin: 10px auto;
+                    position: static;
+                    width: 95%;
+                }
+                h1 { font-size: 1.5em; }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>##'Директория с галереей товаров отсутствует'##</h1>
+        <p>
+            ##'Необходимо создать директорию'## <span class="label help" title="[REAL_GALLERY_DIR]">[GALLERY_DIR]</span>
+            <br/><a href="http://microshop.by/docs/settings/#dirs">##'Как это сделать?'##</a>
+        </p>
+    </body>
+</html>
+HTML
+        ,
+        'title' => array(
+            'ru' => 'Директория с галереей товаров отсутствует',
+            'en' => 'Gallery folder do not exist'
+        )
+    )
+);
+
 
 /*************************
  *====== PHP секция =====*
@@ -1567,6 +1721,7 @@ class Micro_Init {
     public static $_menu       = array();
     public static $_locutions  = array();
     public static $_components = array();
+    public static $_meta       = array();
 
 
     private static $_taxonomy = array();
@@ -1786,6 +1941,34 @@ class Micro_Init {
 
         return $micro_lang->index();
     }
+
+
+    /**
+     * Получение общих мета данных
+     * @return array|null
+     */
+    protected function getMeta() {
+
+        $args = func_get_args();
+        $meta = self::$_meta;
+        $prop = array();
+
+        foreach ($args as $arg) {
+            if (isset($meta[$arg])) {
+                $meta = $meta[$arg];
+                $prop  = $meta;
+            } else {
+                return null;
+            }
+        }
+
+        if (is_array($prop)) {
+            $lang = $this->getLang();
+            if (isset($prop[$lang])) return $prop[$lang];
+        }
+
+        return $prop;
+    }
 }
 
 
@@ -1804,7 +1987,6 @@ abstract class Micro_Component_Abstract extends Micro_Init {
      */
     protected function getComponent() {
 
-        $lang       = $this->getLang();
         $args       = func_get_args();
         $components = self::$_components;
         $prop       = array();
@@ -1818,8 +2000,9 @@ abstract class Micro_Component_Abstract extends Micro_Init {
             }
         }
 
-        if (is_array($prop) && isset($prop[$lang])) {
-            return $prop[$lang];
+        if (is_array($prop)) {
+            $lang = $this->getLang();
+            if (isset($prop[$lang])) return $prop[$lang];
         }
 
         return $prop;
@@ -1915,6 +2098,7 @@ class Micro_Layout extends Micro_Component_Abstract {
 
         $tpl->assign('[LANG]',       $this->lang);
         $tpl->assign('[SHOP_NAME]',  SHOP_NAME);
+        $tpl->assign('[FILE_NAME]',  basename(__FILE__));
 
 
         $taxonomy = $this->getTaxonomy();
@@ -2346,7 +2530,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
         $page = new stdClass();
         $page->style      = $this->getComponent('Micro_Gallery', 'style');
-        $page->javascript = $this->getComponent('Micro_Gallery', 'javascript');
+        $page->javascript = str_replace('[FILE_NAME]', basename(__FILE__), $this->getComponent('Micro_Gallery', 'javascript'));
         $page->content    = $tpl->parse();
 
         return $page;
@@ -2838,7 +3022,7 @@ class Micro_Lang extends Micro_Component_Abstract {
             $languages = explode(',', LANGUAGES);
             $languages = array_map('trim', $languages);
             if ( ! in_array($_GET['lang'], $languages)) {
-                return $this->page404();
+                return DEFAULT_LANG;
             }
 
             return $_GET['lang'];
@@ -2900,6 +3084,39 @@ class Micro extends Micro_Init {
      * return string
      */
     public function dispatch() {
+
+        // Если директории для галлереи нет и создать ее не получилось, то сообщение об этом
+        if ( ! is_dir(GALLERY_DIR) && ! mkdir(GALLERY_DIR, 0755)) {
+            $tpl  = new Micro_Templater();
+            $tpl->setTemplate($this->getMeta('no_gallery', 'tpl'));
+            $tpl->assign('[TITLE]', $this->getMeta('no_gallery', 'title'));
+            $tpl->assign('[REAL_GALLERY_DIR]', realpath(GALLERY_DIR));
+            $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
+
+            return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
+        }
+
+        // Есди директори галлереи пуста, то сообщение об этом
+        if ($handle = opendir(GALLERY_DIR)) {
+            $empty_gallery = true;
+            while ($element_name = readdir($handle)) {
+                if ($element_name != "." && $element_name != "..") {
+                    $empty_gallery = false;
+                    break;
+                }
+            }
+            closedir($handle);
+            if ($empty_gallery) {
+                $tpl  = new Micro_Templater();
+                $tpl->setTemplate($this->getMeta('empty_gallery', 'tpl'));
+                $tpl->assign('[TITLE]', $this->getMeta('empty_gallery', 'title'));
+                $tpl->assign('[REAL_GALLERY_DIR]', realpath(GALLERY_DIR));
+                $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
+
+                return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
+            }
+        }
+
 
         $plugins = $this->getPlugins();
         foreach ($plugins as $plugin=>$extend) {
