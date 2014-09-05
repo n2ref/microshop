@@ -27,50 +27,64 @@
 
 
 /**
- * Название сайта.
+ * Название магазина.
+ * @see http://microshop.by/docs/settings#shop-name
  */
-define('SITE_NAME', 'Microshop');
+define('SHOP_NAME', 'Microshop');
+
+/**
+ * Адрес электронной почты на который будут приходить заказы.
+ * А так же отбратный адрес который будет указан в письмах
+ * отправляемых заказчику на указанный им email.
+ * @see http://microshop.by/docs/settings#emails
+ */
+define('ORDER_EMAIL_TO',     'yourmail@domain.com');
+define('ORDER_EMAIL_FROM',   'noreply@domain.com');
 
 /**
  * Названия валют на сайте для разных языков
+ * @see http://microshop.by/docs/settings#currency
  */
 define('CURRENCY_RU', 'руб');
 define('CURRENCY_EN', 'publes');
 
 /**
- * Адрес электронной почты на который будет приходить заказы.
- * А так же отбратный адрес который будет указан в письмах
- * отправляемых заказчику на указанный им адрес.
- */
-define('ORDER_EMAIL_TO',     'yourmail@domain.com');
-define('ORDER_EMAIL_FROM',   'info@microshop.com');
-
-/**
  * Язык сайта по умолчанию и активные языки
+ * @see http://microshop.by/docs/settings#languages
  */
 define('DEFAULT_LANG', 'ru');
 define('LANGUAGES',    'ru,en');
 
 /**
  * Будет ли название сайта отображаться в загаловке страницы.
+ * @see http://microshop.by/docs/settings#shop-name-in-title
  */
-define('USE_SITE_NAME_IN_TITLE', true);
+define('USE_SHOP_NAME_IN_TITLE', true);
 
 /**
  * Директории используемые приложением.
+ * @see http://microshop.by/docs/settings#dirs
  */
-define('USE_CACHE',   true);
-define('CACHE_DIR',   './cache');
 define('GALLERY_DIR', './gallery');
 define('PLUGINS_DIR', './plugins');
+define('CACHE_DIR',   './cache');
+
+/**
+ * Использовать кэширование или нет
+ * @see http://microshop.by/docs/settings#use-cache
+ */
+define('USE_CACHE', true);
 
 /**
  * Метод отправки писем - по умолчанию равен MAIL
+ * Так же можно указать SMTP
+ * @see http://microshop.by/docs/settings#email-method
  */
 define('ORDER_EMAIL_METHOD', 'MAIL');
 
 /**
  * Параметры для отправки писем при помощи метода SMTP
+ * @see http://microshop.by/docs/settings#email-smtp-auth
  */
 define('EMAIL_SMTP_HOST',   'localhost');
 define('EMAIL_SMTP_PORT',   25);
@@ -80,14 +94,20 @@ define('EMAIL_SMTP_USER',   '');
 define('EMAIL_SMTP_PASS',   '');
 
 /**
- * Количество фотографий на странице.
- * Путь до изображения с водяным знаком.
+ * Количество товаров на странице.
+ * @see http://microshop.by/docs/settings#products-rep-page
  */
-define('GALLERY_PHOTOS_ON_PAGE', 18);
-define('WATERMARK_IMAGE',        '');
+define('NUMBER_PRODUCTS_PER_PAGE', 18);
+
+/**
+ * Путь до изображение с водяным знаком.
+ * @see http://microshop.by/docs/settings#watermark
+ */
+define('WATERMARK_IMAGE', '');
 
 /**
  *  Настройки для каких изображений будет применен водяной знак
+ * @see http://microshop.by/docs/settings#use-watermark
  */
 define('USE_WATERMARK_BIG_IMAGE',  true);
 define('USE_WATERMARK_LIST_IMAGE', false);
@@ -95,6 +115,7 @@ define('USE_WATERMARK_CART_IMAGE', false);
 
 /**
  * Размеры для картинок
+ * @see http://microshop.by/docs/settings#image-sizes
  */
 define('MAX_WIDTH_BIG_IMAGE',   640);
 define('MAX_HEIGHT_BIG_IMAGE',  480);
@@ -104,10 +125,12 @@ define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
 
 
+/**
+ * Меню
+ */
 Micro_Init::$_menu = array(
     'gallery' => 'Галерея',
-    'cart'    => 'Ваш заказ',
-    'help'    => 'Помощь'
+    'cart'    => 'Ваш заказ'
 );
 
 
@@ -129,21 +152,18 @@ Micro_Init::$_router = array(
     'cart' => array(
         'menu'    => array( 'Micro_MainMenu' ),
         'content' => array( 'Micro_Cart' )
-    ),
-    'help' => array(
-        'menu'    => array( 'Micro_MainMenu' ),
-        'content' => array( 'Micro_Help' )
     )
 );
 
 
-
+/**
+ * Переводы
+ */
 Micro_Init::$_locutions = array(
     'en' => array(
         'Цена'                      => 'Price',
         'Галерея'                   => 'Gallery',
         'Ваш заказ'                 => 'Your order',
-        'Помощь'                    => 'Help',
         'Меню'                      => 'Menu',
         'В корзину'                 => 'Add to cart',
         'Отмена'                    => 'Cancel',
@@ -578,7 +598,7 @@ Micro_Init::$_components['Micro_Layout'] = array(
         <header class="clearfix">
             <div id="h-wrap">
                 <div class="wrapper clearfix">
-                    <a href="index.php" id="logo">[SITE_NAME]</a>
+                    <a href="index.php" id="logo">[SHOP_NAME]</a>
                     <!-- BEGIN position_header -->
                     [HEADER]
                     <!-- END position_header -->
@@ -651,7 +671,8 @@ Micro_Init::$_components['Micro_Lang'] = array(
             </select>
         </div>
 HTML
-,'javascript' => <<<HTML
+    ,
+    'javascript' => <<<HTML
         <script type="text/javascript">
             function selectLang(lang) {
                 if (document.location.search.indexOf('lang=') >= 0) {
@@ -666,7 +687,8 @@ HTML
             }
         </script>
 HTML
-,'style' => <<<HTML
+    ,
+    'style' => <<<HTML
         <style>
             #lang-switcher {
                 float: right;
@@ -700,7 +722,7 @@ Micro_Init::$_components['Micro_MainMenu'] = array(
             </select>
         </nav>
 HTML
-,
+    ,
     'javascript' => <<<HTML
         <script type="text/javascript">
             function selectNav(select) {
@@ -708,7 +730,7 @@ HTML
             }
         </script>
 HTML
-,
+    ,
     'style' => <<<HTML
         <style>
             nav {
@@ -799,7 +821,7 @@ Micro_Init::$_components['Micro_Categories'] = array(
         </p>
         <!-- END no_albums -->
 HTML
-,
+    ,
     'style' => <<<HTML
     <style>
         #albums {
@@ -828,7 +850,7 @@ HTML
         }
     </style>
 HTML
-,
+    ,
     'javascript' => <<<HTML
     <script type="text/javascript">
         function selectAlbum (select) {
@@ -875,7 +897,7 @@ Micro_Init::$_components['Micro_Gallery'] = array(
     <!-- END photos -->
     <div class="clearfix"></div>
 HTML
-,
+    ,
     'tpl_pay' => <<<HTML
         <div class="div-data">
             <div class="currency">
@@ -894,7 +916,7 @@ HTML
             </div>
         </div>
 HTML
-,
+    ,
     'style' => <<<HTML
     <style>
         #photo_wrapper {
@@ -1010,7 +1032,7 @@ HTML
         }
     </style>
 HTML
-,
+    ,
     'javascript' => <<<HTML
     <script type="text/javascript">
         var gallery = {
@@ -1048,7 +1070,7 @@ HTML
         }
     </script>
 HTML
-,
+    ,
     'title' => array(
         'ru' => 'Галерея',
         'en' => 'Gallery'
@@ -1132,7 +1154,7 @@ Micro_Init::$_components['Micro_Cart'] = array(
             </form>
             <!-- END orders -->
 HTML
-    ,
+        ,
         'javascript' => <<<HTML
             <script type="text/javascript">
                 if (document.getElementsByClassName) {
@@ -1192,7 +1214,7 @@ HTML
                 }
             </script>
 HTML
-    ,
+        ,
         'style' => <<<HTML
             <style>
                 th { font-weight: bold; }
@@ -1206,7 +1228,7 @@ HTML
                 }
             </style>
 HTML
-    ,
+        ,
         'title' => array(
             'ru' => 'Корзина',
             'en' => 'Cart'
@@ -1318,7 +1340,7 @@ HTML
             <span class="red-star">*</span> - ##'поля, обязательные для заполнения'##
             <!-- END order_form -->
 HTML
-    ,
+        ,
         'javascript' => <<<HTML
             <script type="text/javascript">
                 function ValidateForm (form) {
@@ -1333,7 +1355,7 @@ HTML
                 }
             </script>
 HTML
-    ,
+        ,
         'style' => <<<HTML
             <style>
                 .ms-field-container {
@@ -1360,7 +1382,7 @@ HTML
                 .red-star { color: red; }
             </style>
 HTML
-    ,
+        ,
         'title' => array(
             'ru' => 'Оформление заказа',
             'en' => 'Like to order'
@@ -1392,7 +1414,7 @@ HTML
     <a href="javascript:window.history.back()">##'назад'##</a>
     <!-- END error -->
 HTML
-    ,
+        ,
         'title' => array(
             'ru' => 'Завершение заказа',
             'en' => 'Сompletion order'
@@ -1407,7 +1429,7 @@ HTML
         )
     ),
     'order_email_admin' => array(
-        'subject' => SITE_NAME . ' - ##\'Новый заказ\'##',
+        'subject' => SHOP_NAME . ' - ##\'Новый заказ\'##',
         'tpl' => <<<HTML
     <html>
         <header>
@@ -1455,7 +1477,7 @@ HTML
 HTML
     ),
     'order_email_client' => array(
-        'subject' => SITE_NAME . ' - ##\'Ваш заказ\'##',
+        'subject' => SHOP_NAME . ' - ##\'Ваш заказ\'##',
         'tpl' => <<<HTML
     <html>
         <body>
@@ -1463,53 +1485,6 @@ HTML
         </body>
     </html>
 HTML
-    )
-);
-
-
-
-/**
- * Справочная информация
- */
-Micro_Init::$_components['Micro_Help'] = array(
-    'tpl' => array(
-        'ru' => <<<HTML
-    <p>
-        Для того чтобы заказать товар, нажмите кнопку <b>"В корзину"</b> находящейся под картинкой.
-        Если вы кликните мышкой на изображение, вы увидите его в увеличенном виде. Затем в разделе <b>"Ваш заказ"</b> уточните количество.
-        Внизу списка товаров вы увидите общую стоимость.
-        Если вы уверены в правильности заказа, нажмите на кнопку <b>"Продолжить"</b>.
-        Вы увидите форму для отправки заказа нашему администратору. После правильного заполнения формы нажмите кнопку <b>"Отправить заказ"</b>.
-    </p>
-HTML
-    ,
-        'en' => <<<HTML
-    <p>
-        To order a product, click <b>"Add to Cart"</b> under the picture.
-        If you click the mouse on the image, you will see it in a larger size. Then under <b>"Your order"</b> specify the amount.
-        Bottom of the list of goods you will see the total cost.
-        If you are unsure of the order, click <b>"Continue"</b>.
-        You will see a form to order our administrator. After filling out the form correctly, click <b>"Submit Order"</b>.
-    </p>
-HTML
-    ),
-    'style' => <<<HTML
-    <style>
-        body p { text-indent: 20px; }
-    </style>
-HTML
-,
-    'title' => array(
-        'ru' => 'Помощь',
-        'en' => 'Help'
-    ),
-    'meta_desc' => array(
-        'ru' => 'Помощь пользователю в работе с сайтом',
-        'en' => 'Help the user to work with the site'
-    ),
-    'meta_keys' => array(
-        'ru' => 'магазин, сайт, помощь',
-        'en' => 'shop, site, help'
     )
 );
 
@@ -1568,7 +1543,7 @@ This content is licensed under Creative Commons Attribution 4.0. The full text o
 </html>
 <!-- IE needs 512+ bytes: http://blogs.msdn.com/b/ieinternals/archive/2010/08/19/http-error-pages-in-internet-explorer.aspx -->
 HTML
-,
+    ,
     'title' => array(
         'ru' => 'Страница не найдена',
         'en' => 'Page Not Found'
@@ -1600,10 +1575,10 @@ class Micro_Init {
 
 
     /**
-     * Инициализация плагинов
-     * @return array
+     * Получает список активных плагинов
+     * @return array Список активных плагинов
      */
-    public static function getPlugins() {
+    protected function getPlugins() {
 
         if (empty(self::$_plugins) && is_dir(PLUGINS_DIR)) {
             $h = opendir(PLUGINS_DIR);
@@ -1621,9 +1596,9 @@ class Micro_Init {
                         if ((in_array('Micro_Plugin_Abstract', $parents) || in_array('Micro_Component_Abstract', $parents)) &&
                             isset($plugin_vars['is_active']) && $plugin_vars['is_active']
                         ) {
-                            self::addRoute($plugin_name);
-                            self::addMenu($plugin_name);
-                            self::addLocutions($plugin_name);
+                            $this->addRoute($plugin_name);
+                            $this->addMenu($plugin_name);
+                            $this->addLocutions($plugin_name);
 
                             $extend_class                = current($parents);
                             self::$_plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Abstract' ||
@@ -1641,9 +1616,11 @@ class Micro_Init {
 
 
     /**
-     * @param $plugin
+     * Соединяет в основным маршрутизатором внутренний маршрутизатор указанного плагина
+     * @param string $plugin Название плагина
+     * @return void
      */
-    private static function addRoute($plugin) {
+    private function addRoute($plugin) {
 
         $plugin_vars = get_class_vars($plugin);
         if ( ! empty($plugin_vars['router'])) {
@@ -1663,9 +1640,11 @@ class Micro_Init {
 
 
     /**
-     * @param $plugin
+     * Соединяет в основным меню внутреннем меню указанного плагина
+     * @param string $plugin Название плагина
+     * @return void
      */
-    private static function addMenu($plugin) {
+    private function addMenu($plugin) {
 
         $plugin_vars = get_class_vars($plugin);
         if ( ! empty($plugin_vars['menu'])) {
@@ -1677,9 +1656,11 @@ class Micro_Init {
 
 
     /**
-     * @param $plugin
+     * Добаяляет в основной список переводов, переводы из плагина
+     * @param string $plugin Название плагина
+     * @return void
      */
-    private static function addLocutions($plugin) {
+    private function addLocutions($plugin) {
 
         $plugin_vars = get_class_vars($plugin);
         if ( ! empty($plugin_vars['locutions'])) {
@@ -1695,10 +1676,11 @@ class Micro_Init {
 
 
     /**
-     * @param string $name
-     * @return mixed
+     * Получение из реестра значение ранее помещенное под указанным именем
+     * @param string $name Имя содержимого
+     * @return mixed Любое значение ранее помещенное под указанным именем.
      */
-    public static function getRegistry($name) {
+    protected function getRegistry($name) {
         return isset(self::$_registry[$name])
             ? self::$_registry[$name]
             : null;
@@ -1706,38 +1688,42 @@ class Micro_Init {
 
 
     /**
-     * @param string $name
-     * @param mixed $var
+     * Помещает в реестор какое-либо значение под указанным именем.
+     * Если под указанным именем уже что-то есть, то его содержимое будет изменено.
+     * @param string $name Имя содержимого
+     * @param mixed $var Любое значение, которое нужно поместить под указанным именем
+     * @return void
      */
-    public static function setRegistry($name, $var) {
+    protected function setRegistry($name, $var) {
         self::$_registry[$name] = $var;
     }
 
 
     /**
      * Добавление пути в таксонамию
-     * @param string $title
-     * @param string $url
+     * @param string $title Название страницы
+     * @param string $url Адрес страницы
+     * @return void
      */
-    public static function addTaxonomy($title, $url) {
+    protected function addTaxonomy($title, $url) {
         self::$_taxonomy[] = array('title' => $title, 'url' => $url);
     }
 
 
     /**
      * Получение содержимого таксономии
-     * @return array
+     * @return array Сформированный ранее путь
      */
-    public function getTaxonomy() {
+    protected function getTaxonomy() {
         return self::$_taxonomy;
     }
 
 
     /**
-     * Страница 404
-     * @return string
+     * Возвращает текст страницы 404 для вставки его на страницу.
+     * @return string Текст страницы 404
      */
-    public function page404() {
+    protected function page404() {
 
         if ( ! ($page404 = self::getRegistry('page404'))) {
             $plugins = self::getPlugins();
@@ -1760,40 +1746,11 @@ class Micro_Init {
 
 
     /**
-     * Получение структуры страниц
-     * @return array|bool
-     */
-    public function getPageStructure() {
-
-        $matches = array();
-        preg_match('~^([^?]+)(?|)~', $_SERVER['REQUEST_URI'], $matches);
-        $current_url = $matches[1];
-        foreach (self::$_router as $page=>$structure) {
-            if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
-                $page == 'home' && ! isset($_GET['view']) ||
-                preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
-            ) {
-                return $structure;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getMenu() {
-        return self::$_menu;
-    }
-
-
-    /**
      * Получение переводов
      * @param string $lang Язык переводов
-     * @return array|null
+     * @return array|null Массив с переводами
      */
-    public function getLocutions($lang = '') {
+    protected function getLocutions($lang = '') {
 
         if ($lang == '') $lang = $this->getLang();
         $locutions = self::$_locutions;
@@ -1807,43 +1764,15 @@ class Micro_Init {
 
 
     /**
-     * Получение мета данных компонента
-     * @return array|null
-     */
-    public function getComponent() {
-
-        $lang       = $this->getLang();
-        $args       = func_get_args();
-        $components = self::$_components;
-        $prop       = array();
-
-        foreach ($args as $arg) {
-            if (isset($components[$arg])) {
-                $components = $components[$arg];
-                $prop  = $components;
-            } else {
-                return null;
-            }
-        }
-
-        if (is_array($prop) && isset($prop[$lang])) {
-            return $prop[$lang];
-        }
-
-        return $prop;
-    }
-
-
-    /**
      * Возвращает текущий язык на странице
-     * @return mixed
+     * @return string Двухбуквенное обозначение языка
      */
-    public function getLang() {
+    protected function getLang() {
 
         if ( ! ($micro_lang = self::getRegistry('lang'))) {
             $plugins = self::getPlugins();
             foreach ($plugins as $plugin=>$extend) {
-                if ($extend == 'lang') {
+                if ($extend == 'Micro_Lang') {
                     $micro_lang = new $plugin();
                     break;
                 }
@@ -1867,6 +1796,34 @@ abstract class Micro_Component_Abstract extends Micro_Init {
 
     public static $is_active = true;
     abstract public function index();
+
+
+    /**
+     * Получение мета данных компонента
+     * @return array|null
+     */
+    protected function getComponent() {
+
+        $lang       = $this->getLang();
+        $args       = func_get_args();
+        $components = self::$_components;
+        $prop       = array();
+
+        foreach ($args as $arg) {
+            if (isset($components[$arg])) {
+                $components = $components[$arg];
+                $prop  = $components;
+            } else {
+                return null;
+            }
+        }
+
+        if (is_array($prop) && isset($prop[$lang])) {
+            return $prop[$lang];
+        }
+
+        return $prop;
+    }
 }
 
 
@@ -1957,7 +1914,7 @@ class Micro_Layout extends Micro_Component_Abstract {
 
 
         $tpl->assign('[LANG]',       $this->lang);
-        $tpl->assign('[SITE_NAME]',  SITE_NAME);
+        $tpl->assign('[SHOP_NAME]',  SHOP_NAME);
 
 
         $taxonomy = $this->getTaxonomy();
@@ -1997,6 +1954,27 @@ class Micro_Layout extends Micro_Component_Abstract {
 
         // Перевод и вывод финальной страницы
         return Micro_Tools::replaceLocutions($result, $this->getLocutions());
+    }
+
+
+    /**
+     * Получение структуры текущей (запрашиваемой) страницы
+     * @return array|bool Массив структуры, либо false если найти запрашиваемую страницу не удалось
+     */
+    protected function getPageStructure() {
+
+        $matches = array();
+        preg_match('~^([^?]+)(?|)~', $_SERVER['REQUEST_URI'], $matches);
+        $current_url = $matches[1];
+        foreach (self::$_router as $page=>$structure) {
+            if ((isset($_GET['view']) && $_GET['view'] == $page && $_GET['view'] != 'home') ||
+                $page == 'home' && ! isset($_GET['view']) ||
+                preg_match('~^[\~`/].*[\~`/]*$~', $page) && preg_match($page, $current_url)
+            ) {
+                return $structure;
+            }
+        }
+        return false;
     }
 
 
@@ -2050,8 +2028,8 @@ class Micro_Layout extends Micro_Component_Abstract {
             $this->title[$this->lang];
         }
 
-        return USE_SITE_NAME_IN_TITLE
-            ? ($this->title != '' ? SITE_NAME . ' - ' . $this->title : SITE_NAME)
+        return USE_SHOP_NAME_IN_TITLE
+            ? ($this->title != '' ? SHOP_NAME . ' - ' . $this->title : SHOP_NAME)
             : $this->title;
     }
 
@@ -2097,6 +2075,15 @@ class Micro_MainMenu extends Micro_Component_Abstract {
         $page->content    = $tpl->parse();
 
         return $page;
+    }
+
+
+    /**
+     * Получение массива содержащего меню
+     * @return array
+     */
+    protected function getMenu() {
+        return self::$_menu;
     }
 
 
@@ -2187,19 +2174,13 @@ class Micro_Categories extends Micro_Component_Abstract  {
 class Micro_Gallery extends Micro_Component_Abstract {
 
     /**
-     * Получение названия действия которое нужно выпонить
-     * @return string|bool
+     * @return int|stdClass
      */
-    protected function getAction() {
-        return isset($_GET['action'])
-            ? $_GET['action']
-            : false;
-    }
-
-
     public function index() {
 
-        $action = $this->getAction();
+        $action = isset($_GET['action'])
+            ? $_GET['action']
+            : false;
 
         switch ($action) {
             case 'photo' : $this->photo(); break;
@@ -2291,8 +2272,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         in_array(mime_content_type($path . '/' . $element_name), $available_types)
                     ) {
                         if (
-                            ($page * GALLERY_PHOTOS_ON_PAGE) - GALLERY_PHOTOS_ON_PAGE <= $dir_content['total_files'] &&
-                            count($dir_content['file']) < GALLERY_PHOTOS_ON_PAGE)
+                            ($page * NUMBER_PRODUCTS_PER_PAGE) - NUMBER_PRODUCTS_PER_PAGE <= $dir_content['total_files'] &&
+                            count($dir_content['file']) < NUMBER_PRODUCTS_PER_PAGE)
                         {
                             $dir_content['file'][] = $element_name;
                         }
@@ -2303,7 +2284,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
 
             // Проверка на существование запрошенной строницы
-            if (($page * GALLERY_PHOTOS_ON_PAGE) - GALLERY_PHOTOS_ON_PAGE > $dir_content['total_files']) {
+            if (($page * NUMBER_PRODUCTS_PER_PAGE) - NUMBER_PRODUCTS_PER_PAGE > $dir_content['total_files']) {
                 return $this->page404();
             }
 
@@ -2325,7 +2306,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
                     $tpl_pay->assign('[PHOTO_COST]', str_replace(',', '.', $matches[1]));
 
-                    if ( ! isset($_SESSION['cart'][SITE_NAME][$photo_path])) {
+                    if ( ! isset($_SESSION['cart'][SHOP_NAME][$photo_path])) {
                         $tpl_pay->add_in_cart->assign('[PHOTO_PATH]', $photo_path);
                     } else {
                         $tpl_pay->remove_in_cart->assign('[PHOTO_PATH]', $photo_path);
@@ -2349,12 +2330,11 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
 
             // Пагинация
-            if ($dir_content['total_files'] > GALLERY_PHOTOS_ON_PAGE) {
+            if ($dir_content['total_files'] > NUMBER_PRODUCTS_PER_PAGE) {
                 $dir_path = isset($_GET['path']) ? $_GET['path'] : '';
                 $pagebar  = Micro_Tools::paginate(
-                    '',
                     "?view=gallery&path={$dir_path}&lang=[LANG]&page",
-                    ceil($dir_content['total_files'] / GALLERY_PHOTOS_ON_PAGE),
+                    ceil($dir_content['total_files'] / NUMBER_PRODUCTS_PER_PAGE),
                     isset($_GET['page']) ? $_GET['page'] : 1,
                     3
                 );
@@ -2539,11 +2519,11 @@ class Micro_Cart extends Micro_Component_Abstract {
         $tpl = new Micro_Templater();
         $tpl->setTemplate($this->getComponent('Micro_Cart', 'cart', 'tpl'));
 
-        if ( ! isset($_SESSION['cart'][SITE_NAME]) || empty($_SESSION['cart'][SITE_NAME])) {
+        if ( ! isset($_SESSION['cart'][SHOP_NAME]) || empty($_SESSION['cart'][SHOP_NAME])) {
             $tpl->touchBlock('empty_cart');
 
         } else {
-            $orders   = $_SESSION['cart'][SITE_NAME];
+            $orders   = $_SESSION['cart'][SHOP_NAME];
             $cost_sum = 0;
 
             foreach ($orders as $key=>$order) {
@@ -2604,8 +2584,8 @@ class Micro_Cart extends Micro_Component_Abstract {
      */
     protected function removeInCart() {
 
-        if (isset($_POST['item']) && isset($_SESSION['cart'][SITE_NAME][$_POST['item']])) {
-            unset($_SESSION['cart'][SITE_NAME][$_POST['item']]);
+        if (isset($_POST['item']) && isset($_SESSION['cart'][SHOP_NAME][$_POST['item']])) {
+            unset($_SESSION['cart'][SHOP_NAME][$_POST['item']]);
         }
         echo json_encode(array('error' => 0));
         exit;
@@ -2618,12 +2598,12 @@ class Micro_Cart extends Micro_Component_Abstract {
      */
     protected function addInCart() {
 
-        if ( ! isset($_SESSION['cart'][SITE_NAME])) {
-            $_SESSION['cart'][SITE_NAME] = array();
+        if ( ! isset($_SESSION['cart'][SHOP_NAME])) {
+            $_SESSION['cart'][SHOP_NAME] = array();
         }
 
-        if (isset($_POST['item']) && ! isset($_SESSION['cart'][SITE_NAME][$_POST['item']])) {
-            $_SESSION['cart'][SITE_NAME][$_POST['item']] = $_POST['item'];
+        if (isset($_POST['item']) && ! isset($_SESSION['cart'][SHOP_NAME][$_POST['item']])) {
+            $_SESSION['cart'][SHOP_NAME][$_POST['item']] = $_POST['item'];
         }
         echo json_encode(array('error' => 0));
         exit;
@@ -2760,7 +2740,7 @@ class Micro_Cart extends Micro_Component_Abstract {
             }
 
 
-            unset($_SESSION['cart'][SITE_NAME]);
+            unset($_SESSION['cart'][SHOP_NAME]);
             $lang = $this->getLang();
             header('Location: ?view=cart&action=order_result&result=success&lang=' . $lang);
             exit;
@@ -2805,31 +2785,27 @@ class Micro_Cart extends Micro_Component_Abstract {
 }
 
 
-
-/**
- * Class Micro_Help
- */
-class Micro_Help extends Micro_Component_Abstract {
-
-    public function index() {
-        return $this->getComponent('Micro_Help', 'tpl');
-    }
-}
-
-
-
 /**
  * Class Micro_Page404
  */
 class Micro_Page404 extends Micro_Component_Abstract {
 
     /**
-     * Страница 404
+     * Отправлять загаловки при вызове методов или нет
+     * @var bool
+     */
+    public $send_headers = true;
+
+
+    /**
+     * Возвращает страницу 404
      * @return string
      */
     public function index() {
 
-        header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+        if ($this->send_headers) {
+            header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+        }
 
         $template  = $this->getComponent('Micro_Page404', 'tpl');
         $title     = $this->getComponent('Micro_Page404', 'title');
@@ -2838,7 +2814,7 @@ class Micro_Page404 extends Micro_Component_Abstract {
         $tpl = new Micro_Templater();
         $tpl->setTemplate($template);
 
-        $tpl->assign('[TITLE]', USE_SITE_NAME_IN_TITLE ? SITE_NAME . ' - ' . $title : $title);
+        $tpl->assign('[TITLE]', USE_SHOP_NAME_IN_TITLE ? SHOP_NAME . ' - ' . $title : $title);
 
         return Micro_Tools::replaceLocutions($tpl->parse(), $locutions);
     }
@@ -2916,7 +2892,7 @@ class Micro_Lang extends Micro_Component_Abstract {
 /**
  * Class Micro
  */
-class Micro {
+class Micro extends Micro_Init {
 
 
     /**
@@ -2925,7 +2901,7 @@ class Micro {
      */
     public function dispatch() {
 
-        $plugins = Micro_Init::getPlugins();
+        $plugins = $this->getPlugins();
         foreach ($plugins as $plugin=>$extend) {
             if ($extend == 'Micro_Layout') {
                 $layout = new $plugin();
@@ -2937,7 +2913,7 @@ class Micro {
             $layout = new Micro_Layout();
         }
 
-        Micro_Init::setRegistry('layout', $layout);
+        $this->setRegistry('layout', $layout);
         return $layout->index();
     }
 }
@@ -3079,12 +3055,11 @@ class Micro_Tools {
 
 
     /**
-     * Замена слов в тексте обернутых в $embrace на на тот язык,
-     * который сейчас выбран или на язык по умолчанию.
-     * @param $str
-     * @param array $locutions
-     * @param string $embrace
-     * @return string
+     * Замена слов в тексте обернутых в $embrace на указанный языковой массив $locutions
+     * @param string $str Строка с исходныйм значением. Та, отдельные значения которой нужно перевести.
+     * @param array $locutions Массив содержащий элементы вида 'переводимое слово' => 'перевод'. Напрмер 'язык' => 'language'.
+     * @param string $embrace Обертка переводимых слов
+     * @return string Переведенный текст
      */
     public static function replaceLocutions($str, $locutions = array(), $embrace = "##''##") {
 
@@ -3138,12 +3113,13 @@ class Micro_Tools {
 
 
     /**
-     * Создание изображения
-     * @param string $image_path
-     * @param int $max_height
-     * @param int $max_width
-     * @param null|string $save_path
-     * @param null|string $watermark_path
+     * Создание изображения с другим размером
+     * @param string $image_path Путь до файла исходного изображения
+     * @param int $max_height Максимальная высота результируемого изображения
+     * @param int $max_width Максимальная ширина результируемого изображения
+     * @param null|string $save_path Путь до файла в который должно сохраняться результирующее изображение. Если не указано, то отправка в буфер вывода
+     * @param null|string $watermark_path Путь до изображения которое будет использоваться как водяной знак
+     * @return void
      * @throws Exception
      */
     public static function resizeImage($image_path, $max_height, $max_width, $save_path = null, $watermark_path = null) {
@@ -3250,10 +3226,10 @@ class Micro_Tools {
 
     /**
      * Конвертирование строки в нужную кодировку
-     * @param string $str
-     * @param string $to
-     * @param string|null $from
-     * @return string
+     * @param string $str Исходная строка
+     * @param string $to Имя кодировки в которую нужно конвертировать строку
+     * @param string|null $from Имя кодировки из которой нужно конвертировать строку
+     * @return string Строка с новой кодировкой
      */
     public static function convertEncoding($str, $to = 'utf-8', $from = null) {
 
@@ -3266,10 +3242,10 @@ class Micro_Tools {
 
 
     /**
-     * Определение кодировки
-     * @param string $string
-     * @param int $pattern_size
-     * @return string
+     * Определение кодировки строки
+     * @param string $string Исходная строка
+     * @param int $pattern_size Размер части строки по которой определяется кодировка
+     * @return string Название кодировки
      */
     public static function detectEncoding($string, $pattern_size = 50) {
 
@@ -3303,9 +3279,9 @@ class Micro_Tools {
 
     /**
      * Конвертирует настоящий путь в хэшированный
-     * @param string $path
-     * @param string $algo
-     * @return string
+     * @param string $path Путь к чему либо
+     * @param string $algo Алгоритм хэштрования
+     * @return string Хэшированный путь
      */
     public static function pathToHash($path, $algo = 'crc32b') {
 
@@ -3322,9 +3298,9 @@ class Micro_Tools {
 
     /**
      * Конвертирует хэшированный путь в настоящий
-     * @param string $hash_path
-     * @param string $algo
-     * @return string
+     * @param string $hash_path Хэшированный путь к чему либо
+     * @param string $algo Алгоритм шифрования
+     * @return string Настоящий путь
      */
     public static function hashToPath($hash_path, $algo = 'crc32b') {
 
@@ -3361,63 +3337,20 @@ class Micro_Tools {
 
 
     /**
-     * Сортировка подмассивов по указанному ключу
-     * @param array $array
-     * @param string $on
-     * @param int $order
-     * @return array
+     * Создание пагинации для вставки на страницу
+     * @param string $base_url Базовый адрес страницы
+     * @param int $total_pages Всего страниц
+     * @param int $current_page Текущая страница
+     * @param int $paginate_limit Ограничение количества показываемых страниц
+     * @return string Сформированный HTML для вставки его на страницу
      */
-    public function arraySort(array $array, $on, $order = SORT_ASC) {
-        $new_array      = array();
-        $sortable_array = array();
-
-        if (count($array) > 0) {
-            foreach ($array as $k => $v) {
-                if (is_array($v)) {
-                    foreach ($v as $k2 => $v2) {
-                        if ($k2 == $on) {
-                            $sortable_array[$k] = $v2;
-                        }
-                    }
-                } else {
-                    $sortable_array[$k] = $v;
-                }
-            }
-
-            switch ($order) {
-                case SORT_ASC:
-                    asort($sortable_array);
-                    break;
-                case SORT_DESC:
-                    arsort($sortable_array);
-                    break;
-            }
-
-            foreach ($sortable_array as $k => $v) {
-                $new_array[$k] = $array[$k];
-            }
-        }
-
-        return $new_array;
-    }
-
-
-    /**
-     * Создание массива с пагинацией
-     * @param string $base_url
-     * @param string $query_str
-     * @param int $total_pages
-     * @param int $current_page
-     * @param int $paginate_limit
-     * @return string
-     */
-    public static function paginate($base_url, $query_str, $total_pages, $current_page, $paginate_limit) {
+    public static function paginate($base_url, $total_pages, $current_page, $paginate_limit) {
 
         $pagebar = '';
         $break   = true;
 
         if ($current_page > 1) {
-            $pagebar .= '<li><a class="prev" href="' . $base_url . $query_str . '=' . ($current_page - 1) . '">##\'Предыдущая\'##</a></li>';
+            $pagebar .= '<li><a class="prev" href="' . $base_url . '=' . ($current_page - 1) . '">##\'Предыдущая\'##</a></li>';
         }
 
         for ( $i = 1; $i <= $total_pages; $i++ ) {
@@ -3427,7 +3360,7 @@ class Micro_Tools {
             ) {
                 $break = true;
                 if ($i != $current_page) {
-                    $url      = $base_url . $query_str . "=" . $i;
+                    $url      = $base_url . "=" . $i;
                     $pagebar .= '<li><a href="' . $url . '">' . $i . '</a></li>';
                 } else {
                     $pagebar .= '<li class="active"><span>' . $i . '</span></li>';
@@ -3440,7 +3373,7 @@ class Micro_Tools {
 
 
         if ($current_page < $total_pages) {
-            $pagebar .= '<li><a class="next" href="' . $base_url . $query_str . '=' . ($current_page + 1) . '">##\'Следующая\'##</a></li>';
+            $pagebar .= '<li><a class="next" href="' . $base_url . '=' . ($current_page + 1) . '">##\'Следующая\'##</a></li>';
         }
 
         return $pagebar;
@@ -3547,7 +3480,7 @@ class Micro_Templater {
 
 
     /**
-     * @param $block
+     * @param string $block
      */
     public function touchBlock($block) {
         $this->newBlock($block);
@@ -3556,7 +3489,7 @@ class Micro_Templater {
 
 
     /**
-     * @param $path
+     * @param string $path
      * @param bool $strip
      */
     public function loadTemplate($path, $strip = true) {
@@ -3565,7 +3498,7 @@ class Micro_Templater {
 
 
     /**
-     * @param $path
+     * @param string $path
      * @param bool $strip
      * @return bool|mixed|string
      */
@@ -3584,7 +3517,7 @@ class Micro_Templater {
 
     /**
      * set the HTML to parse
-     * @param $html
+     * @param string $html
      */
     public function setTemplate($html) {
         $this->html = $html;
@@ -3683,7 +3616,7 @@ class Micro_Templater {
      * @param $var
      * @param string $value
      * @param bool $avoidEmbrace
-     * @return mixed
+     * @return void
      */
     public function assign($var, $value = '', $avoidEmbrace = false) {
         if (is_array($var)) {
@@ -3696,7 +3629,6 @@ class Micro_Templater {
         } else {
             $this->vars[$this->embrace[0] . $var . $this->embrace[1]] = $value;
         }
-
     }
 
 
