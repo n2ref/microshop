@@ -2544,77 +2544,81 @@ class Micro_Gallery extends Micro_Component_Abstract {
     protected function photo() {
 
         if (defined('USE_CACHE') && USE_CACHE) {
-            if ( ! isset($_GET['path']) || $_GET['path'] == '') {
-                throw new Exception('Неверная ссылка');
-            }
-            if ( ! is_dir(CACHE_DIR) && ! mkdir(CACHE_DIR, 0755)) {
-                throw new Exception('Не удалось создать директорию "' . CACHE_DIR . '"');
-            }
-            if ( ! is_writeable(CACHE_DIR)) {
-                if ( ! chmod(CACHE_DIR, 0755)) {
-                    throw new Exception('Директория "' . CACHE_DIR . '" не доступна для чтения');
+            try {
+                if ( ! isset($_GET['path']) || $_GET['path'] == '') {
+                    throw new Exception('Неверная ссылка');
                 }
-            }
-
-            // создание названия для кэш-файла
-            switch ($_GET['size']) {
-                case 'big' :
-                    if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE) {
-                        $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                            ? WATERMARK_IMAGE
-                            : null;
-                    } else {
-                        $watermark_path = '';
-                    }
-                    $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_BIG_IMAGE . MAX_WIDTH_BIG_IMAGE . $watermark_path);
-                    break;
-
-                case 'list' :
-                    if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE) {
-                        $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                            ? WATERMARK_IMAGE
-                            : null;
-                    } else {
-                        $watermark_path = '';
-                    }
-                    $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_LIST_IMAGE . MAX_WIDTH_LIST_IMAGE . $watermark_path);
-                    break;
-
-                case 'cart' :
-                    if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE) {
-                        $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                            ? WATERMARK_IMAGE
-                            : null;
-                    } else {
-                        $watermark_path = '';
-                    }
-                    $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_CART_IMAGE . MAX_WIDTH_CART_IMAGE . $watermark_path);
-                    break;
-                default : throw new Exception('Некорректный адрес'); break;
-            }
-
-            // если кэш-файл уже существует, то ипользуем его
-            if (file_exists($cache_file)) {
-
-                $last_modified_time = filemtime($cache_file);
-                $etag               = hash('crc32b', $cache_file);
-                $len                = filesize($cache_file);
-                header('Content-type: image/png');
-                header("Cache-Control: public");
-                header("Pragma: public");
-                header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_modified_time) . " GMT");
-                header("Etag: $etag");
-                header("Content-Length: $len");
-                if (
-                    (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time) ||
-                    (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)
-                ) {
-                    header("{$_SERVER['SERVER_PROTOCOL']} 304 Not Modified");
-
-                } else {
-                    readfile($cache_file);
+                if ( ! is_dir(CACHE_DIR) && ! mkdir(CACHE_DIR, 0755)) {
+                    throw new Exception('Не удалось создать директорию "' . CACHE_DIR . '"');
                 }
-                exit;
+                if ( ! is_writeable(CACHE_DIR)) {
+                    if ( ! chmod(CACHE_DIR, 0755)) {
+                        throw new Exception('Директория "' . CACHE_DIR . '" не доступна для чтения');
+                    }
+                }
+
+                // создание названия для кэш-файла
+                switch ($_GET['size']) {
+                    case 'big' :
+                        if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE) {
+                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
+                                ? WATERMARK_IMAGE
+                                : null;
+                        } else {
+                            $watermark_path = '';
+                        }
+                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_BIG_IMAGE . MAX_WIDTH_BIG_IMAGE . $watermark_path);
+                        break;
+
+                    case 'list' :
+                        if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE) {
+                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
+                                ? WATERMARK_IMAGE
+                                : null;
+                        } else {
+                            $watermark_path = '';
+                        }
+                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_LIST_IMAGE . MAX_WIDTH_LIST_IMAGE . $watermark_path);
+                        break;
+
+                    case 'cart' :
+                        if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE) {
+                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
+                                ? WATERMARK_IMAGE
+                                : null;
+                        } else {
+                            $watermark_path = '';
+                        }
+                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_CART_IMAGE . MAX_WIDTH_CART_IMAGE . $watermark_path);
+                        break;
+                    default : throw new Exception('Некорректный адрес'); break;
+                }
+
+                // если кэш-файл уже существует, то ипользуем его
+                if (file_exists($cache_file)) {
+
+                    $last_modified_time = filemtime($cache_file);
+                    $etag               = hash('crc32b', $cache_file);
+                    $len                = filesize($cache_file);
+                    header('Content-type: image/png');
+                    header("Cache-Control: public");
+                    header("Pragma: public");
+                    header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_modified_time) . " GMT");
+                    header("Etag: $etag");
+                    header("Content-Length: $len");
+                    if (
+                        (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time) ||
+                        (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)
+                    ) {
+                        header("{$_SERVER['SERVER_PROTOCOL']} 304 Not Modified");
+
+                    } else {
+                        readfile($cache_file);
+                    }
+                    exit;
+                }
+            } catch (Exception $e) {
+                $cache_file = null;
             }
 
         } else {
