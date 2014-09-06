@@ -2022,7 +2022,6 @@ abstract class Micro_Plugin_Abstract extends Micro_Init {
     public static $meta      = array();
     public static $menu      = array();
 
-
     abstract public function index();
 }
 
@@ -3090,7 +3089,7 @@ class Micro extends Micro_Init {
             $tpl  = new Micro_Templater();
             $tpl->setTemplate($this->getMeta('no_gallery', 'tpl'));
             $tpl->assign('[TITLE]', $this->getMeta('no_gallery', 'title'));
-            $tpl->assign('[REAL_GALLERY_DIR]', realpath(GALLERY_DIR));
+            $tpl->assign('[REAL_GALLERY_DIR]', realpath(dirname(GALLERY_DIR)) . DIRECTORY_SEPARATOR . basename(GALLERY_DIR));
             $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
 
             return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
