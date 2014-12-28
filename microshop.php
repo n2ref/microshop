@@ -65,9 +65,9 @@ define('USE_SHOP_NAME_IN_TITLE', true);
  * Директории используемые приложением.
  * @see http://microshop.by/docs/settings#dirs
  */
-define('GALLERY_DIR', './gallery');
-define('PLUGINS_DIR', './plugins');
-define('CACHE_DIR',   './cache');
+define('GALLERY_DIR', 'gallery');
+define('PLUGINS_DIR', 'plugins');
+define('CACHE_DIR',   'cache');
 
 /**
  * Использовать кэширование или нет
@@ -123,6 +123,12 @@ define('MAX_WIDTH_LIST_IMAGE',  205);
 define('MAX_HEIGHT_LIST_IMAGE', 180);
 define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
+
+/**
+ * Режим отладки приложения
+ * @see http://microshop.by/docs/settings#debug
+ */
+define('DEBUG', true);
 
 
 /**
@@ -246,7 +252,7 @@ Micro_Init::$_components['Micro_Layout'] = array(
         samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,
         dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,
         tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
-        embed,figure,figcaption,footer,header,hgroup,menu,nav,
+        embed,figure,figcaption,footer,header,menu,nav,
         output,ruby,section,summary,time,mark,audio,video {
             border:0;
             font:inherit;
@@ -384,9 +390,9 @@ Micro_Init::$_components['Micro_Layout'] = array(
             padding-top:45px;
             margin-top:60px;
         }
-        article,aside,details,figcaption,figure,footer,header,hgroup,
+        article,aside,details,figcaption,figure,footer,header,
         menu,nav,section,article,aside,canvas,figure,figure img,
-        figcaption,hgroup,footer,header,nav,section,audio,video {
+        figcaption,footer,header,nav,section,audio,video {
             display:block;
         }
         ::selection,
@@ -1180,12 +1186,12 @@ HTML
                             for (j = 0; j < classes; j++)  {
                                 if (list[i].className.search('\\b' + classArray[j] + '\\b') != -1) {
                                     result.push(list[i])
-                                    break
+                                    break;
                                 }
                             }
                         }
 
-                        return result
+                        return result;
                     }
                 }
 
@@ -1755,7 +1761,57 @@ class Micro_Init {
                             $this->addMenu($plugin_name);
                             $this->addLocutions($plugin_name);
 
-                            $extend_class                = current($parents);
+                            $extend_class                 = current($parents);
+                            self::$_plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Abstract' ||
+                            $extend_class == 'Micro_Component_Abstract'
+                                ? $plugin_name
+                                : $extend_class;
+                        }
+                    }
+
+                } elseif ($element != '.' && $element != '..' &&
+                          is_dir(PLUGINS_DIR . '/' . $element) &&
+                          is_file(PLUGINS_DIR . "/{$element}/{$element}.php")
+                ) {
+                    require_once PLUGINS_DIR . "/{$element}/{$element}.php";
+
+                    $plugin_name = '\\Plugins\\' . $element;
+                    if (class_exists($plugin_name)) {
+                        $plugin_vars = get_class_vars($plugin_name);
+                        $parents     = class_parents($plugin_name);
+                        if ((in_array('Micro_Plugin_Abstract', $parents) || in_array('Micro_Component_Abstract', $parents)) &&
+                            isset($plugin_vars['is_active']) && $plugin_vars['is_active']
+                        ) {
+                            $this->addRoute($plugin_name);
+                            $this->addMenu($plugin_name);
+                            $this->addLocutions($plugin_name);
+
+                            $extend_class                 = current($parents);
+                            self::$_plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Abstract' ||
+                            $extend_class == 'Micro_Component_Abstract'
+                                ? $plugin_name
+                                : $extend_class;
+                        }
+                    }
+
+                } elseif ($element != '.' && $element != '..' &&
+                    is_file(PLUGINS_DIR . '/' . $element) &&
+                    substr($element, strrpos($element, '.')+1) == 'phar'
+                ) {
+                    require_once 'phar://plugins/Micro_Plugin_Gallery.phar';
+
+                    $plugin_name = '\\Plugins\\' . substr($element, 0, strrpos($element, '.'));
+                    if (class_exists($plugin_name)) {
+                        $plugin_vars = get_class_vars($plugin_name);
+                        $parents     = class_parents($plugin_name);
+                        if ((in_array('Micro_Plugin_Abstract', $parents) || in_array('Micro_Component_Abstract', $parents)) &&
+                            isset($plugin_vars['is_active']) && $plugin_vars['is_active']
+                        ) {
+                            $this->addRoute($plugin_name);
+                            $this->addMenu($plugin_name);
+                            $this->addLocutions($plugin_name);
+
+                            $extend_class                 = current($parents);
                             self::$_plugins[$plugin_name] = $extend_class == 'Micro_Plugin_Abstract' ||
                             $extend_class == 'Micro_Component_Abstract'
                                 ? $plugin_name
@@ -2312,6 +2368,8 @@ class Micro_Categories extends Micro_Component_Abstract  {
                     $dirs[] = $element_name;
                 }
             }
+
+            natsort($dirs);
         }
 
 
@@ -2435,14 +2493,14 @@ class Micro_Gallery extends Micro_Component_Abstract {
             );
             if( ! function_exists('mime_content_type')) {
                 function mime_content_type($filename) {
-                    $fh=fopen($filename,'rb');
+                    $fh = fopen($filename,'rb');
                     if ($fh) {
-                        $bytes6=fread($fh,6);
+                        $bytes6 = fread($fh,6);
                         fclose($fh);
-                        if ($bytes6===false) return false;
-                        if (substr($bytes6,0,3)=="\xff\xd8\xff") return 'image/jpeg';
-                        if ($bytes6=="\x89PNG\x0d\x0a") return 'image/png';
-                        if ($bytes6=="GIF87a" || $bytes6=="GIF89a") return 'image/gif';
+                        if ($bytes6 === false) return false;
+                        if (substr($bytes6,0,3) == "\xff\xd8\xff") return 'image/jpeg';
+                        if ($bytes6 == "\x89PNG\x0d\x0a") return 'image/png';
+                        if ($bytes6 == "GIF87a" || $bytes6 == "GIF89a") return 'image/gif';
                         return 'application/octet-stream';
                     }
                     return false;
@@ -2479,12 +2537,12 @@ class Micro_Gallery extends Micro_Component_Abstract {
                     :  Micro_Tools::pathToHash($file_name);
 
                 $matches = array();
-                if (preg_match('~^__([0-9\.,]+)__~sU', $file_name, $matches)) {
+                if (preg_match('~^_([0-9\.,]+)_~sU', $file_name, $matches)) {
 
                     $tpl_pay = new Micro_Templater();
                     $tpl_pay->setTemplate($this->getComponent('Micro_Gallery', 'tpl_pay'));
 
-                    $file_name_cut = preg_replace('~^__[0-9\.,]+__~sU', '', $file_name);
+                    $file_name_cut = preg_replace('~^_[0-9\.,]+_~sU', '', $file_name);
                     $file_name_utf = Micro_Tools::convertEncoding($file_name_cut);
 
                     $tpl_pay->assign('[PHOTO_COST]', str_replace(',', '.', $matches[1]));
@@ -2508,7 +2566,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
                 $tpl->photos->photo->assign('[PHOTO_SMALL_URL]', "?view=gallery&action=photo&path={$photo_path}&size=list");
                 $tpl->photos->photo->assign('[PHOTO_NAME]',      substr($file_name_utf, 0, strrpos($file_name_utf, '.')));
 
-                if ($file_name != end($dir_content['file'])) $tpl->photos->photo->reassign();
+                $tpl->photos->photo->reassign();
             }
 
 
@@ -2740,7 +2798,7 @@ class Micro_Cart extends Micro_Component_Abstract {
                     $tpl->orders->order->assign('[PARAM_VALUE]',   $order);
                     $tpl->orders->order->assign('[COUNT_NAME]',    'orders[' . $key . '][count]');
 
-                    if ($order != end($orders)) $tpl->orders->order->reassign();
+                    $tpl->orders->order->reassign();
                 }
             }
 
@@ -2811,12 +2869,12 @@ class Micro_Cart extends Micro_Component_Abstract {
             $tpl->touchBlock('empty_order');
 
         } else {
-            foreach ($_POST['orders'] as $k=>$order) {
+            foreach ($_POST['orders'] as $k => $order) {
                 $tpl->order_form->orders->assign('[ORDER_PARAM_NAME]', "orders[{$k}][path]");
                 $tpl->order_form->orders->assign('[ORDER_NAME]', $order['path']);
                 $tpl->order_form->orders->assign('[ORDER_PARAM_COUNT]', "orders[{$k}][count]");
                 $tpl->order_form->orders->assign('[ORDER_COUNT]', $order['count']);
-                if ($order != end($_POST['orders'])) $tpl->order_form->orders->reassign();
+                $tpl->order_form->orders->reassign();
             }
         }
 
@@ -2869,7 +2927,7 @@ class Micro_Cart extends Micro_Component_Abstract {
                     $tpl_email->order->assign('[PRICE]', $price);
                     $tpl_email->order->assign('[COUNT]', $order['count']);
                     $tpl_email->order->assign('[PRICE_TOTAL]', $order['count'] * $price);
-                    if ($order != end($_POST['orders'])) $tpl_email->order->reassign();
+                    $tpl_email->order->reassign();
 
                     $global_price += $order['count'] * $price;
                 }
@@ -3061,7 +3119,7 @@ class Micro_Lang extends Micro_Component_Abstract {
                 }
 
                 $tpl->languages->assign('[SELECTED]', $selected);
-                if ($iso != end($languages)) $tpl->languages->reassign();
+                $tpl->languages->reassign();
             }
 
             $page = new stdClass();
@@ -3084,23 +3142,16 @@ class Micro extends Micro_Init {
 
     /**
      * Ответ пользователю на запрос
-     * return string
+     * @return string
      */
     public function dispatch() {
 
         // Если директории для галлереи нет и создать ее не получилось, то сообщение об этом
-        if ( ! is_dir(GALLERY_DIR) && ! mkdir(GALLERY_DIR, 0755)) {
-            $tpl  = new Micro_Templater();
-            $tpl->setTemplate($this->getMeta('no_gallery', 'tpl'));
-            $tpl->assign('[TITLE]', $this->getMeta('no_gallery', 'title'));
-            $tpl->assign('[REAL_GALLERY_DIR]', realpath(dirname(GALLERY_DIR)) . DIRECTORY_SEPARATOR . basename(GALLERY_DIR));
-            $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
+        if ( ! is_dir(GALLERY_DIR) && ! mkdir(GALLERY_DIR, 0777, true)) {
+            return $this->getNoGallery();
 
-            return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
-        }
-
-        // Есди директори галлереи пуста, то сообщение об этом
-        if ($handle = opendir(GALLERY_DIR)) {
+        // Если директори галлереи пуста, то сообщение об этом
+        } elseif ($handle = opendir(GALLERY_DIR)) {
             $empty_gallery = true;
             while ($element_name = readdir($handle)) {
                 if ($element_name != "." && $element_name != "..") {
@@ -3110,19 +3161,13 @@ class Micro extends Micro_Init {
             }
             closedir($handle);
             if ($empty_gallery) {
-                $tpl  = new Micro_Templater();
-                $tpl->setTemplate($this->getMeta('empty_gallery', 'tpl'));
-                $tpl->assign('[TITLE]', $this->getMeta('empty_gallery', 'title'));
-                $tpl->assign('[REAL_GALLERY_DIR]', realpath(GALLERY_DIR));
-                $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
-
-                return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
+                return $this->getEmptyGallery();
             }
         }
 
 
         $plugins = $this->getPlugins();
-        foreach ($plugins as $plugin=>$extend) {
+        foreach ($plugins as $plugin => $extend) {
             if ($extend == 'Micro_Layout') {
                 $layout = new $plugin();
                 break;
@@ -3135,6 +3180,36 @@ class Micro extends Micro_Init {
 
         $this->setRegistry('layout', $layout);
         return $layout->index();
+    }
+
+
+    /**
+     * Страница сообщающая о том, что галерея не создана
+     * @return string
+     */
+    public function getNoGallery() {
+        $tpl = new Micro_Templater();
+        $tpl->setTemplate($this->getMeta('no_gallery', 'tpl'));
+        $tpl->assign('[TITLE]', $this->getMeta('no_gallery', 'title'));
+        $tpl->assign('[REAL_GALLERY_DIR]', realpath(dirname(GALLERY_DIR)) . DIRECTORY_SEPARATOR . basename(GALLERY_DIR));
+        $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
+
+        return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
+    }
+
+
+    /**
+     * Страница сообщающая о том, что галерея пуста
+     * @return string
+     */
+    public function getEmptyGallery() {
+        $tpl  = new Micro_Templater();
+        $tpl->setTemplate($this->getMeta('empty_gallery', 'tpl'));
+        $tpl->assign('[TITLE]', $this->getMeta('empty_gallery', 'title'));
+        $tpl->assign('[REAL_GALLERY_DIR]', realpath(GALLERY_DIR));
+        $tpl->assign('[GALLERY_DIR]', GALLERY_DIR);
+
+        return Micro_Tools::replaceLocutions($tpl->parse(), $this->getLocutions());
     }
 }
 
@@ -3564,13 +3639,13 @@ class Micro_Tools {
      * @param int $paginate_limit Ограничение количества показываемых страниц
      * @return string Сформированный HTML для вставки его на страницу
      */
-    public static function paginate($base_url, $total_pages, $current_page, $paginate_limit) {
+    public static function paginate($base_url, $total_pages, $current_page, $paginate_limit = 3) {
 
-        $pagebar = '';
-        $break   = true;
+        $paginate = '';
+        $break    = true;
 
         if ($current_page > 1) {
-            $pagebar .= '<li><a class="prev" href="' . $base_url . '=' . ($current_page - 1) . '">##\'Предыдущая\'##</a></li>';
+            $paginate .= '<li><a class="prev" href="' . $base_url . '=' . ($current_page - 1) . '">##\'Предыдущая\'##</a></li>';
         }
 
         for ( $i = 1; $i <= $total_pages; $i++ ) {
@@ -3580,287 +3655,112 @@ class Micro_Tools {
             ) {
                 $break = true;
                 if ($i != $current_page) {
-                    $url      = $base_url . "=" . $i;
-                    $pagebar .= '<li><a href="' . $url . '">' . $i . '</a></li>';
+                    $url       = $base_url . "=" . $i;
+                    $paginate .= '<li><a href="' . $url . '">' . $i . '</a></li>';
                 } else {
-                    $pagebar .= '<li class="active"><span>' . $i . '</span></li>';
+                    $paginate .= '<li class="active"><span>' . $i . '</span></li>';
                 }
             } elseif ($break == true) {
-                $break    = false;
-                $pagebar .= '<li class="break">&hellip;</li>';
+                $break     = false;
+                $paginate .= '<li class="break">&hellip;</li>';
             }
         }
 
 
         if ($current_page < $total_pages) {
-            $pagebar .= '<li><a class="next" href="' . $base_url . '=' . ($current_page + 1) . '">##\'Следующая\'##</a></li>';
+            $paginate .= '<li><a class="next" href="' . $base_url . '=' . ($current_page + 1) . '">##\'Следующая\'##</a></li>';
         }
 
-        return $pagebar;
+        return $paginate;
     }
 }
 
 
 /**
  * Class Micro_Templater
+ * @see https://github.com/shinji00/Micro_Templater
  */
 class Micro_Templater {
 
-    private $blocks = array();
-    private $vars = array();
-    private $html = '';
-    private $owner = '';
-    private $selects = array();
-    private $loopHTML = array();
-    private $embrace = array('', '');
-    private $_p = array();
+    protected $plugins  = array();
+    protected $blocks   = array();
+    protected $vars     = array();
+    protected $_p       = array();
+    protected $reassign = false;
+    protected $loop     = '';
+    protected $html     = '';
 
-
-    function __construct($tpl = '') {
-        if ($tpl) $this->loadTemplate($tpl);
+    public function __construct($tpl_file = '') {
+        if ($tpl_file) $this->loadTemplate($tpl_file);
     }
 
-
-    public function __isset($k) {
-        return isset($this->_p[$k]);
+    public function __isset($block) {
+        return isset($this->_p[$block]);
     }
 
 
     /**
-     * nested blocks will be stored inside $_p
-     * @param $k
-     * @return Common|null
+     * Nested blocks will be stored inside $_p
+     * @param string $field
+     * @return Micro_Templater|null
      */
-    public function __get($k) {
-        $v = NULL;
-        if (array_key_exists($k, $this->_p)) {
-            $v = $this->_p[$k];
+    public function __get($field) {
+
+        if ($this->reassign) $this->startReassign();
+        $this->touchBlock($field);
+
+        if (array_key_exists($field, $this->_p)) {
+            $v = $this->_p[$field];
         } else {
             $temp = new Micro_Templater();
-            $temp->owner = $k;
-            $temp->setTemplate($this->getBlock($k));
-            $temp->setEmbrace(implode('', $this->embrace));
-            $v = $this->{$k} = $temp;
+            $temp->setTemplate($this->getBlock($field));
+            $v = $this->_p[$field] = $temp;
         }
         return $v;
     }
 
 
-    public function __set($k, $v) {
-        $this->_p[$k] = $v;
-        return $this;
-    }
-
-
-    public function setEmbrace($em) {
-        $arr = array();
-        if ((strlen($em) % 2) == 0) {
-            $i = strlen($em) / 2;
-            $arr[] = substr($em, 0, $i);
-            $arr[] = substr($em, $i);
-        }
-        $this->embrace = $arr;
-    }
-
-
     /**
-     * @param $block
-     * @param $text
-     */
-    public function prependToBlock($block, $text) {
-        $this->newBlock($block);
-        $this->blocks[$block]['PREPEND'] = $text;
-    }
-
-
-    /**
-     * @param $block
-     * @param $text
-     */
-    public function appendToBlock($block, $text) {
-        $this->newBlock($block);
-        $this->blocks[$block]['APPEND'] = $text;
-    }
-
-
-    /**
-     * @param $block
-     */
-    private function newBlock($block) {
-        if (!isset($this->blocks[$block])) {
-            $this->blocks[$block] = array('PREPEND' => '',
-                'APPEND' => '',
-                'GET' => false,
-                'REASSIGN' => false,
-                'REPLACE' => false,
-                'TOUCHED' => false
-            );
-        }
-    }
-
-
-    /**
-     * @param string $block
-     */
-    public function touchBlock($block) {
-        $this->newBlock($block);
-        $this->blocks[$block]['TOUCHED'] = true;
-    }
-
-
-    /**
+     * Load the HTML file to parse
      * @param string $path
-     * @param bool $strip
+     * @throws \Exception
      */
-    public function loadTemplate($path, $strip = true) {
-        $this->html = $this->getTemplate($path, $strip);
+    public function loadTemplate($path) {
+        if ( ! file_exists($path)) {
+            throw new \Exception("file not found \"$path\"");
+        }
+        $this->setTemplate(file_get_contents($path));
     }
 
 
     /**
-     * @param string $path
-     * @param bool $strip
-     * @return bool|mixed|string
-     */
-    public function getTemplate($path, $strip = true) {
-        if (!is_file($path)) {
-            return false;
-        }
-        $temp = file_get_contents($path);
-        if ($strip) {
-            $temp = str_replace("\r", "", $temp);
-            $temp = str_replace("\t", "", $temp);
-        }
-        return $temp;
-    }
-
-
-    /**
-     * set the HTML to parse
-     * @param string $html
+     * Set the HTML to parse
+     * @param $html
      */
     public function setTemplate($html) {
         $this->html = $html;
-        $this->blocks = array();
-        $this->vars = array();
+        $this->clear();
     }
 
 
     /**
-     * the final render
-     * @return string
+     * Add plugin
+     * @param string $title
+     * @param mixed $obj
      */
-    public function parse() {
-        $html = $this->html;
-        $this->autoSearch($html);
-
-        foreach ($this->blocks as $block => $data) {
-            if (array_key_exists($block, $this->_p)) {
-                $data['REPLACE'] = $this->_p[$block]->parse();
-            }
-            $temp = array();
-            preg_match("/(.*)<!--\s*BEGIN\s$block\s*-->(.+)<!--\s*END\s$block\s*-->(.*)/sm", $html, $temp);
-            if (isset($temp[1])) {
-                if (!empty($data['REPLACE'])) {
-                    $data['GET'] = true;
-                }
-                if ($data['TOUCHED']) {
-                    $html = $temp[1] . $data['PREPEND'] . $temp[2] . $data['APPEND'] . $temp[3];
-                } else if ($data['GET']) {
-                    $html = $temp[1] . "<!--$block-->" . $temp[3];
-                } else {
-                    $html = $temp[1] . $temp[3];
-                }
-                if (!empty($data['REPLACE'])) {
-                    $html = str_replace("<!--$block-->", $data['REPLACE'], $html);
-                }
-            }
-        }
-        $html = implode('', $this->loopHTML) . str_replace(array_keys($this->vars), $this->vars, $html);
-        $this->loopHTML = array();
-        return $html;
+    public function addPlugin($title, $obj) {
+        $this->plugins[strtolower($title)] = $obj;
     }
 
 
     /**
-     * @param $html
-     */
-    private function autoSearch($html) {
-        $temp = array();
-        preg_match_all("/<!--\s*BEGIN\s(.+?)\s*-->/sm", $html, $temp);
-        if (isset($temp[1]) && count($temp[1])) {
-            foreach ($temp[1] as $block) {
-                $this->newBlock($block);
-            }
-        }
-    }
-
-
-    /**
-     * Fill SELECT items on page
-     *
-     * @param string $inID
-     * @param array $inOptions
-     * @param string $inVal
-     */
-    public function fillDropDown($inID, array $inOptions, $inVal = '') {
-        if (is_array(current($inOptions))) {
-            $opt = array();
-            foreach ($inOptions as $val) {
-                $opt[current($val)] = next($val);
-            }
-        } else {
-            $opt = $inOptions;
-        }
-
-        $tmp = "";
-        if ($inVal) {
-            $inVal = explode(',', $inVal);
-        } else {
-            $inVal = array();
-        }
-        foreach ($inOptions as $key => $val) {
-            $sel = '';
-            if (in_array($key, $inVal)) $sel = "selected=\"selected\"";
-            $tmp .= "<option $sel value=\"$key\">$val</option>";
-        }
-        $inOptions = $tmp;
-        $arrayOfSelect = array();
-        $reg = "/(<select\s*.*id\s*=\s*[\"|']{$inID}[\"|'][^>]*>).*?(<\/select>)/msi";
-        $this->html = preg_replace($reg, "$1[[$inID]]$2", $this->html);
-        $this->assign("[[$inID]]", $inOptions, true);
-    }
-
-
-    /**
-     * @param $var
+     * Assign variable
+     * @param string $var
      * @param string $value
-     * @param bool $avoidEmbrace
-     * @return void
      */
-    public function assign($var, $value = '', $avoidEmbrace = false) {
-        if (is_array($var)) {
-            foreach ($var as $key => $val) {
-                $this->assign($key, $val, $avoidEmbrace);
-            }
-        }
-        if ($avoidEmbrace) {
-            $this->vars[$var] = $value;
-        } else {
-            $this->vars[$this->embrace[0] . $var . $this->embrace[1]] = $value;
-        }
-    }
-
-
-    /**
-     * @return void
-     */
-    private function clear() {
-        $this->blocks = array();
-        $this->vars = array();
-        foreach ($this->_p as $obj => $data) {
-            $this->_p[$obj]->clear();
-        }
+    public function assign($var, $value = '') {
+        if ($this->reassign) $this->startReassign();
+        $this->vars[$var] = $value;
     }
 
 
@@ -3868,28 +3768,138 @@ class Micro_Templater {
      * Reset the current instance's variables and make them able to assign again
      */
     public function reassign() {
-        $this->loopHTML[] = $this->parse();
-        $this->clear();
+        $this->reassign = true;
     }
 
 
     /**
-     * @param $block
-     * @param string $html
+     * Start reassign
+     */
+    protected function startReassign() {
+        $this->loop = $this->parse();
+        $this->clear();
+        $this->reassign = false;
+    }
+
+
+    /**
+     * Touched block
+     * @param string $block
+     */
+    public function touchBlock($block) {
+        $this->blocks[$block]['TOUCHED'] = true;
+    }
+
+
+    /**
+     * The final render
      * @return string
      */
-    public function getBlock($block, $html = '') {
-        if (!$html) {
-            $html = $this->html;
+    public function parse() {
+        $html = $this->html;
+
+        if (strpos($html, 'BEGIN')) {
+            $matches = array();
+            preg_match_all("~<\!--\s*BEGIN\s+([a-zA-Z0-9_]+?)\s*-->~s", $html, $matches);
+            if (isset($matches[1]) && count($matches[1])) {
+                foreach ($matches[1] as $block) {
+                    if ( ! isset($this->blocks[$block])) {
+                        $this->blocks[$block] = array('TOUCHED' => false);
+                    }
+                }
+            }
+
+            foreach ($this->blocks as $block => $data) {
+                $sub_tpl = array_key_exists($block, $this->_p) ? $this->_p[$block] : null;
+                $html    = preg_replace_callback(
+                    "~(.*?)<\!--\s*BEGIN\s+{$block}\s*-->(.+)<\!--\s*END\s+{$block}\s*-->(.*)~s",
+                    function($matches) use($data, $sub_tpl) {
+                        if (isset($data['TOUCHED']) && $data['TOUCHED']) {
+                            if ($sub_tpl) {
+                                $parsed = $sub_tpl->parse();
+                                $html = $matches[1] . $parsed . $matches[3];
+                            } else {
+                                $html = $matches[1] . $matches[2] . $matches[3];
+                            }
+
+                        } else {
+                            $html = $matches[1] . $matches[3];
+                        }
+
+                        return $html;
+                    },
+                    $html
+                );
+            }
         }
-        $temp = array();
-        preg_match("/(.*)<!--\s*BEGIN\s$block\s*-->(.+)<!--\s*END\s$block\s*-->(.*)/sm", $html, $temp);
-        if (isset($temp[2]) && $temp[2]) {
-            $html = $temp[2];
+
+
+        $assigned   = str_replace(array_keys($this->vars), $this->vars, $html);
+        $html       = $this->loop . $assigned;
+        $this->loop = '';
+
+        //apply plugins
+        foreach ($this->plugins as $plugin => $process) {
+            $matches = array();
+            preg_match_all("~\[{$plugin}:([^\]]+)\]~s", $html, $matches);
+            foreach ($matches[1] as $k => $value) {
+                $tmp = explode('|', $value);
+                $matches[1][$k] = call_user_func_array(array($process, $plugin), $tmp);
+            }
+            $html = str_replace($matches[0], $matches[1], $html);
         }
-        $this->newBlock($block);
-        $this->blocks[$block]['GET'] = true;
+
         return $html;
+    }
+
+
+    /**
+     * Fill SELECT items on page
+     * @param string $id
+     * @param array $options
+     * @param string|array $selected
+     */
+    public function fillDropDown($id, array $options, $selected = '') {
+
+        if ($this->reassign) $this->startReassign();
+
+        $html = "";
+        foreach ($options as $value => $title) {
+            $sel = (is_array($selected) && in_array($value, $selected)) || $value == $selected
+                ? "selected=\"selected\" "
+                : '';
+            $html .= "<option {$sel}value=\"{$value}\">{$title}</option>";
+        }
+        if ($html) {
+            $id = preg_quote($id);
+            $reg = "~(<select.*?id\s*=\s*[\"']{$id}[\"'][^>]*>).*?(</select>)~si";
+            $this->html = preg_replace($reg, "$1[[$id]]$2", $this->html);
+            $this->assign("[[$id]]", $html, true);
+        }
+    }
+
+
+    /**
+     * Get html block
+     * @param string $block
+     * @return string
+     */
+    public function getBlock($block) {
+        $matched = array();
+        preg_match("~<\!--\s*BEGIN\s+{$block}\s*-->(.+)<\!--\s*END\s+{$block}\s*-->~s", $this->html, $matched);
+        return ! empty($matched[1]) ? $matched[1] : '';
+    }
+
+
+    /**
+     * Clear vars & blocks
+     */
+    private function clear() {
+        $this->blocks = array();
+        $this->vars   = array();
+        foreach ($this->_p as $obj => $data) {
+            $this->_p[$obj]->clear();
+        }
     }
 }
 
@@ -3901,7 +3911,11 @@ try {
     echo $init->dispatch();
 
 } catch (Exception $e) {
-    ini_set('display_errors', 1);
-    echo '<pre>';
-    throw new Exception($e->getMessage());
+    if (defined('DEBUG') && DEBUG) {
+        echo '<pre>';
+        echo $e->getMessage(), "\n";
+        echo '<b>', $e->getFile(), ': ', $e->getLine(), "</b>\n\n";
+        echo $e->getTraceAsString();
+        echo '</pre>';
+    }
 }
