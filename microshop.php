@@ -124,6 +124,9 @@ define('MAX_HEIGHT_LIST_IMAGE', 180);
 define('MAX_WIDTH_CART_IMAGE',  100);
 define('MAX_HEIGHT_CART_IMAGE', 100);
 
+define('IMAGE_CACHE_TYPE', 'jpeg'); //тип изображения, в котором храниться кэш: jpeg or png.
+define('IMAGE_QUALITY', 75); //от 0 (низкое качество, маленький размер файла) до 100 (высокое качество, большой размер файла). По умолчанию используется 75.
+
 
 /**
  * Меню
@@ -2599,11 +2602,15 @@ class Micro_Gallery extends Micro_Component_Abstract {
 
                 // если кэш-файл уже существует, то ипользуем его
                 if (file_exists($cache_file)) {
-
+                    if (IMAGE_CACHE_TYPE == 'jpeg') {
+                        $type = "image/jpeg";
+                    } else {
+                        $type = "image/png";
+                    }
                     $last_modified_time = filemtime($cache_file);
                     $etag               = hash('crc32b', $cache_file);
                     $len                = filesize($cache_file);
-                    header('Content-type: image/png');
+                    header("Content-type: {$type}");
                     header("Cache-Control: public");
                     header("Pragma: public");
                     header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_modified_time) . " GMT");
@@ -3444,10 +3451,19 @@ class Micro_Tools {
 
         header('content-type: image/png');
         if ($save_path === null) {
-            imagepng($convas);
+            if (IMAGE_CACHE_TYPE == 'jpeg') {
+                imagejpeg($convas, null, IMAGE_QUALITY);
+            } else {
+                imagepng($convas, null, 9 - round(9*IMAGE_QUALITY/100, 0));
+            }
         } else {
-            imagepng($convas, $save_path);
-            imagepng($convas);
+            if (IMAGE_CACHE_TYPE == 'jpeg') {
+                imagejpeg($convas, $save_path, IMAGE_QUALITY);
+                imagejpeg($convas, null, IMAGE_QUALITY);
+            } else {
+                imagepng($convas, $save_path, 9 - round(9*IMAGE_QUALITY/100, 0));
+                imagepng($convas, null, 9 - round(9*IMAGE_QUALITY/100, 0));
+            }
         }
 
         // освобождаем память
