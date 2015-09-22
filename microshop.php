@@ -2567,7 +2567,10 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         } else {
                             $watermark_path = '';
                         }
-                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_BIG_IMAGE . MAX_WIDTH_BIG_IMAGE . $watermark_path);
+                        $path = md5($_GET['path'] . MAX_HEIGHT_BIG_IMAGE . MAX_WIDTH_BIG_IMAGE . $watermark_path);
+                        $subDirs = str_split($path, 2);
+                        unset($subDirs[count($subDirs) - 1]);
+                        $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
 
                     case 'list' :
@@ -2578,7 +2581,10 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         } else {
                             $watermark_path = '';
                         }
-                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_LIST_IMAGE . MAX_WIDTH_LIST_IMAGE . $watermark_path);
+                        $path = md5($_GET['path'] . MAX_HEIGHT_LIST_IMAGE . MAX_WIDTH_LIST_IMAGE . $watermark_path);
+                        $subDirs = str_split($path, 2);
+                        unset($subDirs[count($subDirs) - 1]);
+                        $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
 
                     case 'cart' :
@@ -2589,7 +2595,10 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         } else {
                             $watermark_path = '';
                         }
-                        $cache_file = CACHE_DIR . '/' . md5($_GET['path'] . MAX_HEIGHT_CART_IMAGE . MAX_WIDTH_CART_IMAGE . $watermark_path);
+                        $path = md5($_GET['path'] . MAX_HEIGHT_CART_IMAGE . MAX_WIDTH_CART_IMAGE . $watermark_path);
+                        $subDirs = str_split($path, 2);
+                        unset($subDirs[count($subDirs) - 1]);
+                        $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
                     default : throw new Exception('Некорректный адрес'); break;
                 }
@@ -2616,6 +2625,22 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         readfile($cache_file);
                     }
                     exit;
+                }
+
+                //создаем подкаталог для кэша
+                if (!empty($cache_file)) {
+                    $subDirPath = CACHE_DIR;
+                    foreach ($subDirs as $dir) {
+                        $subDirPath .= "/{$dir}";
+                        if (!is_dir($subDirPath) && !mkdir($subDirPath, 0755)) {
+                            throw new Exception('Не удалось создать директорию "' . $subDirPath . '"');
+                        }
+                        if (!is_writeable($subDirPath)) {
+                            if (!chmod($subDirPath, 0755)) {
+                                throw new Exception('Директория "' . $subDirPath . '" не доступна для чтения');
+                            }
+                        }
+                    }
                 }
             } catch (Exception $e) {
                 $cache_file = null;
