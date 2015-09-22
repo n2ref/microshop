@@ -2560,10 +2560,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                 // создание названия для кэш-файла
                 switch ($_GET['size']) {
                     case 'big' :
-                        if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE) {
-                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                                ? WATERMARK_IMAGE
-                                : null;
+                        if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                            $watermark_path = WATERMARK_IMAGE;
                         } else {
                             $watermark_path = '';
                         }
@@ -2574,10 +2572,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         break;
 
                     case 'list' :
-                        if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE) {
-                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                                ? WATERMARK_IMAGE
-                                : null;
+                        if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                            $watermark_path = WATERMARK_IMAGE;
                         } else {
                             $watermark_path = '';
                         }
@@ -2588,10 +2584,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         break;
 
                     case 'cart' :
-                        if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE) {
-                            $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                                ? WATERMARK_IMAGE
-                                : null;
+                        if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                            $watermark_path = WATERMARK_IMAGE;
                         } else {
                             $watermark_path = '';
                         }
@@ -2654,10 +2648,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
         $path = GALLERY_DIR . '/' . Micro_Tools::hashToPath($_GET['path']);
         switch ($_GET['size']) {
             case 'big'   :
-                if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE) {
-                    $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                        ? WATERMARK_IMAGE
-                        : null;
+                if (defined('USE_WATERMARK_BIG_IMAGE') && USE_WATERMARK_BIG_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                    $watermark_path = WATERMARK_IMAGE;
                 } else {
                     $watermark_path = null;
                 }
@@ -2665,10 +2657,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                 break;
 
             case 'list' :
-                if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE) {
-                    $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                        ? WATERMARK_IMAGE
-                        : null;
+                if (defined('USE_WATERMARK_LIST_IMAGE') && USE_WATERMARK_LIST_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                    $watermark_path = WATERMARK_IMAGE;
                 } else {
                     $watermark_path = null;
                 }
@@ -2676,10 +2666,8 @@ class Micro_Gallery extends Micro_Component_Abstract {
                 break;
 
             case 'cart' :
-                if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE) {
-                    $watermark_path = defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)
-                        ? WATERMARK_IMAGE
-                        : null;
+                if (defined('USE_WATERMARK_CART_IMAGE') && USE_WATERMARK_CART_IMAGE && defined('WATERMARK_IMAGE') && file_exists(WATERMARK_IMAGE)) {
+                    $watermark_path = WATERMARK_IMAGE;
                 } else {
                     $watermark_path = null;
                 }
@@ -3451,6 +3439,7 @@ class Micro_Tools {
 
         if ($watermark_path !== null) {
             imagecopymerge($convas, $watermark_resource, 0, 0, 0, 0, $image_width, $image_height, 10);
+            imagedestroy($watermark_resource);
         }
 
         header('content-type: image/png');
@@ -3463,9 +3452,6 @@ class Micro_Tools {
 
         // освобождаем память
         imagedestroy($convas);
-        if ($watermark_path !== null) {
-            imagedestroy($watermark_resource);
-        }
     }
 
 
