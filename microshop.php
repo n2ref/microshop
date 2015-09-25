@@ -2570,7 +2570,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         }
                         $path = md5($_GET['path'] . MAX_HEIGHT_BIG_IMAGE . MAX_WIDTH_BIG_IMAGE . $watermark_path);
                         $subDirs = str_split($path, 2);
-                        unset($subDirs[count($subDirs) - 1]);
+                        $subDirs = array($subDirs[0]);
                         $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
 
@@ -2582,7 +2582,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         }
                         $path = md5($_GET['path'] . MAX_HEIGHT_LIST_IMAGE . MAX_WIDTH_LIST_IMAGE . $watermark_path);
                         $subDirs = str_split($path, 2);
-                        unset($subDirs[count($subDirs) - 1]);
+                        $subDirs = array($subDirs[0]);
                         $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
 
@@ -2594,7 +2594,7 @@ class Micro_Gallery extends Micro_Component_Abstract {
                         }
                         $path = md5($_GET['path'] . MAX_HEIGHT_CART_IMAGE . MAX_WIDTH_CART_IMAGE . $watermark_path);
                         $subDirs = str_split($path, 2);
-                        unset($subDirs[count($subDirs) - 1]);
+                        $subDirs = array($subDirs[0]);
                         $cache_file = CACHE_DIR . "/" . implode("/", $subDirs) . "/{$path}";
                         break;
                     default : throw new Exception('Некорректный адрес'); break;
